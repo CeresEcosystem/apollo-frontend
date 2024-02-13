@@ -11,6 +11,8 @@ export default {
         pinkDark: '#530037',
         pinkMedium: '#83045C',
         pinkLight: '#EB0EAD',
+        pinkText: '#CD3BA2',
+        pinkButton: '#C00A8B',
         grey: '#001C31',
         grey2: '#909090',
       },

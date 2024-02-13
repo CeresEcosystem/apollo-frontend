@@ -12,18 +12,24 @@ export default function Clipboard({
   textToCopy?: string;
   children: React.ReactNode;
 }) {
+  const handleChildClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
+  };
+
   return (
     <>
       <CopyToClipboard data-tooltip-id={id} text={textToCopy ?? text}>
-        {children}
+        <div onClick={handleChildClick}>{children}</div>
       </CopyToClipboard>
       <Tooltip
         id={id}
         content="Copied!"
-        events={['click']}
+        openOnClick
         delayHide={1000}
         place="top"
-        className="!bg-pink rounded-lg"
+        className="!bg-grey !rounded-3xl"
       />
     </>
   );

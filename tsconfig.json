@@ -11,6 +11,8 @@
       "@constants/*": ["src/constants/*"],
       "@context/*": ["src/context/*"],
       "@utils/*": ["src/utils/*"],
+      "@pages/*": ["src/pages/*"],
+      "@hooks/*": ["src/hooks/*"],
     },
 
     /* Bundler mode */

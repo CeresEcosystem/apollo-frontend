@@ -1,3 +1,4 @@
+import Clipboard from '@components/clipboard';
 import Gradient from '@components/gradient';
 import Modal from '@components/modal';
 import { POLKADOT_EXTENSION } from '@constants/index';
@@ -49,9 +50,11 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
                     >
                       {account?.meta?.name}
                     </p>
-                    <p className="text-xs text-grey2 truncate">
-                      {formatWalletAddress(account?.address, 12)}
-                    </p>
+                    <Clipboard text={account?.address}>
+                      <p className="text-xs text-grey2 truncate hover:underline">
+                        {formatWalletAddress(account?.address, 12)}
+                      </p>
+                    </Clipboard>
                   </div>
                 </div>
               );
