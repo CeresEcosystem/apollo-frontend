@@ -3,6 +3,7 @@ import { useApolloClaim } from '@context/apollo_claim_context';
 import { usePolkadot } from '@context/polkadot_context';
 import { getAvatarTitle } from '@utils/helpers';
 import { useIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 export default function Header({
   showWalletModal,
@@ -17,7 +18,9 @@ export default function Header({
   return (
     <>
       <div className="bg-white h-20 shadow-sm flex gap-x-2 items-center py-2 justify-between px-5 md:px-16 lg:px-28">
-        <img src="/logo.png" alt="logo" className="h-4/5 xs:h-full" />
+        <Link to="/" className="h-full flex items-center">
+          <img src="/logo.png" alt="logo" className="h-4/5 xs:h-full" />
+        </Link>
         <div
           onClick={showWalletModal}
           className="cursor-pointer rounded-3xl overflow-hidden max-w-60"
@@ -50,7 +53,7 @@ export default function Header({
         </div>
       </div>
       <div className="bg-grey h-8 px-5 flex items-center justify-center">
-        <span className="text-white font-medium">{`Total APOLLO claimed: ${apolloClaim && apolloClaim.totalClaimed !== null ? intl.formatNumber(apolloClaim.totalClaimed, { maximumFractionDigits: 2 }) : '_'}`}</span>
+        <span className="text-white font-medium text-sm sm:text-base">{`Total APOLLO claimed: ${apolloClaim && apolloClaim.totalClaimed !== null ? intl.formatNumber(apolloClaim.totalClaimed, { maximumFractionDigits: 2 }) : '_'}`}</span>
       </div>
     </>
   );

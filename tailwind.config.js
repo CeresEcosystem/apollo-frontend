@@ -15,6 +15,7 @@ export default {
         pinkButton: '#C00A8B',
         grey: '#001C31',
         grey2: '#909090',
+        grey3: '#F2F2F2',
       },
       fontFamily: {
         body: ['Montserrat'],

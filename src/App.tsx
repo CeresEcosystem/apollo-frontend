@@ -1,3 +1,4 @@
+import Footer from '@components/footer';
 import Header from '@components/header';
 import PageLoader from '@components/loader/page_loader';
 import WalletModal from '@components/wallet/wallet_modal';
@@ -15,14 +16,14 @@ export default function App() {
   }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Header showWalletModal={() => setShowWalletModal(true)} />
       <WalletModal
         showModal={showWalletModal}
         closeModal={() => setShowWalletModal(false)}
       />
       <Outlet />
-      <span>Footer</span>
-    </>
+      <Footer />
+    </div>
   );
 }

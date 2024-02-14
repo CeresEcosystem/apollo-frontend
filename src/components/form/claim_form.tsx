@@ -28,14 +28,22 @@ function AccountData({
     if (claimableAccount.balance > 0) {
       return (
         <>
-          <h2 className="font-bold text-5xl text-grey">Congrats!</h2>
-          <p className="mt-5 text-xl">
+          <h2 className="font-bold text-grey text-3xl md:text-4xl lg:text-5xl">
+            Congrats!
+          </h2>
+          <p className="mt-5 text-base md:text-lg lg:text-xl">
             The connected account is eligible for the following amount of
             APOLLO.
           </p>
           <div className="bg-backgroundBody text-pinkText mt-8 rounded-3xl border-2 border-border p-8 flex flex-col items-center justify-center gap-y-2">
-            <span className="font-medium text-xl">Amount to claim</span>
-            <span className="font-extrabold text-5xl">{`${intl.formatNumber(claimableAccount.balance, { maximumFractionDigits: 4 })} APOLLO`}</span>
+            <span className="font-medium text-base md:text-lg lg:text-xl">
+              APOLLO Amount to claim
+            </span>
+            <span className="font-extrabold text-3xl md:text-4xl lg:text-5xl">
+              {intl.formatNumber(claimableAccount.balance, {
+                maximumFractionDigits: 4,
+              })}
+            </span>
           </div>
           {claimableAccount.hasClaimed ? (
             <div className="mt-10 w-full bg-backgroundBody rounded-3xl p-4 text-center">
@@ -53,8 +61,10 @@ function AccountData({
     } else {
       return (
         <>
-          <h2 className="font-bold text-5xl text-grey">Claim APOLLO!</h2>
-          <p className="mt-5 text-xl">
+          <h2 className="font-bold text-grey text-3xl md:text-4xl lg:text-5xl">
+            Claim APOLLO!
+          </h2>
+          <p className="mt-5 text-base md:text-lg lg:text-xl">
             Unfortunately, you are not eligible for APOLLO airdrop.
           </p>
         </>
@@ -64,8 +74,10 @@ function AccountData({
 
   return (
     <>
-      <h2 className="font-bold text-5xl text-grey">Claim APOLLO!</h2>
-      <p className="mt-5 text-xl">
+      <h2 className="font-bold text-grey text-3xl md:text-4xl lg:text-5xl">
+        Claim APOLLO!
+      </h2>
+      <p className="mt-5 text-base md:text-lg lg:text-xl">
         Connect your wallet to see how much APOLLO you are eligible for and to
         claim your allocation.
       </p>
