@@ -1809,6 +1809,11 @@ client-only@^0.0.1:
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
+clsx@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.0.tgz#e851283bcb5c80ee7608db18487433f7b23f77cb"
+  integrity sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==
+
 color-convert@^1.9.0:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
@@ -3401,6 +3406,11 @@ react-dom@^18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
+react-icons@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.0.1.tgz#1694e11bfa2a2888cab47dcc30154ce90485feee"
+  integrity sha512-WqLZJ4bLzlhmsvme6iFdgO8gfZP17rfjYEJ2m9RsZjZ+cc4k1hTzknEz63YS1MeT50kVzoa1Nz36f4BEx+Wigw==
+
 react-intl@^6.6.2:
   version "6.6.2"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-6.6.2.tgz#97a044afa9cac65ae62f404c8bb9cbd3aec52d41"
@@ -3446,6 +3456,13 @@ react-router@6.22.0:
   integrity sha512-q2yemJeg6gw/YixRlRnVx6IRJWZD6fonnfZhN1JIOhV2iJCPeRNSH3V1ISwHf+JWcESzLC3BOLD1T07tmO5dmg==
   dependencies:
     "@remix-run/router" "1.15.0"
+
+react-toastify@^10.0.4:
+  version "10.0.4"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-10.0.4.tgz#6ecdbbf923a07fc45850e69b0566efc7bf733283"
+  integrity sha512-etR3RgueY8pe88SA67wLm8rJmL1h+CLqUGHuAoNsseW35oTGJEri6eBTyaXnFKNQ80v/eO10hBYLgz036XRGgA==
+  dependencies:
+    clsx "^2.1.0"
 
 react-tooltip@^5.26.1:
   version "5.26.2"
@@ -3973,6 +3990,11 @@ vite-plugin-node-polyfills@^0.21.0:
   dependencies:
     "@rollup/plugin-inject" "^5.0.5"
     node-stdlib-browser "^1.2.0"
+
+vite-plugin-radar@^0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/vite-plugin-radar/-/vite-plugin-radar-0.9.3.tgz#c184897aa8c057fa845f1033a2f977011a8b7c70"
+  integrity sha512-o/7F0gHQW9yUxpExXYwQLxFYOSxiWIPs3Uh24sg+wl5ikghzLKMQ2Xldak/rsT0o06rzdrAqP9+XSOwfCbwz2Q==
 
 vite-tsconfig-paths@^4.3.1:
   version "4.3.1"

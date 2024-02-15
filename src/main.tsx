@@ -9,9 +9,10 @@ import PrivacyPolicy from '@pages/privacy_policy/index.tsx';
 import TermsOfUse from '@pages/terms_of_use/index.tsx';
 import { IntlProvider } from 'react-intl';
 import ApolloClaimProvider from '@context/apollo_claim_context.tsx';
-import './index.css';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-tooltip/dist/react-tooltip.css';
+import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
 
 const router = createBrowserRouter([
   {

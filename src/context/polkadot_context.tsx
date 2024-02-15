@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 
 interface PolkadotContextType {
-  keyring: Keyring | null;
+  keyring: Keyring;
   loading: boolean;
   accounts: InjectedAccountWithMeta[] | null;
   selectedAccount: InjectedAccountWithMeta | null;
@@ -29,7 +29,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedAccount, setSelectedAccount] =
     useState<InjectedAccountWithMeta | null>(null);
 
-  const keyring = useRef<Keyring | null>(null);
+  const keyring = useRef<Keyring>(new Keyring());
 
   const saveSelectedAccount = useCallback(
     async (account: InjectedAccountWithMeta) => {
@@ -70,19 +70,14 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const setKeyring = useCallback(async () => {
-    keyring.current = new Keyring();
-  }, []);
-
   useEffect(() => {
     async function init() {
       await connectToPolkadotExtension();
-      await setKeyring();
       setLoading(false);
     }
 
     init();
-  }, [connectToPolkadotExtension, setKeyring]);
+  }, [connectToPolkadotExtension]);
 
   return (
     <PolkadotContext.Provider
@@ -101,4 +96,12 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
 
 export default PolkadotProvider;
 
-export const usePolkadot = () => useContext(PolkadotContext);
+export const usePolkadot = (): PolkadotContextType => {
+  const contextValue = useContext(PolkadotContext);
+  if (!contextValue) {
+    throw new Error(
+      'usePolkadot must be used within a PolkadotContextProvider',
+    );
+  }
+  return contextValue;
+};

@@ -7,29 +7,28 @@ import { formatWalletAddress, getAvatarTitle } from '@utils/helpers';
 import classNames from 'classnames';
 
 function Accounts({ closeModal }: { closeModal: () => void }) {
-  const polkadot = usePolkadot();
+  const { accounts, selectedAccount, saveSelectedAccount } = usePolkadot();
 
-  if (polkadot?.accounts) {
-    if (polkadot?.accounts.length > 0) {
+  if (accounts) {
+    if (accounts.length > 0) {
       return (
         <>
           <span className="text-grey text-sm">Select account to work with</span>
           <div className="mt-4 max-h-96 overflow-x-hidden overflow-y-auto flex flex-col gap-y-1">
-            {polkadot.accounts?.map(account => {
-              const selectedAccount =
-                account.address === polkadot?.selectedAccount?.address;
+            {accounts?.map(account => {
+              const active = account.address === selectedAccount?.address;
 
               return (
                 <div
                   key={account?.address}
                   className={classNames(
                     'bg-backgroundBody rounded-3xl border-2 cursor-pointer flex items-center overflow-hidden group p-2 xxs:p-4',
-                    selectedAccount
+                    active
                       ? 'border-border'
                       : 'border-transparent hover:border-border',
                   )}
                   onClick={() => {
-                    polkadot?.saveSelectedAccount(account);
+                    saveSelectedAccount(account);
                     closeModal();
                   }}
                 >

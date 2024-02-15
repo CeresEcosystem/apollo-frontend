@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { IoChatboxSharp } from 'react-icons/io5';
 
 const socials = [
-  { href: 'https://t.me/cerestoken', icon: 'telegram' },
-  { href: 'https://twitter.com/TokenCeres', icon: 'twitter' },
-  { href: 'https://t.me/ceres_polkaswap_bot', icon: 'chat' },
+  { href: 'https://t.me/cerestoken', icon: FaTelegramPlane },
+  { href: 'https://twitter.com/TokenCeres', icon: FaTwitter },
+  { href: 'https://t.me/ceres_polkaswap_bot', icon: IoChatboxSharp },
 ];
 
 const links = [
@@ -25,21 +27,25 @@ export default function Footer() {
       <div className="flex flex-col gap-y-8 gap-x-6 justify-between items-center sm:flex-row">
         <div className="max-w-md w-full flex flex-wrap justify-center gap-y-4 gap-x-10 sm:justify-start lg:gap-x-16">
           <div className="flex flex-col gap-y-5 items-center">
-            <img src="/polkaswap.png" alt="polkaswap" />
+            <a href="https://polkaswap.io/#/swap" target="_blank">
+              <img src="/polkaswap.png" alt="polkaswap" />
+            </a>
             <span className="text-grey font-medium text-xs">Follow us</span>
             <div className="flex gap-x-2">
-              {socials.map(social => (
-                <a
-                  key={social.href}
-                  href={social.href}
-                  target="_blank"
-                  className="cursor-pointer bg-border bg-opacity-40 pt-2 px-2 pb-1 rounded-md"
-                >
-                  <i
-                    className={`flaticon-${social.icon} text-xl text-grey text-center`}
-                  ></i>
-                </a>
-              ))}
+              {socials.map(social => {
+                const Icon = social.icon;
+
+                return (
+                  <a
+                    key={social.href}
+                    href={social.href}
+                    target="_blank"
+                    className="cursor-pointer bg-border bg-opacity-40 p-2 rounded-md"
+                  >
+                    <Icon className="text-xl text-grey text-center" />
+                  </a>
+                );
+              })}
             </div>
           </div>
           <ul

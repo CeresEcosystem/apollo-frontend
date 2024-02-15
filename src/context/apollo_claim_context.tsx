@@ -44,4 +44,12 @@ const ApolloClaimProvider = ({ children }: { children: React.ReactNode }) => {
 
 export default ApolloClaimProvider;
 
-export const useApolloClaim = () => useContext(ApolloClaimContext);
+export const useApolloClaim = (): ApolloClaimContextType => {
+  const contextValue = useContext(ApolloClaimContext);
+  if (!contextValue) {
+    throw new Error(
+      'useApolloClaim must be used within a ApolloClaimContextProvider',
+    );
+  }
+  return contextValue;
+};

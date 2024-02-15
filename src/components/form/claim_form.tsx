@@ -19,8 +19,12 @@ function ClaimFormLoading() {
 
 function AccountData({
   claimableAccount,
+  claimApollo,
+  claimLoading,
 }: {
   claimableAccount: ClaimableAccount | null;
+  claimApollo: () => void;
+  claimLoading: boolean;
 }) {
   const intl = useIntl();
 
@@ -52,7 +56,11 @@ function AccountData({
               </span>
             </div>
           ) : (
-            <button className="outline-none mt-10 w-full bg-pinkButton rounded-3xl p-4 text-center">
+            <button
+              onClick={() => claimApollo()}
+              disabled={claimLoading}
+              className="outline-none mt-10 w-full bg-pinkButton rounded-3xl p-4 text-center"
+            >
               <span className="font-semibold text-white">Claim</span>
             </button>
           )}
@@ -86,7 +94,7 @@ function AccountData({
 }
 
 function ClaimData() {
-  const { loading, claimableAccount } = useClaim();
+  const { loading, claimableAccount, claimApollo, claimLoading } = useClaim();
 
   return (
     <>
@@ -94,7 +102,11 @@ function ClaimData() {
         <ClaimFormLoading />
       ) : (
         <div className="text-center">
-          <AccountData claimableAccount={claimableAccount} />
+          <AccountData
+            claimableAccount={claimableAccount}
+            claimApollo={claimApollo}
+            claimLoading={claimLoading}
+          />
         </div>
       )}
     </>

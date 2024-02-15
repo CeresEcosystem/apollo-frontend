@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
-@import url('/font/flaticon.css');
 
 @tailwind base;
 @tailwind components;
@@ -8,6 +7,9 @@
 :root {
   --background: #f7f7f7;
   --pink: #eb0ead;
+  --text: #001c31;
+  --toastify-color-info: #eb0ead;
+  --toastify-icon-color-info: var(--toastify-color-info);
 }
 
 /* Firefox */
@@ -47,4 +49,25 @@ body {
   .background {
     background-image: none;
   }
+}
+
+/*
+	*
+	* react-toastify styles
+	*
+	*/
+.Toastify__toast-container {
+  max-width: 1280px;
+  width: auto;
+}
+.Toastify__toast-body {
+  padding: 15px;
+}
+.Toastify__toast--success {
+  font-size: 16px;
+  color: var(--text);
+}
+.Toastify__toast--error {
+  font-size: 16px;
+  color: var(--text);
 }
