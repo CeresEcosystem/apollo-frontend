@@ -87,7 +87,7 @@ function AccountData({
       </h2>
       <p className="mt-5 text-base md:text-lg lg:text-xl">
         Connect your wallet to see how much APOLLO you are eligible for and to
-        claim your allocation.
+        confirm your presence.
       </p>
     </>
   );

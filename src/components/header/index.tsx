@@ -2,7 +2,6 @@ import Gradient from '@components/gradient';
 import { useApolloClaim } from '@context/apollo_claim_context';
 import { usePolkadot } from '@context/polkadot_context';
 import { getAvatarTitle } from '@utils/helpers';
-import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 export default function Header({
@@ -12,8 +11,6 @@ export default function Header({
 }) {
   const { selectedAccount } = usePolkadot();
   const { totalClaimed } = useApolloClaim();
-
-  const intl = useIntl();
 
   return (
     <>
@@ -53,7 +50,7 @@ export default function Header({
         </div>
       </div>
       <div className="bg-grey h-8 px-5 flex items-center justify-center">
-        <span className="text-white font-medium text-sm sm:text-base">{`Total APOLLO claimed: ${totalClaimed !== null ? intl.formatNumber(totalClaimed, { maximumFractionDigits: 2 }) : '_'}`}</span>
+        <span className="text-white font-medium text-sm sm:text-base">{`Total APOLLO claimed: ${totalClaimed ?? '_'}`}</span>
       </div>
     </>
   );

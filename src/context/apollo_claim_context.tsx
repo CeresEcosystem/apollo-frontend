@@ -6,25 +6,42 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { useIntl } from 'react-intl';
 
 interface ApolloClaimContextType {
-  totalClaimed: number | null;
+  totalClaimed: string | null;
   fetchTotalClaim: () => void;
 }
 
 const ApolloClaimContext = createContext<ApolloClaimContextType | null>(null);
 
+const totalApollo = 100000;
+
 const ApolloClaimProvider = ({ children }: { children: React.ReactNode }) => {
-  const [totalClaimed, setTotalClaimed] = useState<number | null>(null);
+  const intl = useIntl();
+
+  const [totalClaimed, setTotalClaimed] = useState<string | null>(null);
 
   const fetchTotalClaim = useCallback(async () => {
     const response = await fetch(`${API_URL}/airdrop/total-claimed`);
 
     if (response.ok) {
       const json = await response.json();
-      setTotalClaimed(json.totalClaimed ?? 0);
+      const tClaimed = intl.formatNumber(json.totalClaimed, {
+        maximumFractionDigits: 2,
+      });
+      const percentage = intl.formatNumber(
+        (json.totalClaimed / totalApollo) * 100,
+        { maximumFractionDigits: 2 },
+      );
+
+      setTotalClaimed(
+        `${tClaimed}/${intl.formatNumber(totalApollo, {
+          maximumFractionDigits: 2,
+        })} (${percentage}%)`,
+      );
     }
-  }, []);
+  }, [intl]);
 
   useEffect(() => {
     fetchTotalClaim();
