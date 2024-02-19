@@ -11,7 +11,7 @@ const socials = [
 
 const links = [
   { href: '/privacy-policy', title: 'Privacy Policy', external: false },
-  { href: '/terms-of-use', title: 'Term of Use', external: false },
+  { href: '/terms-of-use', title: 'Terms of Use', external: false },
   {
     href: 'https://apollo-protocol.gitbook.io/apollo-protocol/get-started/what-is-apollo-protocol',
     title: 'Litepaper',
