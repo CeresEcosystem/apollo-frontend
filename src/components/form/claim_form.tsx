@@ -3,6 +3,10 @@ import Form from '.';
 import Skeleton from 'react-loading-skeleton';
 import { ClaimableAccount } from 'src/interfaces';
 import { useIntl } from 'react-intl';
+import Countdown, {
+  CountdownRenderProps,
+  CountdownRendererFn,
+} from 'react-countdown';
 
 function ClaimFormLoading() {
   return (
@@ -114,9 +118,38 @@ function ClaimData() {
 }
 
 export default function ClaimForm() {
+  const countDownRenderer: CountdownRendererFn = ({
+    formatted: { days, hours, minutes, seconds },
+    completed,
+  }: CountdownRenderProps) => {
+    if (completed) {
+      return (
+        <div className="rounded-3xl py-2 px-4 text-center bg-grey">
+          <span className="text-white font-medium text-center">
+            Claiming period ended
+          </span>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-col justify-center items-center gap-x-4">
+        <span className="font-medium text-grey">Claiming period ends in:</span>
+        <div className="rounded-3xl py-2 px-4 text-center bg-grey">
+          <span className="text-white font-medium text-center text-sm">
+            {days} days, {hours} hours, {minutes} minutes, {seconds} seconds
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <Form>
-      <ClaimData />
-    </Form>
+    <div className="flex flex-col gap-y-28">
+      <Countdown date={1710511200000} renderer={countDownRenderer} />
+      <Form>
+        <ClaimData />
+      </Form>
+    </div>
   );
 }

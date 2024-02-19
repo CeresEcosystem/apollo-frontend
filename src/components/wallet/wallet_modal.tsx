@@ -3,11 +3,16 @@ import Gradient from '@components/gradient';
 import Modal from '@components/modal';
 import { POLKADOT_EXTENSION } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
-import { formatWalletAddress, getAvatarTitle } from '@utils/helpers';
+import {
+  formatWalletAddress,
+  getAvatarTitle,
+  getEncodedAddress,
+} from '@utils/helpers';
 import classNames from 'classnames';
 
 function Accounts({ closeModal }: { closeModal: () => void }) {
-  const { accounts, selectedAccount, saveSelectedAccount } = usePolkadot();
+  const { accounts, selectedAccount, saveSelectedAccount, keyring } =
+    usePolkadot();
 
   if (accounts) {
     if (accounts.length > 0) {
@@ -17,6 +22,10 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
           <div className="mt-4 max-h-96 overflow-x-hidden overflow-y-auto flex flex-col gap-y-1">
             {accounts?.map(account => {
               const active = account.address === selectedAccount?.address;
+              const encodedAddress = getEncodedAddress(
+                keyring,
+                account.address,
+              );
 
               return (
                 <div
@@ -49,9 +58,9 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
                     >
                       {account?.meta?.name}
                     </p>
-                    <Clipboard text={account?.address}>
+                    <Clipboard text={encodedAddress}>
                       <p className="text-xs text-grey2 truncate hover:underline">
-                        {formatWalletAddress(account?.address, 12)}
+                        {formatWalletAddress(encodedAddress, 12)}
                       </p>
                     </Clipboard>
                   </div>

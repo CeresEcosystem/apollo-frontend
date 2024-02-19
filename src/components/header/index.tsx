@@ -49,8 +49,8 @@ export default function Header({
           )}
         </div>
       </div>
-      <div className="bg-grey h-8 px-5 flex items-center justify-center">
-        <span className="text-white font-medium text-sm sm:text-base">{`Total APOLLO claimed: ${totalClaimed ?? '_'}`}</span>
+      <div className="bg-grey py-2 px-5 flex items-center justify-center">
+        <span className="text-white text-center font-medium text-sm sm:text-base">{`Total APOLLO claimed: ${totalClaimed ?? '_'}`}</span>
       </div>
     </>
   );
