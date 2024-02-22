@@ -59,10 +59,10 @@ const useClaim = () => {
       const toastID = showLoadingNotify();
 
       const message = 'Claim Apollo airdrop';
-      const address = getEncodedAddress(keyring, selectedAccount?.address);
+      const address = getEncodedAddress(keyring, selectedAccount.address);
       let signature;
 
-      const injector = await web3FromSource(selectedAccount.meta.source);
+      const injector = await web3FromSource(selectedAccount.name!);
       const signRaw = injector?.signer?.signRaw;
 
       // eslint-disable-next-line no-extra-boolean-cast

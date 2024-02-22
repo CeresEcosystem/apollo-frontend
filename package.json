@@ -13,6 +13,10 @@
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@polkadot-onboard/core": "^1.1.0",
+    "@polkadot-onboard/injected-wallets": "^1.1.0",
+    "@polkadot-onboard/react": "^1.1.0",
+    "@polkadot-onboard/wallet-connect": "^1.1.0",
     "@polkadot/api": "^10.11.2",
     "@polkadot/extension-dapp": "^0.46.6",
     "classnames": "^2.5.1",

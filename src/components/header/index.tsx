@@ -1,7 +1,11 @@
 import Gradient from '@components/gradient';
 import { useApolloClaim } from '@context/apollo_claim_context';
 import { usePolkadot } from '@context/polkadot_context';
-import { getAvatarTitle } from '@utils/helpers';
+import {
+  formatWalletAddress,
+  getAvatarTitle,
+  getEncodedAddress,
+} from '@utils/helpers';
 import { Link } from 'react-router-dom';
 
 export default function Header({
@@ -9,7 +13,7 @@ export default function Header({
 }: {
   showWalletModal: () => void;
 }) {
-  const { selectedAccount } = usePolkadot();
+  const { selectedAccount, keyring } = usePolkadot();
   const { totalClaimed } = useApolloClaim();
 
   return (
@@ -24,17 +28,28 @@ export default function Header({
         >
           {selectedAccount ? (
             <div className="py-1 px-2 border-2 rounded-3xl border-border flex items-center gap-x-2 bg-backgroundBody xs:py-2 xs:px-4">
-              <div className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden">
-                <Gradient>
-                  <div className="h-full w-full flex items-center justify-center">
-                    <span className="text-sm text-white">
-                      {getAvatarTitle(selectedAccount.meta.name)}
-                    </span>
-                  </div>
-                </Gradient>
-              </div>
+              {selectedAccount.name ? (
+                <div className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden">
+                  <Gradient>
+                    <div className="h-full w-full flex items-center justify-center">
+                      <span className="text-sm text-white">
+                        {getAvatarTitle(selectedAccount.name)}
+                      </span>
+                    </div>
+                  </Gradient>
+                </div>
+              ) : (
+                <img
+                  src="/walletconnect.png"
+                  alt="walletconnect"
+                  className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden xxs:h-10 xxs:w-10"
+                />
+              )}
               <span className="hidden font-semibold text-sm text-grey truncate xxs:inline-block xs:text-base">
-                {selectedAccount.meta.name}
+                {formatWalletAddress(
+                  getEncodedAddress(keyring, selectedAccount.address),
+                  5,
+                )}
               </span>
             </div>
           ) : (

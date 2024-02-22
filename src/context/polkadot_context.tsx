@@ -1,7 +1,6 @@
-import { APP_NAME, POLKADOT_ACCOUNT } from '@constants/index';
-import { Keyring } from '@polkadot/api';
-import { web3Accounts, web3Enable } from '@polkadot/extension-dapp';
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
+import { ApiPromise, Keyring, WsProvider } from '@polkadot/api';
+import { useWallets } from '@polkadot-onboard/react';
+import { Account, BaseWallet } from '@polkadot-onboard/core';
 import React, {
   createContext,
   useCallback,
@@ -10,83 +9,99 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { showErrorNotify } from '@utils/toast';
 
 interface PolkadotContextType {
+  api: ApiPromise | null;
   keyring: Keyring;
   loading: boolean;
-  accounts: InjectedAccountWithMeta[] | null;
-  selectedAccount: InjectedAccountWithMeta | null;
-  saveSelectedAccount: (account: InjectedAccountWithMeta) => void;
+  accounts: Account[] | undefined;
+  selectedWalletProvider: BaseWallet | undefined;
+  selectedAccount: Account | undefined;
+  setSelectedAccount: (account: Account) => void;
+  wallets: BaseWallet[] | undefined;
+  connect: (wallet: BaseWallet) => void;
 }
 
 const PolkadotContext = createContext<PolkadotContextType | null>(null);
 
 const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
+  const { wallets } = useWallets();
+
+  const [accounts, setAccounts] = useState<Account[] | undefined>([]);
+  const [api, setApi] = useState<ApiPromise | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [accounts, setAccounts] = useState<InjectedAccountWithMeta[] | null>(
-    null,
-  );
-  const [selectedAccount, setSelectedAccount] =
-    useState<InjectedAccountWithMeta | null>(null);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account | undefined>();
+  const [selectedWalletProvider, setSelectedWalletProvider] = useState<
+    BaseWallet | undefined
+  >();
 
   const keyring = useRef<Keyring>(new Keyring());
 
-  const saveSelectedAccount = useCallback(
-    async (account: InjectedAccountWithMeta) => {
-      if (account !== selectedAccount) {
-        const acc = account as InjectedAccountWithMeta;
-        localStorage.setItem(POLKADOT_ACCOUNT, JSON.stringify(account));
-        setSelectedAccount(acc);
-      }
-    },
-    [selectedAccount],
-  );
+  useEffect(() => {
+    const setupApi = async () => {
+      const provider = new WsProvider('wss://westend-rpc.polkadot.io');
+      const api = await ApiPromise.create({ provider });
 
-  const connectToPolkadotExtension = useCallback(async () => {
-    const accountJSON = localStorage.getItem(POLKADOT_ACCOUNT);
-    const account = accountJSON ? JSON.parse(accountJSON) : null;
+      setApi(api);
+      setLoading(false);
+    };
 
-    const extensions = await web3Enable(APP_NAME);
-
-    if (extensions.length !== 0) {
-      const allAccounts = await web3Accounts();
-
-      if (allAccounts !== null) {
-        if (allAccounts.length > 0) {
-          setAccounts(allAccounts);
-
-          if (account !== null) {
-            const accountsFiltered = allAccounts.filter(
-              acc => acc?.meta?.name === account?.meta?.name,
-            );
-            if (accountsFiltered.length > 0) {
-              setSelectedAccount(account);
-            }
-          }
-        } else {
-          setAccounts([]);
-        }
-      }
-    }
+    setupApi();
   }, []);
 
+  const connect = useCallback(
+    async (walletProvider: BaseWallet) => {
+      if (!isBusy) {
+        setIsBusy(true);
+        try {
+          await walletProvider.connect();
+          setSelectedWalletProvider(walletProvider);
+        } catch (err) {
+          showErrorNotify('Connection failed', true);
+        }
+        setIsBusy(false);
+      }
+    },
+    [isBusy],
+  );
+
   useEffect(() => {
-    async function init() {
-      await connectToPolkadotExtension();
-      setLoading(false);
+    if (!selectedWalletProvider) {
+      setAccounts([]);
+      return () => {};
     }
 
-    init();
-  }, [connectToPolkadotExtension]);
+    const promUnsubscribe = selectedWalletProvider.subscribeAccounts(
+      (accs: Account[]) => {
+        if (accs.length > 0) {
+          setAccounts(accs);
+        } else {
+          showErrorNotify('Connection failed', true);
+          setSelectedWalletProvider(undefined);
+          setSelectedAccount(undefined);
+        }
+      },
+    );
+
+    return () => {
+      promUnsubscribe.then(unsub => unsub());
+    };
+  }, [selectedWalletProvider]);
 
   return (
     <PolkadotContext.Provider
       value={{
+        api,
         keyring: keyring.current,
         loading,
         accounts,
+        selectedWalletProvider,
         selectedAccount,
-        saveSelectedAccount,
+        setSelectedAccount,
+        wallets,
+        connect,
       }}
     >
       {children}

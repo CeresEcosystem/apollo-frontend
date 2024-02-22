@@ -1,62 +1,76 @@
 import Clipboard from '@components/clipboard';
 import Gradient from '@components/gradient';
 import Modal from '@components/modal';
-import { POLKADOT_EXTENSION } from '@constants/index';
+import { APP_NAME } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
+import { BaseWallet } from '@polkadot-onboard/core';
 import {
   formatWalletAddress,
   getAvatarTitle,
   getEncodedAddress,
 } from '@utils/helpers';
-import classNames from 'classnames';
 
 function Accounts({ closeModal }: { closeModal: () => void }) {
-  const { accounts, selectedAccount, saveSelectedAccount, keyring } =
-    usePolkadot();
+  const {
+    accounts,
+    selectedAccount,
+    selectedWalletProvider,
+    keyring,
+    wallets,
+    connect,
+    setSelectedAccount,
+  } = usePolkadot();
 
-  if (accounts) {
-    if (accounts.length > 0) {
-      return (
-        <>
-          <span className="text-grey text-sm">Select account to work with</span>
-          <div className="mt-4 max-h-96 overflow-x-hidden overflow-y-auto flex flex-col gap-y-1">
-            {accounts?.map(account => {
-              const active = account.address === selectedAccount?.address;
-              const encodedAddress = getEncodedAddress(
-                keyring,
-                account.address,
-              );
+  if (selectedAccount) {
+    return (
+      <div>
+        <span>Selected account</span>
+      </div>
+    );
+  }
 
-              return (
-                <div
-                  key={account?.address}
-                  className={classNames(
-                    'bg-backgroundBody rounded-3xl border-2 cursor-pointer flex items-center overflow-hidden group p-2 xxs:p-4',
-                    active
-                      ? 'border-border'
-                      : 'border-transparent hover:border-border',
-                  )}
-                  onClick={() => {
-                    saveSelectedAccount(account);
-                    closeModal();
-                  }}
-                >
+  if (selectedWalletProvider && accounts && accounts?.length > 0) {
+    return (
+      <>
+        <span className="text-grey text-sm">Select account to work with</span>
+        <div className="mt-4 max-h-96 overflow-x-hidden overflow-y-auto flex flex-col gap-y-1">
+          {accounts.map(account => {
+            const encodedAddress = getEncodedAddress(keyring, account.address);
+
+            return (
+              <div
+                key={account.address}
+                className="bg-backgroundBody rounded-3xl border-2 cursor-pointer flex items-center overflow-hidden p-2 xxs:p-4 border-transparent hover:border-border"
+                onClick={() => {
+                  setSelectedAccount(account);
+                  closeModal();
+                }}
+              >
+                {account.name ? (
                   <div className="h-8 w-8 rounded-full overflow-hidden xxs:h-10 xxs:w-10">
                     <Gradient>
                       <div className="h-full w-full flex items-center justify-center">
                         <span className="text-sm text-white xxs:text-lg">
-                          {getAvatarTitle(account?.meta?.name)}
+                          {getAvatarTitle(account?.name)}
                         </span>
                       </div>
                     </Gradient>
                   </div>
+                ) : (
+                  <img
+                    src="/walletconnect.png"
+                    alt="walletconnect"
+                    className="h-8 w-8 rounded-full overflow-hidden xxs:h-10 xxs:w-10"
+                  />
+                )}
+                {account.name ? (
                   <div className="px-3 flex-1 overflow-hidden">
                     <p
                       className={
                         'truncate font-medium text-grey text-sm xxs:text-base'
                       }
                     >
-                      {account?.meta?.name}
+                      {account.name}
                     </p>
                     <Clipboard text={encodedAddress}>
                       <p className="text-xs text-grey2 truncate hover:underline">
@@ -64,40 +78,43 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
                       </p>
                     </Clipboard>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      );
-    }
-
-    return (
-      <>
-        <p className="text-sm text-grey">
-          You currently don't have any accounts. Create your first account using
-          Polkadot JS extension.
-        </p>
+                ) : (
+                  <Clipboard text={encodedAddress}>
+                    <p className="px-3 text-xs text-grey font-medium truncate hover:underline">
+                      {formatWalletAddress(encodedAddress, 12)}
+                    </p>
+                  </Clipboard>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </>
     );
   }
 
   return (
-    <>
-      <p className="text-sm text-grey">
-        Please add wallet using Polkadot JS extension. If you don&apos;t have
-        Polkadot JS extension installed, please click on this
-        <a
-          href={POLKADOT_EXTENSION}
-          className="text-pinkLight cursor-pointer outline-none"
-          target={'_blank'}
-        >
-          {' '}
-          Link
-        </a>
-        .
-      </p>
-    </>
+    <div className="flex flex-col gap-y-2">
+      {wallets &&
+        wallets.map((wallet: BaseWallet) => (
+          <div
+            key={wallet.metadata.title}
+            onClick={() => connect(wallet)}
+            className="bg-backgroundBody rounded-3xl border-2 cursor-pointer flex gap-x-4 items-center overflow-hidden p-2 xxs:p-4 border-transparent hover:border-border"
+          >
+            <img
+              src={wallet.metadata.iconUrl}
+              alt={wallet.metadata.title}
+              className="h-10 sm:h-14"
+            />
+            <span className="font-medium text-grey text-sm xxs:text-base">
+              {wallet.metadata.title === APP_NAME
+                ? 'WalletConnect'
+                : wallet.metadata.title}
+            </span>
+          </div>
+        ))}
+    </div>
   );
 }
 
