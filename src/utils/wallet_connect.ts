@@ -25,6 +25,19 @@ const injectedWalletProvider = new InjectedWalletProvider(
     disallowed: [],
     supported: [
       {
+        id: 'fearless-wallet',
+        title: 'Fearless Wallet',
+        description: 'Fearless account injection and signer',
+        iconUrl: '/fearless.svg',
+        urls: {
+          main: '',
+          browsers: {
+            chrome:
+              'https://chromewebstore.google.com/detail/fearless-wallet/nhlnehondigmgckngjomcpcefcdplmgc',
+          },
+        },
+      },
+      {
         id: 'polkadot-js',
         title: 'Polkadot{.js}',
         description: 'PolkadotJS account injection and signer',
