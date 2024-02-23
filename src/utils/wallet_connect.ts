@@ -11,8 +11,7 @@ const walletConnectParams: WalletConnectConfiguration = {
   relayUrl: 'wss://relay.walletconnect.com',
   metadata: {
     name: APP_NAME,
-    description:
-      'The Apollo Protocol is the first lending and borrowing platform on the SORA network and a part of the Ceres ecosystem. Apollo enables its users to deposit and borrow assets on the SORA network. Depositors can provide liquidity and secure passive income through interest, while borrowers can leverage their assets without selling them and pay interest for this service.',
+    description: 'WalletConnect',
     url: 'https://apolloprotocol.io/',
     icons: ['/walletconnect.png'],
   },
@@ -27,7 +26,7 @@ const injectedWalletProvider = new InjectedWalletProvider(
       {
         id: 'fearless-wallet',
         title: 'Fearless Wallet',
-        description: 'Fearless account injection and signer',
+        description: 'Fearless Wallet',
         iconUrl: '/fearless.svg',
         urls: {
           main: '',
@@ -40,7 +39,7 @@ const injectedWalletProvider = new InjectedWalletProvider(
       {
         id: 'polkadot-js',
         title: 'Polkadot{.js}',
-        description: 'PolkadotJS account injection and signer',
+        description: 'Polkadot-js',
         iconUrl: '/polkadotjs.svg',
         urls: {
           main: '',

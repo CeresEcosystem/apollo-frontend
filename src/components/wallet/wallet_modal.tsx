@@ -5,7 +5,6 @@ import { usePolkadot } from '@context/polkadot_context';
 import { Account, BaseWallet } from '@polkadot-onboard/core';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import {
-  capitalize,
   formatWalletAddress,
   getAvatarTitle,
   getEncodedAddress,
@@ -150,9 +149,11 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
               alt={wallet.metadata.title}
               className="h-10 sm:h-14"
             />
-            <span className="font-medium text-grey text-sm xxs:text-base">
-              {capitalize(wallet.metadata.id)}
-            </span>
+            {wallet.metadata.description && (
+              <span className="font-medium text-grey text-sm xxs:text-base">
+                {wallet.metadata.description}
+              </span>
+            )}
           </div>
         ))}
     </div>
