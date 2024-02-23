@@ -20,7 +20,7 @@ function AccountItem({
   closeModal: () => void;
   selected?: boolean;
 }) {
-  const { keyring, setSelectedAccount } = usePolkadot();
+  const { keyring, saveSelectedAccount } = usePolkadot();
 
   const encodedAddress = getEncodedAddress(keyring, account.address);
 
@@ -34,7 +34,7 @@ function AccountItem({
       )}
       onClick={() => {
         if (!selected) {
-          setSelectedAccount(account);
+          saveSelectedAccount(account);
           closeModal();
         }
       }}
