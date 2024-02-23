@@ -30,7 +30,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const { wallets } = useWallets();
 
   const [accounts, setAccounts] = useState<Account[] | undefined>([]);
-  const [loading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>();
   const [selectedWalletProvider, setSelectedWalletProvider] = useState<
     BaseWallet | undefined
@@ -88,6 +88,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (wallets) {
       autoLoginSavedAccount(wallets);
+      setLoading(false);
     }
   }, [wallets, connect]);
 
@@ -126,7 +127,6 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <PolkadotContext.Provider
       value={{
-        // api,
         keyring: keyring.current,
         loading,
         accounts,
