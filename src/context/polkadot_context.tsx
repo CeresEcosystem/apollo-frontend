@@ -1,4 +1,4 @@
-import { ApiPromise, Keyring, WsProvider } from '@polkadot/api';
+import { Keyring } from '@polkadot/api';
 import { useWallets } from '@polkadot-onboard/react';
 import { Account, BaseWallet } from '@polkadot-onboard/core';
 import React, {
@@ -12,7 +12,7 @@ import React, {
 import { showErrorNotify } from '@utils/toast';
 
 interface PolkadotContextType {
-  api: ApiPromise | null;
+  // api: ApiPromise | null;
   keyring: Keyring;
   loading: boolean;
   accounts: Account[] | undefined;
@@ -21,6 +21,7 @@ interface PolkadotContextType {
   setSelectedAccount: (account: Account) => void;
   wallets: BaseWallet[] | undefined;
   connect: (wallet: BaseWallet) => void;
+  disconnect: () => void;
 }
 
 const PolkadotContext = createContext<PolkadotContextType | null>(null);
@@ -29,9 +30,8 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const { wallets } = useWallets();
 
   const [accounts, setAccounts] = useState<Account[] | undefined>([]);
-  const [api, setApi] = useState<ApiPromise | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isBusy, setIsBusy] = useState<boolean>(false);
+  // const [api, setApi] = useState<ApiPromise | null>(null);
+  const [loading] = useState<boolean>(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | undefined>();
   const [selectedWalletProvider, setSelectedWalletProvider] = useState<
     BaseWallet | undefined
@@ -39,33 +39,36 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
 
   const keyring = useRef<Keyring>(new Keyring());
 
-  useEffect(() => {
-    const setupApi = async () => {
-      const provider = new WsProvider('wss://westend-rpc.polkadot.io');
-      const api = await ApiPromise.create({ provider });
+  // useEffect(() => {
+  //   const setupApi = async () => {
+  //     const provider = new WsProvider('wss://westend-rpc.polkadot.io');
+  //     const api = await ApiPromise.create({ provider });
 
-      setApi(api);
-      setLoading(false);
-    };
+  //     setApi(api);
+  //     setLoading(false);
+  //   };
 
-    setupApi();
+  //   setupApi();
+  // }, []);
+
+  const connect = useCallback(async (walletProvider: BaseWallet) => {
+    try {
+      await walletProvider.connect();
+      setSelectedWalletProvider(walletProvider);
+    } catch (err) {
+      showErrorNotify('Connection failed', true);
+    }
   }, []);
 
-  const connect = useCallback(
-    async (walletProvider: BaseWallet) => {
-      if (!isBusy) {
-        setIsBusy(true);
-        try {
-          await walletProvider.connect();
-          setSelectedWalletProvider(walletProvider);
-        } catch (err) {
-          showErrorNotify('Connection failed', true);
-        }
-        setIsBusy(false);
-      }
-    },
-    [isBusy],
-  );
+  const disconnect = useCallback(() => {
+    // TODO - dodati i brisanje iz local storage
+    if (selectedWalletProvider?.isConnected) {
+      selectedWalletProvider?.disconnect();
+    }
+
+    setSelectedWalletProvider(undefined);
+    setSelectedAccount(undefined);
+  }, [selectedWalletProvider]);
 
   useEffect(() => {
     if (!selectedWalletProvider) {
@@ -77,10 +80,12 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
       (accs: Account[]) => {
         if (accs.length > 0) {
           setAccounts(accs);
+          if (accs.length === 1) {
+            setSelectedAccount(accs[0]);
+          }
         } else {
           showErrorNotify('Connection failed', true);
-          setSelectedWalletProvider(undefined);
-          setSelectedAccount(undefined);
+          disconnect();
         }
       },
     );
@@ -88,12 +93,12 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       promUnsubscribe.then(unsub => unsub());
     };
-  }, [selectedWalletProvider]);
+  }, [selectedWalletProvider, disconnect]);
 
   return (
     <PolkadotContext.Provider
       value={{
-        api,
+        // api,
         keyring: keyring.current,
         loading,
         accounts,
@@ -102,6 +107,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
         setSelectedAccount,
         wallets,
         connect,
+        disconnect,
       }}
     >
       {children}

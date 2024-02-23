@@ -5,11 +5,10 @@ import { getEncodedAddress } from '@utils/helpers';
 import { Keyring } from '@polkadot/api';
 import { ClaimableAccount } from 'src/interfaces';
 import { showErrorNotify, showLoadingNotify, updateNotify } from '@utils/toast';
-import { web3FromSource } from '@polkadot/extension-dapp';
 import { useApolloClaim } from '@context/apollo_claim_context';
 
 const useClaim = () => {
-  const { selectedAccount, keyring } = usePolkadot();
+  const { selectedAccount, keyring, selectedWalletProvider } = usePolkadot();
   const { fetchTotalClaim } = useApolloClaim();
 
   const [loading, setLoading] = useState(false);
@@ -59,26 +58,31 @@ const useClaim = () => {
       const toastID = showLoadingNotify();
 
       const message = 'Claim Apollo airdrop';
-      const address = getEncodedAddress(keyring, selectedAccount.address);
+
       let signature;
 
-      const injector = await web3FromSource(selectedAccount.name!);
-      const signRaw = injector?.signer?.signRaw;
+      try {
+        const signRaw = selectedWalletProvider?.signer?.signRaw;
 
-      // eslint-disable-next-line no-extra-boolean-cast
-      if (!!signRaw) {
-        const signerResult = await signRaw({
-          address: address,
-          data: message,
-          type: 'bytes',
-        });
-        signature = signerResult?.signature;
+        if (signRaw) {
+          const signerResult = await signRaw({
+            address: selectedAccount.address,
+            data: message,
+            type: 'bytes',
+          });
+          signature = signerResult.signature;
+        }
+      } catch (err) {
+        console.error(err);
       }
 
       const config = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ accountId: address, signature: signature }),
+        body: JSON.stringify({
+          accountId: getEncodedAddress(keyring, selectedAccount.address),
+          signature: signature,
+        }),
       };
 
       const response = await fetch(`${API_URL}/airdrop/claim`, config);
@@ -108,7 +112,13 @@ const useClaim = () => {
     } else {
       showErrorNotify('Please, connect your wallet!');
     }
-  }, [selectedAccount, keyring, claimableAccount, fetchTotalClaim]);
+  }, [
+    selectedAccount,
+    keyring,
+    claimableAccount,
+    fetchTotalClaim,
+    selectedWalletProvider,
+  ]);
 
   return { loading, claimableAccount, claimApollo, claimLoading };
 };
