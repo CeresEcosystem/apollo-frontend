@@ -24,19 +24,6 @@ const injectedWalletProvider = new InjectedWalletProvider(
     disallowed: [],
     supported: [
       {
-        id: 'fearless-wallet',
-        title: 'Fearless Wallet',
-        description: 'Fearless Wallet',
-        iconUrl: '/fearless.svg',
-        urls: {
-          main: '',
-          browsers: {
-            chrome:
-              'https://chromewebstore.google.com/detail/fearless-wallet/nhlnehondigmgckngjomcpcefcdplmgc',
-          },
-        },
-      },
-      {
         id: 'polkadot-js',
         title: 'Polkadot{.js}',
         description: 'Polkadot-js',
@@ -48,6 +35,19 @@ const injectedWalletProvider = new InjectedWalletProvider(
               'https://chrome.google.com/webstore/detail/polkadot%7Bjs%7D-extension/mopnmbcafieddcagagdcbnhejhlodfdd',
             firefox:
               'https://addons.mozilla.org/en-US/firefox/addon/polkadot-js-extension/',
+          },
+        },
+      },
+      {
+        id: 'fearless-wallet',
+        title: 'Fearless Wallet',
+        description: 'Fearless Wallet',
+        iconUrl: '/fearless.svg',
+        urls: {
+          main: '',
+          browsers: {
+            chrome:
+              'https://chromewebstore.google.com/detail/fearless-wallet/nhlnehondigmgckngjomcpcefcdplmgc',
           },
         },
       },

@@ -41,7 +41,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <IntlProvider locale="en">
-      <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
+      <PolkadotWalletsContextProvider
+        walletAggregator={walletAggregator}
+        initialWaitMs={2000}
+      >
         <ApolloClaimProvider>
           <PolkadotProvider>
             <RouterProvider router={router} />
