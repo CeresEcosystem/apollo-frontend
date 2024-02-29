@@ -4,7 +4,6 @@ import App from './App.tsx';
 import PolkadotProvider from '@context/polkadot_context.tsx';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import ErrorPage from '@pages/error/index.tsx';
-import ClaimPage from '@pages/claim/index.tsx';
 import PrivacyPolicy from '@pages/privacy_policy/index.tsx';
 import TermsOfUse from '@pages/terms_of_use/index.tsx';
 import { IntlProvider } from 'react-intl';
@@ -15,6 +14,7 @@ import 'react-tooltip/dist/react-tooltip.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
+import Governance from '@pages/governance/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <ClaimPage />,
+        element: <Governance />,
       },
       {
         path: '/privacy-policy',

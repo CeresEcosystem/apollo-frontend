@@ -8,11 +8,13 @@ export default {
       colors: {
         backgroundBody: '#F7F7F7',
         border: '#CECECE',
+        borderLight: '#D9D9D9',
         pinkDark: '#530037',
         pinkMedium: '#83045C',
         pinkLight: '#EB0EAD',
         pinkText: '#CD3BA2',
         pinkButton: '#C00A8B',
+        pinkBorder: '#C50B8F',
         grey: '#001C31',
         grey2: '#909090',
         grey3: '#F2F2F2',

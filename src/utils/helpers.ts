@@ -1,4 +1,5 @@
 import { Keyring } from '@polkadot/api';
+import moment from 'moment';
 
 export function getEncodedAddress(
   keyring: Keyring | null,
@@ -45,3 +46,8 @@ export function getAvatarTitle(accountName: string | undefined) {
 export function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
+
+export const formatDateFromTimestamp = (timestamp: number) => {
+  const date = moment(new Date(timestamp), 'YYYY-MM-DD HH:MM');
+  return `${date.format('MMM DD, YYYY')} ${date.format('HH:mm')}`;
+};
