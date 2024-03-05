@@ -15,6 +15,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
 import Governance from '@pages/governance/index.tsx';
+import GovernancePoll from '@pages/governance_poll/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,12 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Governance />,
+        children: [
+          {
+            path: '/governance/:pollId',
+            element: <GovernancePoll />,
+          },
+        ],
       },
       {
         path: '/privacy-policy',

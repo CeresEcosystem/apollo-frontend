@@ -1,5 +1,6 @@
 export const APP_NAME = 'Apollo - Lending Borrowing';
 
+export const SITE_URL = 'https://api.apolloprotocol.io';
 export const API_URL = 'https://api.apolloprotocol.io/api';
 
 // SORA API //

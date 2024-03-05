@@ -41,7 +41,7 @@ export default function Polls({
               <span className="text-sm text-grey pr-2">{getEndDate(poll)}</span>
               <Link
                 to={`/governance/${poll.pollId}`}
-                className="bg-gradient-to-r from-goldLight to-goldDark px-4 py-2 text-sm font-semibold text-black shadow-sm sm:text-base md:hidden"
+                className="px-4 py-2 text-sm font-semibold underline text-pinkBorder md:hidden"
               >
                 View
               </Link>

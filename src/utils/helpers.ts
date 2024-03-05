@@ -1,5 +1,6 @@
 import { Keyring } from '@polkadot/api';
 import moment from 'moment';
+import { IntlShape } from 'react-intl';
 
 export function getEncodedAddress(
   keyring: Keyring | null,
@@ -47,7 +48,18 @@ export function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-export const formatDateFromTimestamp = (timestamp: number) => {
+export function formatDateFromTimestamp(timestamp: number) {
   const date = moment(new Date(timestamp), 'YYYY-MM-DD HH:MM');
   return `${date.format('MMM DD, YYYY')} ${date.format('HH:mm')}`;
+}
+
+export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
+  if (price !== null) {
+    return intl.formatNumber(price, {
+      maximumFractionDigits: decimals,
+      minimumFractionDigits: decimals,
+    });
+  }
+
+  return '0.00';
 };
