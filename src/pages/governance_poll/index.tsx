@@ -1,13 +1,14 @@
 import CurrentResults from '@components/governance/current_results';
 import PollDetails from '@components/governance/poll_details';
 import PollInformation from '@components/governance/poll_information';
+import Vote from '@components/governance/vote';
 import VotesTable from '@components/governance/votes_table';
 import TitleWithSubtitle from '@components/heading/title_with_subtitle';
 import SpinnerSM from '@components/loader/spinner_sm';
 import useGovernancePoll from '@hooks/use_governance_poll';
 
 export default function GovernancePoll() {
-  const { loading, poll, results } = useGovernancePoll();
+  const { loading, poll, results, getPollDetails } = useGovernancePoll();
 
   if (loading || !poll) {
     return <SpinnerSM />;
@@ -24,9 +25,9 @@ export default function GovernancePoll() {
       <div className="grid gap-y-10 gap-x-10 md:grid-cols-4 lg:grid-cols-5 xl:gap-x-32">
         <PollDetails poll={poll} />
         <PollInformation poll={poll} />
-        <div className="md:col-span-2 lg:col-span-3">
-          <span>Voting</span>
-        </div>
+        {poll.status !== 'upcoming' && (
+          <Vote poll={poll} reload={getPollDetails} />
+        )}
         {poll.status !== 'upcoming' && <CurrentResults results={results} />}
         {poll.status !== 'upcoming' && <VotesTable poll={poll} />}
       </div>

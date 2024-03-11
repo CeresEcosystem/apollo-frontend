@@ -1,6 +1,7 @@
 import { Keyring } from '@polkadot/api';
 import moment from 'moment';
 import { IntlShape } from 'react-intl';
+import multipliers, { Multiplier } from './multipliers';
 
 export function getEncodedAddress(
   keyring: Keyring | null,
@@ -63,3 +64,17 @@ export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
 
   return '0.00';
 };
+
+export function parse(data?: string) {
+  if (data) {
+    const dataSplit = data?.split(' ');
+
+    return dataSplit.length !== 1
+      ? (
+          parseFloat(dataSplit[0]) * multipliers[dataSplit[1] as Multiplier]
+        ).toFixed(2)
+      : parseFloat(dataSplit[0]).toFixed(2);
+  }
+
+  return '0';
+}

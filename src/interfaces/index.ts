@@ -47,3 +47,8 @@ interface GovernanceResult {
 export interface GovernacePollResults {
   [option: string]: GovernanceResult;
 }
+
+export interface GovernanceSelectedAnswer {
+  answer: string;
+  index: number;
+}

@@ -68,9 +68,9 @@ const useGovernance = () => {
   useEffect(() => {
     async function fetchPolls() {
       const pollsResponses = await Promise.all([
-        getPolls('https://api.cerestoken.io/api/polls/active'),
-        getPolls('https://api.cerestoken.io/api/polls/upcoming', 1),
-        getPolls('https://api.cerestoken.io/api/polls/closed', 2),
+        getPolls('http://localhost:3006/api/polls/active'),
+        getPolls('http://localhost:3006/api/polls/upcoming', 1),
+        getPolls('http://localhost:3006/api/polls/closed', 2),
       ]);
 
       if (pollsResponses[0] && pollsResponses[1] && pollsResponses[2]) {

@@ -18,9 +18,7 @@ const useGovernancePoll = () => {
   const results = useRef<GovernacePollResults | undefined>();
 
   const getPollDetails = useCallback(async () => {
-    const response = await fetch(
-      `https://api.cerestoken.io/api/polls/${pollId}`,
-    );
+    const response = await fetch(`http://localhost:3006/api/polls/${pollId}`);
 
     if (response.ok) {
       const poll = (await response.json()) as GovernancePollDetails;
@@ -67,7 +65,7 @@ const useGovernancePoll = () => {
     getPollDetails();
   }, [getPollDetails]);
 
-  return { poll, loading, results: results.current };
+  return { poll, loading, results: results.current, getPollDetails };
 };
 
 export default useGovernancePoll;
