@@ -21,7 +21,6 @@
     "classnames": "^2.5.1",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
-    "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-intl": "^6.6.2",

@@ -3,10 +3,6 @@ import Form from '.';
 import Skeleton from 'react-loading-skeleton';
 import { ClaimableAccount } from 'src/interfaces';
 import { useIntl } from 'react-intl';
-import Countdown, {
-  CountdownRenderProps,
-  CountdownRendererFn,
-} from 'react-countdown';
 
 function ClaimFormLoading() {
   return (
@@ -23,12 +19,8 @@ function ClaimFormLoading() {
 
 function AccountData({
   claimableAccount,
-  claimApollo,
-  claimLoading,
 }: {
   claimableAccount: ClaimableAccount | null;
-  claimApollo: () => void;
-  claimLoading: boolean;
 }) {
   const intl = useIntl();
 
@@ -53,21 +45,6 @@ function AccountData({
               })}
             </span>
           </div>
-          {claimableAccount.hasClaimed ? (
-            <div className="mt-10 w-full bg-backgroundBody rounded-3xl p-4 text-center">
-              <span className="font-semibold text-grey">
-                Allocation claimed!
-              </span>
-            </div>
-          ) : (
-            <button
-              onClick={() => claimApollo()}
-              disabled={claimLoading}
-              className="outline-none mt-10 w-full bg-pinkButton rounded-3xl p-4 text-center"
-            >
-              <span className="font-semibold text-white">Claim</span>
-            </button>
-          )}
         </>
       );
     } else {
@@ -98,7 +75,7 @@ function AccountData({
 }
 
 function ClaimData() {
-  const { loading, claimableAccount, claimApollo, claimLoading } = useClaim();
+  const { loading, claimableAccount } = useClaim();
 
   return (
     <>
@@ -106,11 +83,7 @@ function ClaimData() {
         <ClaimFormLoading />
       ) : (
         <div className="text-center">
-          <AccountData
-            claimableAccount={claimableAccount}
-            claimApollo={claimApollo}
-            claimLoading={claimLoading}
-          />
+          <AccountData claimableAccount={claimableAccount} />
         </div>
       )}
     </>
@@ -118,35 +91,11 @@ function ClaimData() {
 }
 
 export default function ClaimForm() {
-  const countDownRenderer: CountdownRendererFn = ({
-    formatted: { days, hours, minutes, seconds },
-    completed,
-  }: CountdownRenderProps) => {
-    if (completed) {
-      return (
-        <div className="rounded-3xl py-2 px-4 text-center bg-grey">
-          <span className="text-white font-medium text-center">
-            Claiming period ended
-          </span>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex flex-col justify-center items-center gap-x-4">
-        <span className="font-medium text-grey">Claiming period ends in:</span>
-        <div className="rounded-3xl py-2 px-4 text-center bg-grey">
-          <span className="text-white font-medium text-center text-sm">
-            {days} days, {hours} hours, {minutes} minutes, {seconds} seconds
-          </span>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <div className="flex flex-col gap-y-28">
-      <Countdown date={1710511200000} renderer={countDownRenderer} />
+      <span className="font-semibold text-center text-grey">
+        Claiming period ended. Stay tuned!
+      </span>
       <Form>
         <ClaimData />
       </Form>
