@@ -37,7 +37,9 @@ function AccountData({
           </p>
           <div className="bg-backgroundBody text-pinkText mt-8 rounded-3xl border-2 border-border p-8 flex flex-col items-center justify-center gap-y-2">
             <span className="font-medium text-base md:text-lg lg:text-xl">
-              APOLLO Amount to claim
+              {claimableAccount.hasClaimed
+                ? 'APOLLO amount claimed'
+                : 'Unfortunately, you have not claimed your APOLLO'}
             </span>
             <span className="font-extrabold text-3xl md:text-4xl lg:text-5xl">
               {intl.formatNumber(claimableAccount.balance, {
@@ -67,8 +69,7 @@ function AccountData({
         Claim APOLLO!
       </h2>
       <p className="mt-5 text-base md:text-lg lg:text-xl">
-        Connect your wallet to see how much APOLLO you are eligible for and to
-        confirm your presence.
+        Connect your wallet to see how much APOLLO you are eligible for.
       </p>
     </>
   );

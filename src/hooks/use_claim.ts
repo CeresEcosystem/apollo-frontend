@@ -26,6 +26,7 @@ const useClaim = () => {
 
         if (response.ok) {
           const acc = (await response.json()) as ClaimableAccount;
+          console.log(JSON.stringify(acc));
           setClaimableAccount(acc);
         }
 
@@ -34,7 +35,7 @@ const useClaim = () => {
         setClaimableAccount({
           accountId: encodedAccount,
           balance: 0,
-          hasClaimed: true,
+          hasClaimed: false,
         });
         setLoading(false);
       }
