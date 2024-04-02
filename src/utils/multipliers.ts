@@ -1,26 +1,27 @@
-export type Multiplier =
-  | 'YXOR'
-  | 'ZXOR'
-  | 'EXOR'
-  | 'PXOR'
-  | 'TXOR'
-  | 'GXOR'
-  | 'BXOR'
-  | 'MXOR'
-  | 'kXOR'
-  | 'hXOR'
-  | 'daXOR'
-  | 'XOR'
-  | 'dXOR'
-  | 'cXOR'
-  | 'mXOR'
-  | 'µXOR'
-  | 'nXOR'
-  | 'pXOR'
-  | 'fXOR'
-  | 'aXOR'
-  | 'zXOR'
-  | 'yXOR';
+export type Multiplier = {
+  YXOR: number;
+  ZXOR: number;
+  EXOR: number;
+  PXOR: number;
+  TXOR: number;
+  GXOR: number;
+  BXOR: number;
+  MXOR: number;
+  kXOR: number;
+  hXOR: number;
+  daXOR: number;
+  XOR: number;
+  dXOR: number;
+  cXOR: number;
+  mXOR: number;
+  µXOR: number;
+  nXOR: number;
+  pXOR: number;
+  fXOR: number;
+  aXOR: number;
+  zXOR: number;
+  yXOR: number;
+};
 
 const multipliers = {
   YXOR: Math.pow(10, 24),

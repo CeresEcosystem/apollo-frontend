@@ -7,7 +7,6 @@ import ErrorPage from '@pages/error/index.tsx';
 import PrivacyPolicy from '@pages/privacy_policy/index.tsx';
 import TermsOfUse from '@pages/terms_of_use/index.tsx';
 import { IntlProvider } from 'react-intl';
-import ApolloClaimProvider from '@context/apollo_claim_context.tsx';
 import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-tooltip/dist/react-tooltip.css';
@@ -16,6 +15,8 @@ import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
 import Governance from '@pages/governance/index.tsx';
 import GovernancePoll from '@pages/governance_poll/index.tsx';
+import Markets from '@pages/markets/index.tsx';
+import Dashboard from '@pages/dashboard/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
+        element: <Markets />,
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />,
+      },
+      {
+        path: '/governance',
         element: <Governance />,
         children: [
           {
@@ -52,11 +61,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         walletAggregator={walletAggregator}
         initialWaitMs={2000}
       >
-        <ApolloClaimProvider>
-          <PolkadotProvider>
-            <RouterProvider router={router} />
-          </PolkadotProvider>
-        </ApolloClaimProvider>
+        <PolkadotProvider>
+          <RouterProvider router={router} />
+        </PolkadotProvider>
       </PolkadotWalletsContextProvider>
     </IntlProvider>
   </React.StrictMode>,

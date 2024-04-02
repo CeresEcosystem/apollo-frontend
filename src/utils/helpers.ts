@@ -65,16 +65,34 @@ export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
   return '0.00';
 };
 
+function isExistingMultiplier(
+  multiplier: string,
+): multiplier is keyof Multiplier {
+  return Object.keys(multipliers).includes(multiplier);
+}
+
 export function parse(data?: string) {
   if (data) {
     const dataSplit = data?.split(' ');
 
-    return dataSplit.length !== 1
-      ? (
-          parseFloat(dataSplit[0]) * multipliers[dataSplit[1] as Multiplier]
-        ).toFixed(2)
+    return dataSplit.length !== 1 && isExistingMultiplier(dataSplit[1])
+      ? (parseFloat(dataSplit[0]) * multipliers[dataSplit[1]]).toFixed(2)
       : parseFloat(dataSplit[0]).toFixed(2);
   }
 
   return '0';
+}
+
+export function calculatePrice(price: string) {
+  try {
+    const mp = price.split(' ')[1];
+
+    if (isExistingMultiplier(mp)) {
+      return (parseFloat(price.split(' ')[0]) * multipliers[mp]).toFixed(4);
+    } else {
+      return '0.00';
+    }
+  } catch {
+    return '0.00';
+  }
 }

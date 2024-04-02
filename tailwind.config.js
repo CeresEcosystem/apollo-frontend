@@ -22,6 +22,9 @@ export default {
       fontFamily: {
         body: ['Montserrat'],
       },
+      boxShadow: {
+        buttonShadow: '0px 2px 10px rgba(186, 19, 88, 0.3)',
+      },
     },
     screens: {
       xxxs: '320px',

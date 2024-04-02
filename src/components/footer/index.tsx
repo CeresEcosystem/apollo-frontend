@@ -23,84 +23,86 @@ const logos = ['/ceres.png', '/demeter.png', '/hermes.png', '/apollo.png'];
 
 export default function Footer() {
   return (
-    <div className="border-t-4 border-t-grey3 py-10 flex flex-col gap-y-8 px-5 md:px-16 lg:px-28">
-      <div className="flex flex-col gap-y-8 gap-x-6 justify-between items-center sm:flex-row">
-        <div className="max-w-md w-full flex flex-wrap justify-center gap-y-4 gap-x-10 sm:justify-start lg:gap-x-16">
-          <div className="flex flex-col gap-y-5 items-center">
-            <a href="https://polkaswap.io/#/swap" target="_blank">
-              <img src="/polkaswap.png" alt="polkaswap" />
-            </a>
-            <span className="text-grey font-medium text-xs">Follow us</span>
-            <div className="flex gap-x-2">
-              {socials.map(social => {
-                const Icon = social.icon;
+    <div className="border-t-4 border-t-grey3 py-10 px-5 md:px-16">
+      <div className="flex flex-col gap-y-8 max-w-[1740px] mx-auto">
+        <div className="flex flex-col gap-y-8 gap-x-6 justify-between items-center sm:flex-row">
+          <div className="max-w-md w-full flex flex-wrap justify-center gap-y-4 gap-x-10 sm:justify-start lg:gap-x-16">
+            <div className="flex flex-col gap-y-5 items-center">
+              <a href="https://polkaswap.io/#/swap" target="_blank">
+                <img src="/polkaswap.png" alt="polkaswap" />
+              </a>
+              <span className="text-grey font-medium text-xs">Follow us</span>
+              <div className="flex gap-x-2">
+                {socials.map(social => {
+                  const Icon = social.icon;
+
+                  return (
+                    <a
+                      key={social.href}
+                      href={social.href}
+                      target="_blank"
+                      className="cursor-pointer bg-border bg-opacity-40 p-2 rounded-md"
+                    >
+                      <Icon className="text-xl text-grey text-center" />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+            <ul
+              role="list"
+              className="flex flex-col gap-y-5 justify-center items-center"
+            >
+              {links.map(link => {
+                if (link.external) {
+                  return (
+                    <a key={link.title} href={link.href} target="_blank">
+                      <span className="text-grey text-sm font-medium flex gap-x-1">
+                        {link.title}
+                        <ArrowTopRightOnSquareIcon className="h-4 text-pinkText" />
+                      </span>
+                    </a>
+                  );
+                }
 
                 return (
-                  <a
-                    key={social.href}
-                    href={social.href}
-                    target="_blank"
-                    className="cursor-pointer bg-border bg-opacity-40 p-2 rounded-md"
+                  <Link
+                    key={link.title}
+                    to={link.href}
+                    className="text-grey text-sm font-medium"
                   >
-                    <Icon className="text-xl text-grey text-center" />
-                  </a>
+                    {link.title}
+                  </Link>
                 );
               })}
-            </div>
+            </ul>
           </div>
-          <ul
-            role="list"
-            className="flex flex-col gap-y-5 justify-center items-center"
-          >
-            {links.map(link => {
-              if (link.external) {
-                return (
-                  <a key={link.title} href={link.href} target="_blank">
-                    <span className="text-grey text-sm font-medium flex gap-x-1">
-                      {link.title}
-                      <ArrowTopRightOnSquareIcon className="h-4 text-pinkText" />
-                    </span>
-                  </a>
-                );
-              }
-
-              return (
-                <Link
-                  key={link.title}
-                  to={link.href}
-                  className="text-grey text-sm font-medium"
-                >
-                  {link.title}
-                </Link>
-              );
-            })}
-          </ul>
+          <span className="text-grey hidden text-center 2xl:block text-base">
+            Copyright© 2024{' '}
+            <a href="https://ceresblockchain.solutions/" target="_blank">
+              <span className="text-pinkText">CBS LLC</span>
+            </a>
+            . All rights reserved.
+          </span>
+          <div className="max-w-md flex gap-x-4 w-full items-center justify-center sm:justify-end sm:gap-x-2 md:gap-x-6">
+            {logos.map(logo => (
+              <img
+                key={logo}
+                src={logo}
+                alt={logo}
+                className="h-12 xs:h-14 md:h-16 lg:h-20"
+              />
+            ))}
+          </div>
         </div>
-        <span className="text-grey hidden text-center 2xl:block text-base">
+        <span className="text-grey text-xs text-center sm:text-sm md:text-base 2xl:hidden">
           Copyright© 2024{' '}
           <a href="https://ceresblockchain.solutions/" target="_blank">
             <span className="text-pinkText">CBS LLC</span>
           </a>
           . All rights reserved.
         </span>
-        <div className="max-w-md flex gap-x-4 w-full items-center justify-center sm:justify-end sm:gap-x-2 md:gap-x-6">
-          {logos.map(logo => (
-            <img
-              key={logo}
-              src={logo}
-              alt={logo}
-              className="h-12 xs:h-14 md:h-16 lg:h-20"
-            />
-          ))}
-        </div>
       </div>
-      <span className="text-grey text-xs text-center sm:text-sm md:text-base 2xl:hidden">
-        Copyright© 2024{' '}
-        <a href="https://ceresblockchain.solutions/" target="_blank">
-          <span className="text-pinkText">CBS LLC</span>
-        </a>
-        . All rights reserved.
-      </span>
     </div>
   );
 }
