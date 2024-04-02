@@ -1,3 +1,4 @@
+import { API_URL } from '@constants/index';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { GovernancePoll, GovernancePolls } from 'src/interfaces';
 
@@ -68,9 +69,9 @@ const useGovernance = () => {
   useEffect(() => {
     async function fetchPolls() {
       const pollsResponses = await Promise.all([
-        getPolls('http://localhost:3006/api/polls/active'),
-        getPolls('http://localhost:3006/api/polls/upcoming', 1),
-        getPolls('http://localhost:3006/api/polls/closed', 2),
+        getPolls(`${API_URL}/polls/active`),
+        getPolls(`${API_URL}/polls/upcoming`, 1),
+        getPolls(`${API_URL}/polls/closed`, 2),
       ]);
 
       if (pollsResponses[0] && pollsResponses[1] && pollsResponses[2]) {

@@ -1,3 +1,4 @@
+import { API_URL } from '@constants/index';
 import { priceFormat } from '@utils/helpers';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -18,7 +19,7 @@ const useGovernancePoll = () => {
   const results = useRef<GovernacePollResults | undefined>();
 
   const getPollDetails = useCallback(async () => {
-    const response = await fetch(`http://localhost:3006/api/polls/${pollId}`);
+    const response = await fetch(`${API_URL}/polls/${pollId}`);
 
     if (response.ok) {
       const poll = (await response.json()) as GovernancePollDetails;
