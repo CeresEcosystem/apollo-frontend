@@ -33,6 +33,8 @@ interface PolkadotContextType {
   connect: (wallet: BaseWallet) => void;
   disconnect: () => void;
   apolloPrice: string | null;
+  showWalletModal: boolean;
+  setShowWalletModal: (show: boolean) => void;
 }
 
 const PolkadotContext = createContext<PolkadotContextType | null>(null);
@@ -48,6 +50,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   >();
   const [apolloPrice, setApolloPrice] = useState<string | null>(null);
   const [api, setApi] = useState<ApiPromise | undefined>();
+  const [showWalletModal, setShowWalletModal] = useState(false);
 
   const keyring = useRef<Keyring>(new Keyring());
 
@@ -193,6 +196,8 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
         connect,
         disconnect,
         apolloPrice,
+        showWalletModal,
+        setShowWalletModal,
       }}
     >
       {children}

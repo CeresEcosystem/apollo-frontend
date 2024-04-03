@@ -63,12 +63,12 @@ function PageLinks() {
   );
 }
 
-function ConnectButton({ showWalletModal }: { showWalletModal: () => void }) {
-  const { selectedAccount, keyring } = usePolkadot();
+function ConnectButton() {
+  const { selectedAccount, keyring, setShowWalletModal } = usePolkadot();
 
   return (
     <div
-      onClick={showWalletModal}
+      onClick={() => setShowWalletModal(true)}
       className="cursor-pointer rounded-3xl shadow-buttonShadow overflow-hidden max-w-60"
     >
       {selectedAccount ? (
@@ -100,8 +100,8 @@ function ConnectButton({ showWalletModal }: { showWalletModal: () => void }) {
       ) : (
         <Gradient>
           <div className="py-3 px-4">
-            <img src="/wallet.svg" alt="wallet" className="xxs:hidden" />
-            <span className="hidden font-semibold text-white text-base xxs:block">
+            <img src="/wallet.svg" alt="wallet" className="xs:hidden" />
+            <span className="hidden font-semibold text-white text-base xs:block">
               Connect wallet
             </span>
           </div>
@@ -128,11 +128,7 @@ function ApolloPrice() {
   );
 }
 
-export default function Header({
-  showWalletModal,
-}: {
-  showWalletModal: () => void;
-}) {
+export default function Header() {
   const { pathname } = useLocation();
 
   const { apolloPrice } = usePolkadot();
@@ -171,7 +167,7 @@ export default function Header({
                   </div>
                   <div className="flex items-center gap-x-1 xl:gap-x-2">
                     <ApolloPrice />
-                    <ConnectButton showWalletModal={showWalletModal} />
+                    <ConnectButton />
                   </div>
                   <PageLinks />
                 </div>

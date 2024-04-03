@@ -160,17 +160,15 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
   );
 }
 
-export default function WalletModal({
-  showModal,
-  closeModal,
-}: {
-  showModal: boolean;
-  closeModal: () => void;
-}) {
+export default function WalletModal() {
+  const { showWalletModal, setShowWalletModal } = usePolkadot();
+
+  const closeModal = () => setShowWalletModal(false);
+
   return (
     <Modal
       title={'SORA Network Account'}
-      showModal={showModal}
+      showModal={showWalletModal}
       closeModal={closeModal}
     >
       <Accounts closeModal={closeModal} />
