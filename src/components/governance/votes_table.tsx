@@ -70,57 +70,48 @@ export default function VotesTable({ poll }: { poll: GovernancePollDetails }) {
   );
 
   return (
-    <div className="md:col-span-2 lg:col-span-3 bg-white rounded-3xl border-2 border-borderLight">
-      <span className="py-5 mx-5 inline-flex items-center text-lg text-grey font-bold">
-        <img src="/poll_info.png" alt="Poll info" className="mr-2" />
-        {`Votes ( ${poll?.voters?.length} )`}
-      </span>
-      <hr className="border border-borderLight" />
-      <div className="flex flex-col p-5">
-        {votesSlice?.length > 0 ? (
-          votesSlice?.map((vote, index) => {
-            return (
-              <div key={index.toString()} className="flex py-4">
-                <div className="flex items-center w-1/2 px-2 overflow-hidden self-center">
-                  <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
-                    {formatWalletAddress(vote.accountId)}
+    <div className="max-w-full overflow-x-auto md:col-span-4 lg:col-span-3 bg-white rounded-3xl border-2 border-borderLight">
+      <div className="min-w-[480px]">
+        <span className="py-5 mx-5 inline-flex items-center text-lg text-grey font-bold">
+          <img src="/poll_info.png" alt="Poll info" className="mr-2" />
+          {`Votes ( ${poll?.voters?.length} )`}
+        </span>
+        <hr className="border border-borderLight" />
+        <div className="flex flex-col p-5">
+          {votesSlice?.length > 0 ? (
+            votesSlice?.map((vote, index) => {
+              return (
+                <div key={index.toString()} className="flex py-4">
+                  <div className="flex items-center w-1/2 px-2 overflow-hidden self-center">
+                    <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
+                      {formatWalletAddress(vote.accountId)}
+                    </div>
+                    <CopyToClipboard
+                      text={vote.accountId}
+                      onCopy={() => showSuccessNotify('Wallet address copied.')}
+                    >
+                      <ClipboardIcon className="h-4 flex-shrink-0 ml-1 text-grey cursor-pointer" />
+                    </CopyToClipboard>
                   </div>
-                  <CopyToClipboard
-                    text={vote.accountId}
-                    onCopy={() => showSuccessNotify('Wallet address copied.')}
-                  >
-                    <ClipboardIcon className="h-4 ml-1 text-grey cursor-pointer" />
-                  </CopyToClipboard>
-                </div>
-                <div className="flex items-center w-1/4 px-2 overflow-hidden self-center">
-                  <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
-                    {getPollAnswer(poll.options, vote.votingOption)}
+                  <div className="flex items-center w-1/4 px-2 overflow-hidden self-center">
+                    <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
+                      {getPollAnswer(poll.options, vote.votingOption)}
+                    </div>
+                  </div>
+                  <div className="flex items-center w-1/4 px-2 overflow-hidden self-center">
+                    <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
+                      {vote.numberOfVotes}
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center w-1/4 px-2 overflow-hidden self-center">
-                  <div className="text-sm text-grey whitespace-nowrap text-ellipsis text-center max-w-full">
-                    {vote.numberOfVotes}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        ) : (
-          <span className="text-grey">No votes</span>
-        )}
-        {poll?.voters?.length > tableLimit && renderPagination()}
+              );
+            })
+          ) : (
+            <span className="text-grey">No votes</span>
+          )}
+          {poll?.voters?.length > tableLimit && renderPagination()}
+        </div>
       </div>
     </div>
   );
 }
-
-/* 
-
-<Fragment key={index.toString()}>
-                {renderLabelInfoWithIconsRow(
-                  vote.accountId,
-                  getPollAnswer(poll.options, vote.votingOption),
-                  vote.numberOfVotes
-                )}
-              </Fragment>
-*/

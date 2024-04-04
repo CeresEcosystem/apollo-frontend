@@ -12,7 +12,7 @@ const Information = ({
   info: string;
   copyInfo?: string;
 }) => (
-  <div className="flex items-center justify-between">
+  <div className="flex items-center justify-between gap-x-2">
     <span className="text-grey text-sm">{label}</span>
     {copyInfo && copyInfo !== '' ? (
       <CopyToClipboard
@@ -24,7 +24,7 @@ const Information = ({
         </span>
       </CopyToClipboard>
     ) : (
-      <span className={'text-grey capitalize font-semibold text-sm'}>
+      <span className={'text-grey capitalize text-end font-semibold text-sm'}>
         {info}
       </span>
     )}

@@ -3,6 +3,7 @@ export const TOKEN_NAME = 'Apollo';
 
 export const SITE_URL = 'https://api.apolloprotocol.io';
 export const API_URL = 'https://api.apolloprotocol.io/api';
+export const ICONS_URL = 'https://data.cerestoken.io/storage/icons/';
 
 // SORA API //
 export const POLKADOT_ACCOUNT = 'POLKADOT_ACCOUNT';

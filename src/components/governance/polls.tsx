@@ -29,7 +29,7 @@ export default function Polls({
         {polls.map(poll => (
           <li
             key={poll.pollId}
-            className="p-6 bg-white border border-borderLight rounded-3xl lg:p-12 hover:bg-backgroundBody hover:border-pinkBorder"
+            className=" p-4 xxs:p-6 bg-white border border-borderLight rounded-3xl lg:p-12 hover:bg-backgroundBody hover:border-pinkBorder"
           >
             <h3 className="font-bold text-grey">{poll.title}</h3>
             <p className="mt-3 mb-6 text-sm text-grey2 line-clamp-3">

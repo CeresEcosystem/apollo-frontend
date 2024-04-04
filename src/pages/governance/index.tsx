@@ -13,7 +13,7 @@ export default function Governance() {
   const { pollId } = useParams();
 
   return (
-    <PageFullscreen>
+    <PageFullscreen showBackgroundImage>
       {pollId ? (
         <Outlet />
       ) : (
