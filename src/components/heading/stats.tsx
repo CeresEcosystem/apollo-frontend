@@ -1,8 +1,9 @@
 import Gradient from '@components/gradient';
+import { usePolkadot } from '@context/polkadot_context';
 import classNames from 'classnames';
 
 const containerStyle =
-  'h-44 rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
+  'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
 const titleStyle =
   'block text-grey font-bold leading-tight text-lg xxs:text-xl xs:text-2xl lg:text-xl xl:text-2xl';
 const subtitleStyle =
@@ -11,9 +12,11 @@ const valueStyle =
   'text-grey font-bold text-2xl xxs:text-3xl xs:text-4xl lg:text-2xl xl:text-3xl 2xl:text-4xl';
 
 export default function Stats() {
+  const { selectedAccount } = usePolkadot();
+
   const renderValueLocked = () => {
     return (
-      <div className="h-44 rounded-2xl overflow-hidden xs:h-56 lg:h-44 xl:h-56">
+      <div className="h-44 shadow-sm rounded-2xl overflow-hidden xs:h-56 lg:h-44 xl:h-56">
         <Gradient>
           <div className="p-4 flex flex-col h-full justify-between bg-[url('/earth.png')] bg-no-repeat bg-right-bottom xs:p-6 lg:p-4 xl:p-6">
             <div>
@@ -87,7 +90,12 @@ export default function Stats() {
   };
 
   return (
-    <div className="mt-6 w-full grid gap-4 sm:grid-cols-2 lg:grid-cols-4 2xl:gap-6">
+    <div
+      className={classNames(
+        'w-full grid gap-4 sm:grid-cols-2 lg:grid-cols-4 2xl:gap-6',
+        selectedAccount ?? 'mt-6 md:mt-10',
+      )}
+    >
       {renderValueLocked()}
       {renderTotalLended()}
       {renderTotalBorrowed()}
