@@ -10,7 +10,7 @@ export default function CurrentResults({
     return (
       <div className="border-2 bg-white rounded-3xl border-borderLight md:col-span-2">
         <span className="py-5 mx-5 inline-flex items-center text-lg text-grey font-bold">
-          <img src="/current_results.png" alt="Poll info" className="mr-2" />
+          <img src="/current_results.webp" alt="Poll info" className="mr-2" />
           Current results
         </span>
         <hr className="border border-borderLight" />

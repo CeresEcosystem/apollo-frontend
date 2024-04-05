@@ -27,7 +27,7 @@ export default function ConnectWalletHeading() {
         <div className="bg-grey rounded-2xl flex flex-col justify-center items-center p-4 xxs:p-6 gap-y-2 xxs:gap-y-4 md:hidden">
           {renderContent()}
         </div>
-        <div className="hidden bg-[url('/wallet_connect_heading.png')] bg-contain bg-no-repeat w-full aspect-[6.24] md:flex flex-col justify-center items-center gap-y-4 xl:gap-y-6">
+        <div className="hidden bg-[url('/wallet_connect_heading.webp')] bg-contain bg-no-repeat w-full aspect-[6.24] md:flex flex-col justify-center items-center gap-y-4 xl:gap-y-6">
           {renderContent()}
         </div>
       </>

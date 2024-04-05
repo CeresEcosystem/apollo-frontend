@@ -19,7 +19,7 @@ const links = [
   },
 ];
 
-const logos = ['/ceres.png', '/demeter.png', '/hermes.png', '/apollo.png'];
+const logos = ['/ceres.webp', '/demeter.webp', '/hermes.webp', '/apollo.webp'];
 
 export default function Footer() {
   return (
@@ -29,7 +29,7 @@ export default function Footer() {
           <div className="max-w-md w-full flex flex-wrap justify-center gap-y-4 gap-x-10 sm:justify-start lg:gap-x-16">
             <div className="flex flex-col gap-y-5 items-center">
               <a href="https://polkaswap.io/#/swap" target="_blank">
-                <img src="/polkaswap.png" alt="polkaswap" />
+                <img src="/polkaswap.webp" alt="polkaswap" />
               </a>
               <span className="text-grey font-medium text-xs">Follow us</span>
               <div className="flex gap-x-2">

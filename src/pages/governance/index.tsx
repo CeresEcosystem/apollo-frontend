@@ -6,7 +6,7 @@ import Tabs from '@components/tabs';
 import useGovernance from '@hooks/use_governance';
 import { Outlet, useParams } from 'react-router-dom';
 
-export default function Governance() {
+export function Component() {
   const { loading, polls, tabs, selectedTab, onChange, onTabSelected } =
     useGovernance();
 
@@ -46,3 +46,5 @@ export default function Governance() {
     </PageFullscreen>
   );
 }
+
+Component.displayName = 'Governance';

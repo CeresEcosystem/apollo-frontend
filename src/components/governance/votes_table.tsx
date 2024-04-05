@@ -73,7 +73,7 @@ export default function VotesTable({ poll }: { poll: GovernancePollDetails }) {
     <div className="max-w-full overflow-x-auto md:col-span-4 lg:col-span-3 bg-white rounded-3xl border-2 border-borderLight">
       <div className="min-w-[480px]">
         <span className="py-5 mx-5 inline-flex items-center text-lg text-grey font-bold">
-          <img src="/poll_info.png" alt="Poll info" className="mr-2" />
+          <img src="/poll_info.webp" alt="Poll info" className="mr-2" />
           {`Votes ( ${poll?.voters?.length} )`}
         </span>
         <hr className="border border-borderLight" />

@@ -12,7 +12,7 @@ export default function PageFullscreen({
       className={classNames(
         'min-h-[calc(100vh-100px)] py-16 lg:py-20',
         showBackgroundImage
-          ? "bg-[url('/bg_logo.png')] bg-fixed bg-contain bg-no-repeat bg-right-bottom"
+          ? "bg-[url('/bg_logo.webp')] bg-fixed bg-contain bg-no-repeat bg-right-bottom"
           : '',
       )}
     >

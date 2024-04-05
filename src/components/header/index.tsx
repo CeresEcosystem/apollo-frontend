@@ -85,7 +85,7 @@ function ConnectButton() {
             </div>
           ) : (
             <img
-              src="/walletconnect.png"
+              src="/walletconnect.webp"
               alt="walletconnect"
               className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden xxs:h-10 xxs:w-10"
             />
@@ -118,7 +118,7 @@ function ApolloPrice() {
     <div className="rounded-3xl overflow-hidden hidden lg:block">
       <div className="py-1 px-2 border-2 rounded-3xl border-border flex items-center gap-x-2 bg-backgroundBody xs:py-2 xl:px-4">
         <div className="h-8 w-8 shadow-buttonShadow flex-shrink-0 rounded-full overflow-hidden">
-          <img src="/logo_bg.png" alt="logo" />
+          <img src="/logo_bg.webp" alt="logo" />
         </div>
         <span className="hidden font-semibold text-sm text-grey2 truncate xxs:inline-block xs:text-base">
           $<span className="text-grey pl-1">{apolloPrice ?? '0.00'}</span>
@@ -154,12 +154,12 @@ export default function Header() {
                     </div>
                     <Link to="/" className="h-full flex items-center">
                       <img
-                        src="/apollo.png"
+                        src="/apollo.webp"
                         alt="logo"
                         className="h-4/5 xxs:hidden"
                       />
                       <img
-                        src="/logo.png"
+                        src="/logo.webp"
                         alt="logo"
                         className="hidden xxs:block xxs:h-4/5 xs:h-full"
                       />
@@ -197,7 +197,7 @@ export default function Header() {
                         to="/"
                         className="outline-none"
                       >
-                        <img src="/logo.png" alt="logo" className="h-16" />
+                        <img src="/logo.webp" alt="logo" className="h-16" />
                       </Link>
                       <div className="mr-6 md:mr-14">
                         <button

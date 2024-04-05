@@ -34,7 +34,7 @@ export default function Vote({
 
   if (poll.status == 'closed' && account && !account.assetWithdrawn) {
     return (
-      <Container title="Cast your vote" icon="/cast_vote.png">
+      <Container title="Cast your vote" icon="/cast_vote.webp">
         <button
           disabled={loading}
           onClick={() => withdraw(poll.pollId, reload)}
@@ -48,7 +48,7 @@ export default function Vote({
 
   if (poll.status == 'closed') {
     return (
-      <Container title="Cast your vote" icon="/cast_vote.png">
+      <Container title="Cast your vote" icon="/cast_vote.webp">
         <span className="text-grey">This poll is closed.</span>
       </Container>
     );
@@ -56,7 +56,7 @@ export default function Vote({
 
   return (
     <>
-      <Container title="Cast your vote" icon="/cast_vote.png">
+      <Container title="Cast your vote" icon="/cast_vote.webp">
         <div className="gap-y-2 flex flex-col">
           {poll?.options?.map((option, index) => {
             return (

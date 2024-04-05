@@ -39,7 +39,7 @@ export default function PollInformation({
   return (
     <div className="border-2 bg-white rounded-3xl border-borderLight md:col-span-2">
       <span className="py-5 mx-5 inline-flex items-center text-lg text-grey font-bold">
-        <img src="/poll_info.png" alt="Poll info" className="mr-2" />
+        <img src="/poll_info.webp" alt="Poll info" className="mr-2" />
         Information
       </span>
       <hr className="border border-borderLight" />

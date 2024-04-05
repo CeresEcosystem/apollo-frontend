@@ -7,7 +7,7 @@ import TitleWithSubtitle from '@components/heading/title_with_subtitle';
 import SpinnerSM from '@components/loader/spinner_sm';
 import useGovernancePoll from '@hooks/use_governance_poll';
 
-export default function GovernancePoll() {
+export function Component() {
   const { loading, poll, results, getPollDetails } = useGovernancePoll();
 
   if (loading || !poll) {
@@ -34,3 +34,5 @@ export default function GovernancePoll() {
     </div>
   );
 }
+
+Component.displayName = 'Governance Poll';

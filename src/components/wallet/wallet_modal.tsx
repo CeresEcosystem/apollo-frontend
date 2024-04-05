@@ -51,7 +51,7 @@ function AccountItem({
         </div>
       ) : (
         <img
-          src="/walletconnect.png"
+          src="/walletconnect.webp"
           alt="walletconnect"
           className="h-8 w-8 rounded-full overflow-hidden xxs:h-10 xxs:w-10"
         />

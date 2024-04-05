@@ -1,13 +1,14 @@
 import Gradient from '@components/gradient';
 import { usePolkadot } from '@context/polkadot_context';
 import classNames from 'classnames';
+import { FaLock, FaUsers } from 'react-icons/fa';
 
 const containerStyle =
   'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
 const titleStyle =
   'block text-grey font-bold leading-tight text-lg xxs:text-xl xs:text-2xl lg:text-xl xl:text-2xl';
 const subtitleStyle =
-  'tracking-widest font-semibold text-[10px] xxs:text-xs lg:text-[10px] xl:text-xs text-grey2';
+  'tracking-widest whitespace-nowrap font-semibold text-[10px] xxs:text-xs lg:text-[10px] xl:text-xs text-grey2';
 const valueStyle =
   'text-grey font-bold text-2xl xxs:text-3xl xs:text-4xl lg:text-2xl xl:text-3xl 2xl:text-4xl';
 
@@ -16,9 +17,9 @@ export default function Stats() {
 
   const renderValueLocked = () => {
     return (
-      <div className="h-44 shadow-sm rounded-2xl overflow-hidden xs:h-56 lg:h-44 xl:h-56">
+      <div className="relative h-44 shadow-sm rounded-2xl overflow-hidden xs:h-56 lg:h-44 xl:h-56">
         <Gradient>
-          <div className="p-4 flex flex-col h-full justify-between bg-[url('/earth.png')] bg-no-repeat bg-right-bottom xs:p-6 lg:p-4 xl:p-6">
+          <div className="p-4 flex flex-col h-full justify-between xs:p-6 lg:p-4 xl:p-6">
             <div>
               <span className={classNames(titleStyle, 'text-white')}>
                 LOCKED
@@ -37,6 +38,7 @@ export default function Stats() {
             </span>
           </div>
         </Gradient>
+        <FaLock className="absolute right-1 bottom-4 h-36 w-auto xs:h-48 lg:h-36 xl:h-48 text-white text-opacity-15" />
       </div>
     );
   };
@@ -46,7 +48,7 @@ export default function Stats() {
       <div
         className={classNames(
           containerStyle,
-          "justify-between bg-[url('/total_lended.png')] bg-contain bg-no-repeat bg-bottom",
+          "justify-between bg-[url('/total_lended.webp')] bg-contain bg-no-repeat bg-bottom",
         )}
       >
         <span className={valueStyle}>$100M+</span>
@@ -63,7 +65,7 @@ export default function Stats() {
       <div
         className={classNames(
           containerStyle,
-          "flex-col bg-[url('/total_borrowed.png')] bg-no-repeat bg-center",
+          "flex-col bg-[url('/total_borrowed.webp')] bg-no-repeat bg-center",
         )}
       >
         <span className={valueStyle}>$150M+</span>
@@ -77,14 +79,15 @@ export default function Stats() {
       <div
         className={classNames(
           containerStyle,
-          "flex-col justify-between bg-[url('/total_users.png')] bg-[center_right_1rem] bg-[length:100px] xs:bg-auto lg:bg-[length:100px] xl:bg-auto bg-no-repeat",
+          'relative flex-col justify-between',
         )}
       >
-        <div>
+        <div className="bg-white bg-opacity-10 z-10 w-min">
           <span className={titleStyle}>USERS</span>
           <span className={subtitleStyle}>TOTAL ACTIVE</span>
         </div>
         <span className={valueStyle}>9,000+</span>
+        <FaUsers className="absolute right-2 top-2 h-36 w-auto xs:h-48 lg:h-36 xl:h-48 text-pinkIcon" />
       </div>
     );
   };

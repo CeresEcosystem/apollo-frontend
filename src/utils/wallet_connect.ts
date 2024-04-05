@@ -13,7 +13,7 @@ const walletConnectParams: WalletConnectConfiguration = {
     name: APP_NAME,
     description: 'WalletConnect',
     url: 'https://apolloprotocol.io/',
-    icons: ['/walletconnect.png'],
+    icons: ['/walletconnect.webp'],
   },
   chainIds: ['polkadot:91b171bb158e2d3848fa23a9f1c25182'],
   optionalChainIds: ['polkadot:91b171bb158e2d3848fa23a9f1c25182'],

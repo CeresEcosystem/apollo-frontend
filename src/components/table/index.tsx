@@ -69,7 +69,7 @@ export function IconContainer({ value }: { value: string }) {
   return (
     <div className="flex bg-white items-center mx-auto w-min gap-x-2 border border-border rounded-3xl py-1 px-2">
       <div className="h-6 w-6 rounded-full bg-pinkIcon flex items-center justify-center">
-        <img src="/value_icon.png" />
+        <img src="/value_icon.webp" />
       </div>
       <span className="font-medium text-grey">{value}</span>
     </div>
