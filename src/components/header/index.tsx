@@ -1,6 +1,6 @@
 import Gradient from '@components/gradient';
 import Overlay from '@components/overlay';
-import { TOKEN_NAME } from '@constants/index';
+import { TOAST_ID, TOKEN_NAME, WALLET_NOT_CONNECTED } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { Popover, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -9,6 +9,7 @@ import {
   getAvatarTitle,
   getEncodedAddress,
 } from '@utils/helpers';
+import { showErrorNotify } from '@utils/toast';
 import classNames from 'classnames';
 import { Fragment } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -17,19 +18,24 @@ const pages = [
   {
     title: 'Markets',
     link: '/',
+    requestWalletConnected: false,
   },
   {
     title: 'Dashboard',
     link: '/dashboard',
+    requestWalletConnected: true,
   },
   {
     title: 'Governance',
     link: '/governance',
+    requestWalletConnected: false,
   },
 ];
 
 function PageLinks() {
   const { pathname } = useLocation();
+
+  const { selectedAccount } = usePolkadot();
 
   return (
     <ul
@@ -37,7 +43,10 @@ function PageLinks() {
       className="absolute h-full left-1/2 -translate-x-1/2 hidden items-center gap-x-4 md:flex xl:gap-x-8"
     >
       {pages.map(page => {
-        const active = pathname === page.link;
+        const active =
+          page.link === '/'
+            ? pathname === page.link
+            : pathname.includes(page.link);
 
         return (
           <li
@@ -47,15 +56,29 @@ function PageLinks() {
               active ? 'border-b-pinkLight' : 'border-b-transparent',
             )}
           >
-            <Link
-              to={page.link}
-              className={classNames(
-                'font-medium px-2 text-sm xl:text-base hover:text-grey',
-                active ? 'text-grey' : 'text-grey2',
-              )}
-            >
-              {page.title}
-            </Link>
+            {!selectedAccount && page.requestWalletConnected ? (
+              <button
+                onClick={() =>
+                  showErrorNotify(WALLET_NOT_CONNECTED, true, TOAST_ID)
+                }
+                className={classNames(
+                  'font-medium px-2 text-sm xl:text-base outline-none hover:text-grey',
+                  active ? 'text-grey' : 'text-grey2',
+                )}
+              >
+                {page.title}
+              </button>
+            ) : (
+              <Link
+                to={page.link}
+                className={classNames(
+                  'font-medium px-2 text-sm xl:text-base hover:text-grey',
+                  active ? 'text-grey' : 'text-grey2',
+                )}
+              >
+                {page.title}
+              </Link>
+            )}
           </li>
         );
       })}
