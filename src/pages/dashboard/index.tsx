@@ -1,3 +1,7 @@
+import Borrowing from '@components/borrowing';
+import Stats from '@components/heading/stats';
+import Lending from '@components/lending';
+import PageContainer from '@components/page_container/page_container';
 import { TOAST_ID, WALLET_NOT_CONNECTED } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { showErrorNotify } from '@utils/toast';
@@ -19,9 +23,11 @@ export function Component() {
   }, [selectedAccount, navigate]);
 
   return (
-    <div>
-      <span>Dashboard</span>
-    </div>
+    <PageContainer>
+      <Stats forWallet />
+      <Lending />
+      <Borrowing />
+    </PageContainer>
   );
 }
 

@@ -95,7 +95,7 @@ function Collaterals() {
       </thead>
       <tbody className="divide-y divide-borderTable">
         {data.map(item => (
-          <tr key={item.id}>
+          <tr key={item.id} className="hover:bg-grey3">
             <td
               className={classNames(
                 tableCellCollateralStyle,
@@ -237,7 +237,7 @@ export default function Borrowing() {
 
           return (
             <Fragment key={item.id}>
-              <tr>
+              <tr className="hover:bg-grey3">
                 <td
                   className={classNames(
                     tableCellStyle,

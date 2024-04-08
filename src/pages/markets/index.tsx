@@ -1,7 +1,6 @@
-import Borrowing from '@components/borrowing';
 import ConnectWalletHeading from '@components/heading/connect_wallet_heading';
 import Stats from '@components/heading/stats';
-import Lending from '@components/lending';
+import MarketAssets from '@components/market_assets';
 import PageContainer from '@components/page_container/page_container';
 
 export default function Markets() {
@@ -9,8 +8,7 @@ export default function Markets() {
     <PageContainer>
       <ConnectWalletHeading />
       <Stats />
-      <Lending />
-      <Borrowing />
+      <MarketAssets />
     </PageContainer>
   );
 }

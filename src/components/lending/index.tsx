@@ -71,7 +71,7 @@ export default function Lending() {
       </thead>
       <tbody className="divide-y divide-borderTable">
         {sortedData.map(item => (
-          <tr key={item.id}>
+          <tr key={item.id} className="hover:bg-grey3">
             <td
               className={classNames(
                 tableCellStyle,

@@ -1,7 +1,7 @@
 import Gradient from '@components/gradient';
 import { usePolkadot } from '@context/polkadot_context';
 import classNames from 'classnames';
-import { FaLock, FaUsers } from 'react-icons/fa';
+import { FaLock, FaUsers, FaCoins } from 'react-icons/fa';
 
 const containerStyle =
   'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
@@ -12,7 +12,7 @@ const subtitleStyle =
 const valueStyle =
   'text-grey font-bold text-2xl xxs:text-3xl xs:text-4xl lg:text-2xl xl:text-3xl 2xl:text-4xl';
 
-export default function Stats() {
+export default function Stats({ forWallet = false }: { forWallet?: boolean }) {
   const { selectedAccount } = usePolkadot();
 
   const renderValueLocked = () => {
@@ -30,7 +30,7 @@ export default function Stats() {
                   'text-white text-opacity-50',
                 )}
               >
-                TOTAL VALUE
+                {`${forWallet ? '' : 'TOTAL '}VALUE`}
               </span>
             </div>
             <span className={classNames(valueStyle, 'text-white')}>
@@ -54,7 +54,7 @@ export default function Stats() {
         <span className={valueStyle}>$100M+</span>
         <div>
           <span className={titleStyle}>LENDED</span>
-          <span className={subtitleStyle}>TOTAL</span>
+          {!forWallet && <span className={subtitleStyle}>TOTAL</span>}
         </div>
       </div>
     );
@@ -69,7 +69,9 @@ export default function Stats() {
         )}
       >
         <span className={valueStyle}>$150M+</span>
-        <span className={subtitleStyle}>TOTAL BORROWED</span>
+        <span
+          className={subtitleStyle}
+        >{`${forWallet ? '' : 'TOTAL '}BORROWED`}</span>
       </div>
     );
   };
@@ -92,6 +94,31 @@ export default function Stats() {
     );
   };
 
+  const renderTotalRewards = () => {
+    return (
+      <div
+        className={classNames(
+          containerStyle,
+          'relative flex-col justify-between',
+        )}
+      >
+        <div className="bg-white bg-opacity-10 z-10 w-min">
+          <span className={titleStyle}>REWARDS</span>
+          <span className={subtitleStyle}>TOTAL</span>
+        </div>
+        <span
+          className={classNames(
+            valueStyle,
+            'bg-white bg-opacity-10 z-10 w-min',
+          )}
+        >
+          $100M+
+        </span>
+        <FaCoins className="absolute right-4 top-4 h-36 w-auto xs:top-9 lg:top-4 xl:top-9 text-pinkIcon" />
+      </div>
+    );
+  };
+
   return (
     <div
       className={classNames(
@@ -102,7 +129,7 @@ export default function Stats() {
       {renderValueLocked()}
       {renderTotalLended()}
       {renderTotalBorrowed()}
-      {renderActiveUsers()}
+      {forWallet ? renderTotalRewards() : renderActiveUsers()}
     </div>
   );
 }

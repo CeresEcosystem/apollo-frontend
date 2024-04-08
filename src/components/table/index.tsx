@@ -18,37 +18,48 @@ export function TableContainer({
   secondButtonCallback,
   children,
 }: {
-  title: string;
-  firstButtonTitle: string;
-  firstButtonCallback: () => void;
-  secondButtonTitle: string;
-  secondButtonCallback: () => void;
+  title?: string;
+  firstButtonTitle?: string;
+  firstButtonCallback?: () => void;
+  secondButtonTitle?: string;
+  secondButtonCallback?: () => void;
   children: React.ReactNode;
 }) {
   return (
     <>
       <div className="mt-16">
-        <h2 className="font-bold text-xl text-grey tracking-widest">{title}</h2>
+        {title && (
+          <h2 className="font-bold text-xl text-grey tracking-widest">
+            {title}
+          </h2>
+        )}
         <div className="max-w-full overflow-x-auto">
-          <table className="mt-5 bg-tableBackground rounded-2xl shadow-sm min-w-[768px] md:min-w-full overflow-hidden divide-y divide-borderTable">
+          <table
+            className={classNames(
+              'bg-tableBackground rounded-2xl shadow-sm min-w-[768px] md:min-w-full overflow-hidden divide-y divide-borderTable',
+              title ? 'mt-5' : 'mt-0',
+            )}
+          >
             {children}
           </table>
         </div>
       </div>
-      <div className="flex mt-6 gap-3 flex-col xxs:flex-row justify-center md:justify-end">
-        <button
-          onClick={firstButtonCallback}
-          className={classNames(buttonStyle, 'bg-pinkBorder text-white')}
-        >
-          {firstButtonTitle}
-        </button>
-        <button
-          onClick={secondButtonCallback}
-          className={classNames(buttonStyle, 'bg-white text-pinkBorder')}
-        >
-          {secondButtonTitle}
-        </button>
-      </div>
+      {firstButtonCallback && secondButtonCallback && (
+        <div className="flex mt-6 gap-3 flex-col xxs:flex-row justify-center md:justify-end">
+          <button
+            onClick={firstButtonCallback}
+            className={classNames(buttonStyle, 'bg-pinkBorder text-white')}
+          >
+            {firstButtonTitle}
+          </button>
+          <button
+            onClick={secondButtonCallback}
+            className={classNames(buttonStyle, 'bg-white text-pinkBorder')}
+          >
+            {secondButtonTitle}
+          </button>
+        </div>
+      )}
     </>
   );
 }
