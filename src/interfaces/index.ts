@@ -1,3 +1,8 @@
+export interface SelectOption {
+  label: string;
+  value: string;
+}
+
 export interface ClaimableAccount {
   accountId: string;
   balance: number;
@@ -51,4 +56,21 @@ export interface GovernacePollResults {
 export interface GovernanceSelectedAnswer {
   answer: string;
   index: number;
+}
+
+export interface LendingAssetFormData {
+  asset: SelectOption | '';
+}
+
+export interface LendingDataItem {
+  id: number;
+  asset: string;
+  apr: number;
+  amount: number;
+  reward: number;
+}
+
+export interface LendingWithdrawModal {
+  show: boolean;
+  item: LendingDataItem | null;
 }

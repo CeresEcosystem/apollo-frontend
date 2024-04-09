@@ -8,6 +8,8 @@
   --background: #f7f7f7;
   --pink: #eb0ead;
   --text: #001c31;
+  --inputBackground: #f8f8f8;
+  --inputBorder: #cecece;
   --toastify-color-info: #eb0ead;
   --toastify-icon-color-info: var(--toastify-color-info);
 }
@@ -49,6 +51,16 @@ body {
   .background {
     background-image: none;
   }
+}
+
+.css-13cymwt-control {
+  background: var(--inputBackground) !important;
+  border: none !important;
+}
+
+.css-t3ipsp-control {
+  background: var(--inputBackground) !important;
+  box-shadow: 0 0 0 0 !important;
 }
 
 /*
