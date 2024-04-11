@@ -6,6 +6,7 @@ import { useState } from 'react';
 import LendAssetModal from './lend_asset_modal';
 import WithdrawModal from './withdraw_modal';
 import { LendingDataItem, LendingWithdrawModal } from 'src/interfaces';
+import RewardsModal from '@components/rewards/rewards_modal';
 
 const data: LendingDataItem[] = [
   { id: 1, asset: 'PSWAP', apr: 5.2, amount: 1000, reward: 50 },
@@ -24,6 +25,7 @@ export default function Lending() {
     useTableSort<LendingDataItem>(data);
 
   const [showLendModal, setShowLendModal] = useState(false);
+  const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] =
     useState<LendingWithdrawModal>({
       show: false,
@@ -37,7 +39,7 @@ export default function Lending() {
         firstButtonTitle="Lend asset"
         firstButtonCallback={() => setShowLendModal(true)}
         secondButtonTitle="Get rewards"
-        secondButtonCallback={() => {}}
+        secondButtonCallback={() => setShowRewardsModal(true)}
       >
         <thead className="bg-grey bg-opacity-5">
           <tr>
@@ -115,6 +117,11 @@ export default function Lending() {
         assets={data}
         showModal={showLendModal}
         closeModal={() => setShowLendModal(false)}
+      />
+      <RewardsModal
+        assets={data}
+        showModal={showRewardsModal}
+        closeModal={() => setShowRewardsModal(false)}
       />
       <WithdrawModal
         showModal={showWithdrawModal.show}

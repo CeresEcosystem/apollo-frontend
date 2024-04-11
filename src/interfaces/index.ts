@@ -1,6 +1,7 @@
-export interface SelectOption {
+export interface AssetSelectOption {
   label: string;
   value: string;
+  icon: string;
 }
 
 export interface ClaimableAccount {
@@ -59,7 +60,12 @@ export interface GovernanceSelectedAnswer {
 }
 
 export interface LendingAssetFormData {
-  asset: SelectOption | '';
+  asset: AssetSelectOption | null;
+}
+
+export interface BorrowingAssetFormData {
+  asset: AssetSelectOption | null;
+  collateral: AssetSelectOption | null;
 }
 
 export interface LendingDataItem {
@@ -73,4 +79,24 @@ export interface LendingDataItem {
 export interface LendingWithdrawModal {
   show: boolean;
   item: LendingDataItem | null;
+}
+
+export interface TransactionOverviewData {
+  label: string;
+  info: string;
+}
+
+export interface BorrowingDataItem {
+  id: number;
+  asset: string;
+  apr: number;
+  amount: number;
+  interest: number;
+  reward: number;
+  healthFactor: number;
+}
+
+export interface BorrowingCollateralModal {
+  show: boolean;
+  item: BorrowingDataItem | null;
 }

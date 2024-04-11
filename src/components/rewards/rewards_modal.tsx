@@ -5,14 +5,13 @@ import {
   LendingAssetFormData,
   LendingDataItem,
 } from 'src/interfaces';
-import AssetBalance from '@components/input/asset_balance';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import TransactionFee from '@components/transaction/transaction_fee';
 import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL } from '@constants/index';
 
-export default function LendAssetModal({
+export default function RewardsModal({
   showModal,
   closeModal,
   assets,
@@ -42,18 +41,20 @@ export default function LendAssetModal({
   };
 
   return (
-    <Modal title="Lend asset" showModal={showModal} closeModal={closeModal}>
+    <Modal title="Rewards" showModal={showModal} closeModal={closeModal}>
       <AssetSelect
         options={options}
         selectedOption={formData.asset}
         handleChange={handleChange}
+        label="Select pool"
       />
-      <AssetBalance label="Amount" handleChange={() => {}} />
       {formData.asset && (
-        <TransactionOverview overviews={[{ label: 'APR', info: '1.37%' }]} />
+        <TransactionOverview
+          overviews={[{ label: 'Reward', info: '20 Apollo' }]}
+        />
       )}
       <TransactionFee />
-      <ModalButton title="Lend asset" />
+      <ModalButton title="Get rewards" />
     </Modal>
   );
 }

@@ -2,8 +2,8 @@ import Modal from '@components/modal';
 import { useState } from 'react';
 import {
   AssetSelectOption,
-  LendingAssetFormData,
-  LendingDataItem,
+  BorrowingAssetFormData,
+  BorrowingDataItem,
 } from 'src/interfaces';
 import AssetBalance from '@components/input/asset_balance';
 import TransactionOverview from '@components/transaction/transaction_overview';
@@ -12,17 +12,18 @@ import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL } from '@constants/index';
 
-export default function LendAssetModal({
+export default function BorrowAssetModal({
   showModal,
   closeModal,
   assets,
 }: {
   showModal: boolean;
   closeModal: () => void;
-  assets: LendingDataItem[];
+  assets: BorrowingDataItem[];
 }) {
-  const [formData, setFormData] = useState<LendingAssetFormData>({
+  const [formData, setFormData] = useState<BorrowingAssetFormData>({
     asset: null,
+    collateral: null,
   });
 
   const options: AssetSelectOption[] = assets.map(asset => {
@@ -33,7 +34,7 @@ export default function LendAssetModal({
     };
   });
 
-  const handleChange = (selectedOption: AssetSelectOption | null) => {
+  const handleAssetChange = (selectedOption: AssetSelectOption | null) => {
     if (selectedOption !== formData.asset) {
       setFormData(prevData => {
         return { ...prevData, asset: selectedOption };
@@ -41,19 +42,39 @@ export default function LendAssetModal({
     }
   };
 
+  const handleCorrateralChange = (selectedOption: AssetSelectOption | null) => {
+    if (selectedOption !== formData.collateral) {
+      setFormData(prevData => {
+        return { ...prevData, collateral: selectedOption };
+      });
+    }
+  };
+
   return (
-    <Modal title="Lend asset" showModal={showModal} closeModal={closeModal}>
+    <Modal title="Borrow asset" showModal={showModal} closeModal={closeModal}>
+      <AssetSelect
+        options={options}
+        label="Select collateral"
+        selectedOption={formData.collateral}
+        handleChange={handleCorrateralChange}
+      />
       <AssetSelect
         options={options}
         selectedOption={formData.asset}
-        handleChange={handleChange}
+        handleChange={handleAssetChange}
+        spaceTop
       />
       <AssetBalance label="Amount" handleChange={() => {}} />
-      {formData.asset && (
-        <TransactionOverview overviews={[{ label: 'APR', info: '1.37%' }]} />
+      {formData.asset && formData.collateral && (
+        <TransactionOverview
+          overviews={[
+            { label: 'Collateral', info: '100 XOR' },
+            { label: 'Max borrowing amount', info: '150 PSWAP' },
+          ]}
+        />
       )}
       <TransactionFee />
-      <ModalButton title="Lend asset" />
+      <ModalButton title="Borrow asset" />
     </Modal>
   );
 }
