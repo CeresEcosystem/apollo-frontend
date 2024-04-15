@@ -10,16 +10,9 @@ import React, {
   useState,
 } from 'react';
 import { showErrorNotify } from '@utils/toast';
-import {
-  APOLLO_ADDRESS,
-  DAI_ADDRESS,
-  POLKADOT_ACCOUNT,
-  POLKADOT_SOURCE,
-  SORA_API,
-} from '@constants/index';
+import { POLKADOT_ACCOUNT, POLKADOT_SOURCE, SORA_API } from '@constants/index';
 import { options } from '@utils/sora_options';
 import { ApiOptions } from '@polkadot/api/types';
-import { calculatePrice } from '@utils/helpers';
 
 interface PolkadotContextType {
   api: ApiPromise | undefined;
@@ -48,7 +41,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedWalletProvider, setSelectedWalletProvider] = useState<
     BaseWallet | undefined
   >();
-  const [apolloPrice, setApolloPrice] = useState<string | null>(null);
+  const [apolloPrice] = useState('0.00');
   const [api, setApi] = useState<ApiPromise | undefined>();
   const [showWalletModal, setShowWalletModal] = useState(false);
 
@@ -92,26 +85,6 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem(POLKADOT_SOURCE);
   }, [selectedWalletProvider]);
 
-  const getApolloPrice = useCallback(async () => {
-    await api?.rpc?.liquidityProxy?.quote(
-      0,
-      APOLLO_ADDRESS,
-      DAI_ADDRESS,
-      '1000000000000000000',
-      'WithDesiredInput',
-      ['XYKPool'],
-      'Disabled',
-      // @ts-expect-error No overload matches this call.
-      price => {
-        price = price.toHuman();
-
-        if (price != null) {
-          setApolloPrice(calculatePrice(price['amount']));
-        }
-      },
-    );
-  }, [api]);
-
   useEffect(() => {
     async function autoLoginSavedAccount(baseWallets: BaseWallet[]) {
       const source = localStorage.getItem(POLKADOT_SOURCE);
@@ -141,14 +114,13 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     async function init(wallets: BaseWallet[]) {
       await autoLoginSavedAccount(wallets);
       await setupApi();
-      await getApolloPrice();
       setLoading(false);
     }
 
     if (wallets) {
       init(wallets);
     }
-  }, [wallets, connect, getApolloPrice]);
+  }, [wallets, connect]);
 
   useEffect(() => {
     if (!selectedWalletProvider) {
@@ -195,9 +167,9 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
         wallets,
         connect,
         disconnect,
-        apolloPrice,
         showWalletModal,
         setShowWalletModal,
+        apolloPrice,
       }}
     >
       {children}

@@ -10,9 +10,12 @@ import 'react-tooltip/dist/react-tooltip.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
+import ReactGA from 'react-ga4';
+import { cryptoWaitReady } from '@polkadot/util-crypto';
 
-import Markets from '@pages/markets/index.tsx';
 import ErrorPage from '@pages/error/index.tsx';
+
+ReactGA.initialize('G-JYW28NEEEN');
 
 const router = createBrowserRouter([
   {
@@ -23,7 +26,7 @@ const router = createBrowserRouter([
       {
         index: true,
         path: '/',
-        element: <Markets />,
+        lazy: () => import('@pages/markets/index.tsx'),
       },
       {
         path: 'dashboard',
@@ -51,17 +54,16 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <IntlProvider locale="en">
-      <PolkadotWalletsContextProvider
-        walletAggregator={walletAggregator}
-        initialWaitMs={2000}
-      >
-        <PolkadotProvider>
-          <RouterProvider router={router} />
-        </PolkadotProvider>
-      </PolkadotWalletsContextProvider>
-    </IntlProvider>
-  </React.StrictMode>,
-);
+cryptoWaitReady().then(() => {
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <IntlProvider locale="en">
+        <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
+          <PolkadotProvider>
+            <RouterProvider router={router} />
+          </PolkadotProvider>
+        </PolkadotWalletsContextProvider>
+      </IntlProvider>
+    </React.StrictMode>,
+  );
+});

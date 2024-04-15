@@ -82,17 +82,3 @@ export function parse(data?: string) {
 
   return '0';
 }
-
-export function calculatePrice(price: string) {
-  try {
-    const mp = price.split(' ')[1];
-
-    if (isExistingMultiplier(mp)) {
-      return (parseFloat(price.split(' ')[0]) * multipliers[mp]).toFixed(4);
-    } else {
-      return '0.00';
-    }
-  } catch {
-    return '0.00';
-  }
-}

@@ -7,7 +7,6 @@
 :root {
   --background: #f7f7f7;
   --primary: #eb0ead;
-  --secondary: #eb0ead;
   --text: #001c31;
   --toastify-color-info: #eb0ead;
   --toastify-icon-color-info: var(--toastify-color-info);
@@ -25,7 +24,7 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--primary);
+  background: var(--background);
   border-radius: 5px;
 }
 

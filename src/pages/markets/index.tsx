@@ -3,7 +3,7 @@ import Stats from '@components/heading/stats';
 import MarketAssets from '@components/market_assets';
 import PageContainer from '@components/page_container/page_container';
 
-export default function Markets() {
+export function Component() {
   return (
     <PageContainer>
       <ConnectWalletHeading />
@@ -12,3 +12,5 @@ export default function Markets() {
     </PageContainer>
   );
 }
+
+Component.displayName = 'Markets';
