@@ -110,7 +110,7 @@ function ConnectButton() {
             <img
               src="/walletconnect.webp"
               alt="walletconnect"
-              className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden xxs:h-10 xxs:w-10"
+              className="h-8 w-8 flex-shrink-0 rounded-full overflow-hidden"
             />
           )}
           <span className="hidden font-semibold text-sm text-grey truncate xs:inline-block xs:text-base">

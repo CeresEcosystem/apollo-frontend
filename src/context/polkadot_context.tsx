@@ -67,7 +67,12 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const connect = useCallback(async (walletProvider: BaseWallet) => {
     try {
       await walletProvider.connect();
-      setSelectedWalletProvider(walletProvider);
+
+      if (walletProvider.signer) {
+        setSelectedWalletProvider(walletProvider);
+      } else {
+        window.location.reload();
+      }
     } catch (err) {
       showErrorNotify('Connection failed', true);
     }
