@@ -1,7 +1,9 @@
 import { usePolkadot } from '@context/polkadot_context';
+import { useWalletModal } from 'src/store';
 
 export default function ConnectWalletHeading() {
-  const { selectedAccount, setShowWalletModal } = usePolkadot();
+  const { selectedAccount } = usePolkadot();
+  const toggleWalletModal = useWalletModal(state => state.toggleWalletModal);
 
   const renderContent = () => {
     return (
@@ -10,7 +12,7 @@ export default function ConnectWalletHeading() {
           Please, connect your wallet
         </h1>
         <button
-          onClick={() => setShowWalletModal(true)}
+          onClick={() => toggleWalletModal()}
           className="py-1 xxs:py-2 px-4 border-2 rounded-3xl border-pinkBorder outline-none lg:py-3 lg:px-8"
         >
           <span className="font-semibold text-white text-xs xxs:text-sm lg:text-base xl:text-lg">

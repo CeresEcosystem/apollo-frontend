@@ -10,6 +10,7 @@ import {
   getEncodedAddress,
 } from '@utils/helpers';
 import classNames from 'classnames';
+import { useWalletModal } from 'src/store';
 
 function AccountItem({
   account,
@@ -161,9 +162,10 @@ function Accounts({ closeModal }: { closeModal: () => void }) {
 }
 
 export default function WalletModal() {
-  const { showWalletModal, setShowWalletModal } = usePolkadot();
+  const showWalletModal = useWalletModal(state => state.showWalletModal);
+  const toggleWalletModal = useWalletModal(state => state.toggleWalletModal);
 
-  const closeModal = () => setShowWalletModal(false);
+  const closeModal = () => toggleWalletModal();
 
   return (
     <Modal
@@ -175,48 +177,3 @@ export default function WalletModal() {
     </Modal>
   );
 }
-
-/* 
-if (polkadot?.selectedAccount) {
-      const address = getEncodedAddress(
-        polkadot?.keyring,
-        polkadot?.selectedAccount?.address,
-      );
-
-      return (
-        <div className="overflow-hidden shadow-lg rounded-xl bg-backgroundHeader pt-5">
-          <div className="px-5 flex flex-col">
-            <div className="inline-flex items-center">
-              <UserCircleIcon
-                className={'h-8 w-auto mr-2'}
-                aria-hidden="true"
-                color="#f0398c"
-              />
-              <h1 className="text-white font-bold text-base w-full truncate">
-                {polkadot?.selectedAccount?.meta?.name}
-              </h1>
-            </div>
-            <span className="text-white font-semibold text-base mt-4">
-              Your address
-            </span>
-            <div className="flex items-center">
-              <Clipboard text={address}>
-                <span className="text-white cursor-pointer font-medium text-sm text-opacity-50 hover:underline hover:text-opacity-100">
-                  {formatWalletAddress(address, 10)}
-                </span>
-              </Clipboard>
-            </div>
-          </div>
-          <div className="flex justify-center mt-10 mb-5">
-            <button
-              className="py-2 px-5 rounded-md bg-white bg-opacity-10 text-white font-bold text-base"
-              onClick={() => polkadot?.disconnect()}
-            >
-              Disconnect
-            </button>
-          </div>
-        </div>
-      );
-    }
-
-*/

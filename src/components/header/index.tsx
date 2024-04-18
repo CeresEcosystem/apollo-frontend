@@ -13,6 +13,7 @@ import { showErrorNotify } from '@utils/toast';
 import classNames from 'classnames';
 import { Fragment } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useApolloPrice, useWalletModal } from 'src/store';
 
 const pages = [
   {
@@ -87,11 +88,12 @@ function PageLinks() {
 }
 
 function ConnectButton() {
-  const { selectedAccount, keyring, setShowWalletModal } = usePolkadot();
+  const { selectedAccount, keyring } = usePolkadot();
+  const toggleWalletModal = useWalletModal(state => state.toggleWalletModal);
 
   return (
     <div
-      onClick={() => setShowWalletModal(true)}
+      onClick={() => toggleWalletModal()}
       className="cursor-pointer rounded-3xl shadow-buttonShadow overflow-hidden max-w-60"
     >
       {selectedAccount ? (
@@ -135,7 +137,7 @@ function ConnectButton() {
 }
 
 function ApolloPrice() {
-  const { apolloPrice } = usePolkadot();
+  const apolloPrice = useApolloPrice(state => state.price);
 
   return (
     <div className="rounded-3xl overflow-hidden hidden lg:block">
@@ -154,7 +156,7 @@ function ApolloPrice() {
 export default function Header() {
   const { pathname } = useLocation();
 
-  const { apolloPrice } = usePolkadot();
+  const apolloPrice = useApolloPrice(state => state.price);
 
   return (
     <div id="header">
