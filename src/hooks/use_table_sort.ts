@@ -1,20 +1,26 @@
 import { useCallback, useMemo, useState } from 'react';
 
-const useTableSort = <T>(data: T[]) => {
+const useTableSort = <T>(data: T[], initialKeySort?: keyof T) => {
   const [sortConfig, setSortConfig] = useState<{
-    key: keyof T | null;
+    key: keyof T | undefined;
     direction: string;
   }>({
-    key: null,
+    key: initialKeySort,
     direction: 'desc',
   });
 
   const requestSort = useCallback(
     (key: keyof T) => {
-      let direction = 'asc';
-      if (sortConfig.key === key && sortConfig.direction === 'asc') {
-        direction = 'desc';
+      let direction = 'desc';
+
+      if (sortConfig.key === key) {
+        if (sortConfig.direction === 'asc') {
+          direction = 'desc';
+        } else {
+          direction = 'asc';
+        }
       }
+
       setSortConfig({ key, direction });
     },
     [sortConfig],

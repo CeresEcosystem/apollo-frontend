@@ -8,9 +8,9 @@ import SpinnerSM from '@components/loader/spinner_sm';
 import useGovernancePoll from '@hooks/use_governance_poll';
 
 export function Component() {
-  const { loading, poll, results, getPollDetails } = useGovernancePoll();
+  const { isLoading, data, refetch } = useGovernancePoll();
 
-  if (loading || !poll) {
+  if (isLoading) {
     return <SpinnerSM />;
   }
 
@@ -23,13 +23,15 @@ export function Component() {
         }
       />
       <div className="grid gap-y-10 gap-x-10 md:grid-cols-4 lg:grid-cols-5 xl:gap-x-32">
-        <PollDetails poll={poll} />
-        <PollInformation poll={poll} />
-        {poll.status !== 'upcoming' && (
-          <Vote poll={poll} reload={getPollDetails} />
+        <PollDetails poll={data!.poll} />
+        <PollInformation poll={data!.poll} />
+        {data!.poll.status !== 'upcoming' && (
+          <Vote poll={data!.poll} reload={refetch} />
         )}
-        {poll.status !== 'upcoming' && <CurrentResults results={results} />}
-        {poll.status !== 'upcoming' && <VotesTable poll={poll} />}
+        {data!.poll.status !== 'upcoming' && (
+          <CurrentResults results={data!.results} />
+        )}
+        {data!.poll.status !== 'upcoming' && <VotesTable poll={data!.poll} />}
       </div>
     </div>
   );

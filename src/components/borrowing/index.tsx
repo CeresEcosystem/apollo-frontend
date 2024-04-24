@@ -12,173 +12,138 @@ import {
 } from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
 import { ICONS_URL } from '@constants/index';
-import RewardsModal from '@components/rewards/rewards_modal';
-import { BorrowingCollateralModal, BorrowingDataItem } from 'src/interfaces';
-import BorrowAssetModal from './borrow_asset_modal';
+// import RewardsModal from '@components/rewards/rewards_modal';
+import {
+  BorrowingCollateralModal,
+  BorrowingInfo,
+  Collateral,
+} from 'src/interfaces';
+// import BorrowAssetModal from './borrow_asset_modal';
 import RepayModal from './repay_modal';
-import AddMoreModal from './add_more_modal';
-
-const data: BorrowingDataItem[] = [
-  {
-    id: 1,
-    asset: 'PSWAP',
-    apr: 5.2,
-    amount: 1000,
-    interest: 39.36,
-    reward: 50,
-    healthFactor: 45.2,
-  },
-  {
-    id: 2,
-    asset: 'XOR',
-    apr: 4.8,
-    amount: 2000,
-    interest: 39.36,
-    reward: 60,
-    healthFactor: 45.2,
-  },
-  {
-    id: 3,
-    asset: 'ETH',
-    apr: 6.5,
-    amount: 1500,
-    interest: 39.36,
-    reward: 45,
-    healthFactor: 45.2,
-  },
-  {
-    id: 4,
-    asset: 'CERES',
-    apr: 5.2,
-    amount: 1000,
-    interest: 39.36,
-    reward: 50,
-    healthFactor: 45.2,
-  },
-  {
-    id: 5,
-    asset: 'HMX',
-    apr: 4.8,
-    amount: 2000,
-    interest: 39.36,
-    reward: 60,
-    healthFactor: 45.2,
-  },
-  {
-    id: 6,
-    asset: 'TBCD',
-    apr: 6.5,
-    amount: 1500,
-    interest: 39.36,
-    reward: 45,
-    healthFactor: 45.2,
-  },
-];
+import { priceFormat } from '@utils/helpers';
+import { useIntl } from 'react-intl';
+// import AddMoreModal from './add_more_modal';
 
 function Collaterals({
+  collaterals,
   showRepayModal,
   showAddMoreModal,
 }: {
-  showRepayModal: (item: BorrowingDataItem) => void;
-  showAddMoreModal: (item: BorrowingDataItem) => void;
+  collaterals: Collateral[];
+  showRepayModal: (item: Collateral) => void;
+  showAddMoreModal: (item: Collateral) => void;
 }) {
+  const intl = useIntl();
+
   return (
-    <table className="bg-backgroundBody rounded-2xl min-w-full">
-      <thead>
-        <tr>
-          <th className={tableHeadStyle}>Asset</th>
-          <th className={tableHeadStyle}>Collateral amount</th>
-          <th className={tableHeadStyle}>Interest</th>
-          <th className={tableHeadStyle}>Rewards</th>
-          <th className={tableHeadStyle}>Borrowed amount</th>
-          <th className={tableHeadStyle}>Actions</th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-borderTable">
-        {data.map(item => (
-          <tr key={item.id} className="hover:bg-grey3">
-            <td
-              className={classNames(
-                tableCellCollateralStyle,
-                'flex items-center justify-center',
-              )}
-            >
-              <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
-                <img
-                  src={`https://data.cerestoken.io/storage/icons/${item.asset}.svg`}
-                  alt={item.asset}
-                />
-              </div>
-              <span className="ml-4 text-grey min-w-14 text-sm">
-                {item.asset}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {item.amount}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {item.interest}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {item.reward}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {item.apr}
-              </span>
-            </td>
-            <td className={classNames(tableCellCollateralStyle, 'text-center')}>
-              <button
-                onClick={() => showRepayModal(item)}
-                className={classNames(
-                  tableButtonStyle,
-                  'bg-pinkBorder text-white',
-                )}
-              >
-                Repay
-              </button>
-              <button
-                onClick={() => showAddMoreModal(item)}
-                className={classNames(
-                  tableButtonStyle,
-                  'bg-white text-pinkBorder ml-2',
-                )}
-              >
-                Add more
-              </button>
-            </td>
+    <div className="bg-slate-300 w-full">
+      <table className="bg-backgroundBody rounded-2xl min-w-full">
+        <thead>
+          <tr>
+            <th className={tableHeadStyle}>Asset</th>
+            <th className={tableHeadStyle}>Collateral amount</th>
+            <th className={tableHeadStyle}>Borrowed amount</th>
+            <th className={tableHeadStyle}>Interest</th>
+            <th className={tableHeadStyle}>Rewards</th>
+            <th className={tableHeadStyle}>Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="divide-y divide-borderTable">
+          {collaterals.map(collateral => (
+            <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
+              <td
+                className={classNames(
+                  tableCellCollateralStyle,
+                  'flex items-center justify-center',
+                )}
+              >
+                <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
+                  <img
+                    src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
+                    alt={collateral.collateralAssetSymbol}
+                  />
+                </div>
+                <span className="ml-4 text-grey min-w-14 text-sm">
+                  {collateral.collateralAssetSymbol}
+                </span>
+              </td>
+              <td className={tableCellCollateralStyle}>
+                <span className="text-grey block text-center text-sm">
+                  {priceFormat(intl, collateral.collateralAmount, 3)}
+                </span>
+              </td>
+              <td className={tableCellCollateralStyle}>
+                <span className="text-grey block text-center text-sm">
+                  {priceFormat(intl, collateral.borrowedAmount, 3)}
+                </span>
+              </td>
+              <td className={tableCellCollateralStyle}>
+                <span className="text-grey block text-center text-sm">
+                  {priceFormat(intl, collateral.interest, 3)}
+                </span>
+              </td>
+              <td className={tableCellCollateralStyle}>
+                <span className="text-grey block text-center text-sm">
+                  {priceFormat(intl, collateral.rewards, 3)}
+                </span>
+              </td>
+              <td
+                className={classNames(tableCellCollateralStyle, 'text-center')}
+              >
+                <button
+                  onClick={() => showRepayModal(collateral)}
+                  className={classNames(
+                    tableButtonStyle,
+                    'bg-pinkBorder text-white',
+                  )}
+                >
+                  Repay
+                </button>
+                <button
+                  onClick={() => showAddMoreModal(collateral)}
+                  className={classNames(
+                    tableButtonStyle,
+                    'bg-white text-pinkBorder ml-2',
+                  )}
+                >
+                  Add more
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
-export default function Borrowing() {
-  const { sortConfig, requestSort, sortedData } =
-    useTableSort<BorrowingDataItem>(data);
+export default function Borrowing({
+  borrowingInfo,
+}: {
+  borrowingInfo: BorrowingInfo[];
+}) {
+  const { sortConfig, requestSort, sortedData } = useTableSort<BorrowingInfo>(
+    borrowingInfo,
+    'amount',
+  );
 
-  const [collateralId, setCollateralId] = useState<number | null>(null);
-  const [showBorrowModal, setShowBorrowModal] = useState(false);
-  const [showRewardsModal, setShowRewardsModal] = useState(false);
+  const intl = useIntl();
+
+  const [collateralId, setCollateralId] = useState<string | null>(null);
+  // const [showBorrowModal, setShowBorrowModal] = useState(false);
+  // const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showRepayModal, setShowRepayModal] =
     useState<BorrowingCollateralModal>({
       show: false,
       item: null,
     });
-  const [showAddMoreModal, setShowAddMoreModal] =
-    useState<BorrowingCollateralModal>({
-      show: false,
-      item: null,
-    });
+  // const [showAddMoreModal, setShowAddMoreModal] =
+  //   useState<BorrowingCollateralModal>({
+  //     show: false,
+  //     item: null,
+  //   });
 
-  const toggleCollateralView = (id: number) => {
+  const toggleCollateralView = (id: string) => {
     if (collateralId === id) {
       setCollateralId(null);
     } else {
@@ -191,9 +156,9 @@ export default function Borrowing() {
       <TableContainer
         title="BORROWING"
         firstButtonTitle="Borrow asset"
-        firstButtonCallback={() => setShowBorrowModal(true)}
+        // firstButtonCallback={() => setShowBorrowModal(true)}
         secondButtonTitle="Get rewards"
-        secondButtonCallback={() => setShowRewardsModal(true)}
+        // secondButtonCallback={() => setShowRewardsModal(true)}
       >
         <thead className="bg-grey bg-opacity-5">
           <tr>
@@ -202,10 +167,19 @@ export default function Borrowing() {
             </th>
             <th
               className={classNames(tableHeadStyle, 'cursor-pointer')}
-              onClick={() => requestSort('apr')}
+              onClick={() => requestSort('interestApr')}
             >
-              APR
-              {sortConfig.key === 'apr' && (
+              Interest APR
+              {sortConfig.key === 'interestApr' && (
+                <SortIcon direction={sortConfig.direction} />
+              )}
+            </th>
+            <th
+              className={classNames(tableHeadStyle, 'cursor-pointer')}
+              onClick={() => requestSort('rewardsApr')}
+            >
+              Rewards APR
+              {sortConfig.key === 'rewardsApr' && (
                 <SortIcon direction={sortConfig.direction} />
               )}
             </th>
@@ -229,10 +203,10 @@ export default function Borrowing() {
             </th>
             <th
               className={classNames(tableHeadStyle, 'cursor-pointer')}
-              onClick={() => requestSort('reward')}
+              onClick={() => requestSort('rewards')}
             >
               Reward
-              {sortConfig.key === 'reward' && (
+              {sortConfig.key === 'rewards' && (
                 <SortIcon direction={sortConfig.direction} />
               )}
             </th>
@@ -250,10 +224,10 @@ export default function Borrowing() {
         </thead>
         <tbody className="divide-y divide-borderTable">
           {sortedData.map(item => {
-            const selected = collateralId === item.id;
+            const selected = collateralId === item.poolAssetId;
 
             return (
-              <Fragment key={item.id}>
+              <Fragment key={item.poolAssetId}>
                 <tr className="hover:bg-grey3">
                   <td
                     className={classNames(
@@ -263,49 +237,59 @@ export default function Borrowing() {
                   >
                     <div className="flex-shrink-0 h-8 w-8 xxs:h-12 xxs:w-12 bg-white rounded-full shadow-sm">
                       <img
-                        src={`${ICONS_URL}${item.asset}.svg`}
-                        alt={item.asset}
+                        src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
+                        alt={item.poolAssetSymbol}
                       />
                     </div>
                     <div className="ml-4 font-medium text-grey text-sm xxs:text-base">
-                      {item.asset}
+                      {item.poolAssetSymbol}
                     </div>
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={item.apr.toString()} />
+                    <IconContainer
+                      value={priceFormat(intl, item.interestApr)}
+                    />
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={item.amount.toString()} />
+                    <IconContainer value={priceFormat(intl, item.rewardsApr)} />
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={item.interest.toString()} />
+                    <IconContainer value={priceFormat(intl, item.amount, 3)} />
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={item.reward.toString()} />
+                    <IconContainer
+                      value={priceFormat(intl, item.interest, 3)}
+                    />
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={item.healthFactor.toString()} />
+                    <IconContainer value={priceFormat(intl, item.rewards, 3)} />
+                  </td>
+                  <td className={tableCellStyle}>
+                    <IconContainer
+                      value={priceFormat(intl, item.healthFactor)}
+                    />
                   </td>
                   <td className={classNames(tableCellStyle, 'text-center')}>
-                    <button
-                      onClick={() => toggleCollateralView(item.id)}
-                      className="text-pinkIcon font-semibold text-sm outline-none"
-                    >
-                      {selected ? 'Hide collaterals' : 'Show collaterals'}
-                      <ChevronRightIcon className="h-4 inline-block text-grey ml-2" />
-                    </button>
+                    {item.collaterals.length > 0 && (
+                      <button
+                        onClick={() => toggleCollateralView(item.poolAssetId)}
+                        className="text-pinkIcon font-semibold text-sm outline-none"
+                      >
+                        {selected ? 'Hide collaterals' : 'Show collaterals'}
+                        <ChevronRightIcon className="h-4 inline-block text-grey ml-2" />
+                      </button>
+                    )}
                   </td>
                 </tr>
                 {selected && (
                   <tr className="border-none">
                     <td colSpan={7} className="p-4">
                       <Collaterals
+                        collaterals={item.collaterals}
                         showRepayModal={() =>
                           setShowRepayModal({ show: true, item })
                         }
-                        showAddMoreModal={() =>
-                          setShowAddMoreModal({ show: true, item })
-                        }
+                        showAddMoreModal={() => {}} // setShowAddMoreModal({ show: true, item })
                       />
                     </td>
                   </tr>
@@ -315,16 +299,16 @@ export default function Borrowing() {
           })}
         </tbody>
       </TableContainer>
-      <BorrowAssetModal
+      {/* <BorrowAssetModal
         assets={data}
         showModal={showBorrowModal}
         closeModal={() => setShowBorrowModal(false)}
-      />
-      <RewardsModal
+      /> */}
+      {/* <RewardsModal
         assets={data}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
-      />
+      /> */}
       <RepayModal
         collateral={showRepayModal.item}
         showModal={showRepayModal.show}
@@ -335,7 +319,7 @@ export default function Borrowing() {
           }))
         }
       />
-      <AddMoreModal
+      {/* <AddMoreModal
         collateral={showAddMoreModal.item}
         showModal={showAddMoreModal.show}
         closeModal={() =>
@@ -345,7 +329,7 @@ export default function Borrowing() {
           }))
         }
         assets={data}
-      />
+      /> */}
     </>
   );
 }

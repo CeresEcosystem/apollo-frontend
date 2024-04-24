@@ -8,10 +8,12 @@ import {
   formatWalletAddress,
   getAvatarTitle,
   getEncodedAddress,
+  priceFormat,
 } from '@utils/helpers';
 import { showErrorNotify } from '@utils/toast';
 import classNames from 'classnames';
 import { Fragment } from 'react';
+import { useIntl } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
 import { useApolloPrice, useWalletModal } from 'src/store';
 
@@ -139,6 +141,8 @@ function ConnectButton() {
 function ApolloPrice() {
   const apolloPrice = useApolloPrice(state => state.price);
 
+  const intl = useIntl();
+
   return (
     <div className="rounded-3xl overflow-hidden hidden lg:block">
       <div className="py-1 px-2 border-2 rounded-3xl border-border flex items-center gap-x-2 bg-backgroundBody xs:py-2 xl:px-4">
@@ -146,7 +150,10 @@ function ApolloPrice() {
           <img src="/logo_bg.webp" alt="logo" />
         </div>
         <span className="hidden font-semibold text-sm text-grey2 truncate xxs:inline-block xs:text-base">
-          $<span className="text-grey pl-1">{apolloPrice ?? '0.00'}</span>
+          $
+          <span className="text-grey pl-1">
+            {apolloPrice ? priceFormat(intl, apolloPrice, 3) : '0.00'}
+          </span>
         </span>
       </div>
     </div>
@@ -155,6 +162,8 @@ function ApolloPrice() {
 
 export default function Header() {
   const { pathname } = useLocation();
+
+  const intl = useIntl();
 
   const apolloPrice = useApolloPrice(state => state.price);
 
@@ -198,7 +207,7 @@ export default function Header() {
                 </div>
               </div>
               <div className="bg-grey py-1 px-5 flex items-center justify-center lg:hidden">
-                <span className="text-white text-center font-medium text-sm sm:text-base">{`${TOKEN_NAME.toUpperCase()} $${apolloPrice ?? '0.00'}`}</span>
+                <span className="text-white text-center font-medium text-sm sm:text-base">{`${TOKEN_NAME.toUpperCase()} $${priceFormat(intl, apolloPrice, 3)}`}</span>
               </div>
             </div>
             <Transition

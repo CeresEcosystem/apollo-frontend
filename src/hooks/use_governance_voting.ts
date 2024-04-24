@@ -1,8 +1,7 @@
-import { TOAST_ID } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { FPNumber } from '@utils/FPNumber';
 import { getEncodedAddress } from '@utils/helpers';
-import { showErrorNotify, showSuccessNotify } from '@utils/toast';
+import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
 import { GovernancePollDetails } from 'src/interfaces';
 
@@ -35,6 +34,7 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
     ) => {
       if (api && selectedWalletProvider) {
         setLoading(true);
+        const toastId = showLoadingNotify();
 
         const voteExtrinsic = api?.tx.ceresGovernancePlatform.vote(
           pollId,
@@ -65,16 +65,16 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
                           error.asModule,
                         );
 
-                        showErrorNotify(
+                        updateNotify(
+                          toastId,
                           `Transaction failed : ${decoded.docs[0]}`,
-                          true,
-                          TOAST_ID,
+                          'error',
                         );
                       } else {
-                        showErrorNotify(
+                        updateNotify(
+                          toastId,
                           `Transaction failed : ${error}`,
-                          true,
-                          TOAST_ID,
+                          'error',
                         );
                       }
 
@@ -82,7 +82,7 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
                     },
                   );
 
-                showSuccessNotify(`Voted successfully`, TOAST_ID);
+                updateNotify(toastId, `Voted successfully`, 'success');
                 setLoading(false);
                 reload();
               }
@@ -90,7 +90,7 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
           )
           .catch(error => {
             setLoading(false);
-            showErrorNotify(`Transaction failed : ${error}`, true, TOAST_ID);
+            updateNotify(toastId, `Transaction failed : ${error}`, 'error');
           });
       }
     },
@@ -101,6 +101,7 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
     async (pollId: string, reload: () => void) => {
       if (api && selectedWalletProvider) {
         setLoading(true);
+        const toastId = showLoadingNotify();
 
         const withdrawExtrinsic =
           api.tx.ceresGovernancePlatform.withdraw(pollId);
@@ -128,16 +129,16 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
                           error.asModule,
                         );
 
-                        showErrorNotify(
+                        updateNotify(
+                          toastId,
                           `Transaction failed : ${decoded.docs[0]}`,
-                          true,
-                          TOAST_ID,
+                          'error',
                         );
                       } else {
-                        showErrorNotify(
+                        updateNotify(
+                          toastId,
                           `Transaction failed : ${error}`,
-                          true,
-                          TOAST_ID,
+                          'error',
                         );
                       }
 
@@ -145,7 +146,11 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
                     },
                   );
 
-                showSuccessNotify(`Funds withdrawn successfully`, TOAST_ID);
+                updateNotify(
+                  toastId,
+                  `Funds withdrawn successfully`,
+                  'success',
+                );
                 setLoading(false);
                 reload();
               }
@@ -153,7 +158,7 @@ const useGovernanceVoting = (poll: GovernancePollDetails) => {
           )
           .catch(error => {
             setLoading(false);
-            showErrorNotify(`Transaction failed : ${error}`, true, TOAST_ID);
+            updateNotify(toastId, `Transaction failed : ${error}`, 'error');
           });
       }
     },

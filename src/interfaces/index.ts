@@ -54,6 +54,11 @@ export interface GovernacePollResults {
   [option: string]: GovernanceResult;
 }
 
+export interface GovernancePollDetailsData {
+  poll: GovernancePollDetails;
+  results: GovernacePollResults;
+}
+
 export interface GovernanceSelectedAnswer {
   answer: string;
   index: number;
@@ -68,17 +73,51 @@ export interface BorrowingAssetFormData {
   collateral: AssetSelectOption | null;
 }
 
-export interface LendingDataItem {
-  id: number;
-  asset: string;
+export interface LendingInfo {
+  poolAssetId: string;
+  poolAssetSymbol: string;
   apr: number;
   amount: number;
-  reward: number;
+  rewards: number;
+}
+
+export interface Collateral {
+  collateralAssetId: string;
+  collateralAssetSymbol: string;
+  collateralAmount: number;
+  borrowedAmount: number;
+  interest: number;
+  rewards: number;
+}
+
+export interface BorrowingInfo {
+  poolAssetId: string;
+  poolAssetSymbol: string;
+  interestApr: number;
+  rewardsApr: number;
+  amount: number;
+  interest: number;
+  rewards: number;
+  healthFactor: number;
+  collaterals: Collateral[];
+}
+
+export interface StatsData {
+  tvl: number;
+  totalLent: number;
+  totalBorrowed: number;
+  totalRewards: number;
+}
+
+export interface DashboardData {
+  lendingInfo: LendingInfo[];
+  borrowingInfo: BorrowingInfo[];
+  userData: StatsData;
 }
 
 export interface LendingWithdrawModal {
   show: boolean;
-  item: LendingDataItem | null;
+  item: LendingInfo | null;
 }
 
 export interface TransactionOverviewData {
@@ -86,17 +125,7 @@ export interface TransactionOverviewData {
   info: string;
 }
 
-export interface BorrowingDataItem {
-  id: number;
-  asset: string;
-  apr: number;
-  amount: number;
-  interest: number;
-  reward: number;
-  healthFactor: number;
-}
-
 export interface BorrowingCollateralModal {
   show: boolean;
-  item: BorrowingDataItem | null;
+  item: BorrowingInfo | null;
 }

@@ -9,7 +9,7 @@ export const ICONS_URL = 'https://data.cerestoken.io/storage/icons/';
 // SORA API //
 export const POLKADOT_ACCOUNT = 'POLKADOT_ACCOUNT';
 export const POLKADOT_SOURCE = 'POLKADOT_SOURCE';
-export const SORA_API = 'wss://mof2.sora.org';
+export const SORA_API = 'wss://ws.mof.sora.org';
 export const SORA_API_TEST =
   'wss://ws.framenode-3.s2.stg1.sora2.soramitsu.co.jp';
 

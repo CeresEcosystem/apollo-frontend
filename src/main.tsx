@@ -11,10 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
 import ReactGA from 'react-ga4';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ErrorPage from '@pages/error/index.tsx';
 
 ReactGA.initialize('G-JYW28NEEEN');
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -56,11 +59,13 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <IntlProvider locale="en">
-      <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
-        <PolkadotProvider>
-          <RouterProvider router={router} />
-        </PolkadotProvider>
-      </PolkadotWalletsContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
+          <PolkadotProvider>
+            <RouterProvider router={router} />
+          </PolkadotProvider>
+        </PolkadotWalletsContextProvider>
+      </QueryClientProvider>
     </IntlProvider>
   </React.StrictMode>,
 );

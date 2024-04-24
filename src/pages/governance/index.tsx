@@ -4,13 +4,31 @@ import SpinnerSM from '@components/loader/spinner_sm';
 import PageFullscreen from '@components/page_container/page_fullscreen';
 import Tabs from '@components/tabs';
 import useGovernance from '@hooks/use_governance';
+import { useMemo } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
 export function Component() {
-  const { loading, polls, tabs, selectedTab, onChange, onTabSelected } =
+  const { isLoading, data, tabs, selectedTab, onChange, onTabSelected } =
     useGovernance();
 
   const { pollId } = useParams();
+
+  const polls = useMemo(() => {
+    if (data) {
+      switch (selectedTab) {
+        case 'active':
+          return data.active;
+        case 'upcoming':
+          return data.upcoming;
+        case 'closed':
+          return data.closed;
+        default:
+          return [];
+      }
+    }
+
+    return [];
+  }, [data, selectedTab]);
 
   return (
     <PageFullscreen showBackgroundImage>
@@ -24,7 +42,7 @@ export function Component() {
               'Governance platform is a tool for implementing the concept of decentralization in Apollo Protocol.'
             }
           />
-          {loading ? (
+          {isLoading ? (
             <SpinnerSM />
           ) : (
             <>
