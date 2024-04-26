@@ -82,7 +82,7 @@ export function IconContainer({ value }: { value: string }) {
       <div className="h-6 w-6 rounded-full bg-pinkIcon flex items-center justify-center">
         <img src="/value_icon.webp" />
       </div>
-      <span className="font-medium text-grey">{value}</span>
+      <span className="font-medium text-grey text-sm">{value}</span>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
 import ReactGA from 'react-ga4';

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { IconContainer, SortIcon, TableContainer } from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
-import { ICONS_URL } from '@constants/index';
+import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 import { useState } from 'react';
 // import LendAssetModal from './lend_asset_modal';
 import WithdrawModal from './withdraw_modal';
@@ -11,7 +11,7 @@ import { useIntl } from 'react-intl';
 // import RewardsModal from '@components/rewards/rewards_modal';
 
 const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
-const tableCellStyle = 'px-4 py-4 whitespace-nowrap lg:px-6';
+const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-sm lg:px-6';
 
 export default function Lending({
   lendingInfo,
@@ -85,13 +85,13 @@ export default function Lending({
                   'flex items-center lg:px-12',
                 )}
               >
-                <div className="flex-shrink-0 h-8 w-8 xxs:h-12 xxs:w-12 bg-white rounded-full shadow-sm">
+                <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
                   <img
                     src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
                     alt={item.poolAssetSymbol}
                   />
                 </div>
-                <div className="ml-4 font-medium text-grey text-sm xxs:text-base">
+                <div className="ml-4 font-medium text-grey text-sm">
                   {item.poolAssetSymbol}
                 </div>
               </td>
@@ -99,10 +99,14 @@ export default function Lending({
                 <IconContainer value={`${priceFormat(intl, item.apr)}%`} />
               </td>
               <td className={tableCellStyle}>
-                <IconContainer value={`${priceFormat(intl, item.amount, 3)}`} />
+                <IconContainer
+                  value={`${priceFormat(intl, item.amount, 3)} ${item.poolAssetSymbol}`}
+                />
               </td>
               <td className={tableCellStyle}>
-                <IconContainer value={priceFormat(intl, item.rewards, 3)} />
+                <IconContainer
+                  value={`${priceFormat(intl, item.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                />
               </td>
               <td className={classNames(tableCellStyle, 'text-center')}>
                 {item.amount > 0 && (

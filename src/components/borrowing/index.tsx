@@ -11,7 +11,7 @@ import {
   tableHeadStyle,
 } from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
-import { ICONS_URL } from '@constants/index';
+import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 // import RewardsModal from '@components/rewards/rewards_modal';
 import {
   BorrowingCollateralModal,
@@ -25,10 +25,12 @@ import { useIntl } from 'react-intl';
 // import AddMoreModal from './add_more_modal';
 
 function Collaterals({
+  asset,
   collaterals,
   showRepayModal,
   showAddMoreModal,
 }: {
+  asset: string;
   collaterals: Collateral[];
   showRepayModal: (item: Collateral) => void;
   showAddMoreModal: (item: Collateral) => void;
@@ -36,84 +38,80 @@ function Collaterals({
   const intl = useIntl();
 
   return (
-    <div className="bg-slate-300 w-full">
-      <table className="bg-backgroundBody rounded-2xl min-w-full">
-        <thead>
-          <tr>
-            <th className={tableHeadStyle}>Asset</th>
-            <th className={tableHeadStyle}>Collateral amount</th>
-            <th className={tableHeadStyle}>Borrowed amount</th>
-            <th className={tableHeadStyle}>Interest</th>
-            <th className={tableHeadStyle}>Rewards</th>
-            <th className={tableHeadStyle}>Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-borderTable">
-          {collaterals.map(collateral => (
-            <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
-              <td
+    <table className="bg-backgroundBody rounded-2xl min-w-full">
+      <thead>
+        <tr>
+          <th className={tableHeadStyle}>Asset</th>
+          <th className={tableHeadStyle}>Collateral amount</th>
+          <th className={tableHeadStyle}>Borrowed amount</th>
+          <th className={tableHeadStyle}>Interest</th>
+          <th className={tableHeadStyle}>Rewards</th>
+          <th className={tableHeadStyle}>Actions</th>
+        </tr>
+      </thead>
+      <tbody className="divide-y divide-borderTable">
+        {collaterals.map(collateral => (
+          <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
+            <td
+              className={classNames(
+                tableCellCollateralStyle,
+                'flex items-center justify-center',
+              )}
+            >
+              <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
+                <img
+                  src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
+                  alt={collateral.collateralAssetSymbol}
+                />
+              </div>
+              <span className="ml-4 text-grey min-w-14 text-sm">
+                {collateral.collateralAssetSymbol}
+              </span>
+            </td>
+            <td className={tableCellCollateralStyle}>
+              <span className="text-grey block text-center text-sm">
+                {`${priceFormat(intl, collateral.collateralAmount, 3)} ${collateral.collateralAssetSymbol}`}
+              </span>
+            </td>
+            <td className={tableCellCollateralStyle}>
+              <span className="text-grey block text-center text-sm">
+                {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset}`}
+              </span>
+            </td>
+            <td className={tableCellCollateralStyle}>
+              <span className="text-grey block text-center text-sm">
+                {`${priceFormat(intl, collateral.interest, 3)} ${asset}`}
+              </span>
+            </td>
+            <td className={tableCellCollateralStyle}>
+              <span className="text-grey block text-center text-sm">
+                {`${priceFormat(intl, collateral.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+              </span>
+            </td>
+            <td className={classNames(tableCellCollateralStyle, 'text-center')}>
+              <button
+                onClick={() => showRepayModal(collateral)}
                 className={classNames(
-                  tableCellCollateralStyle,
-                  'flex items-center justify-center',
+                  tableButtonStyle,
+                  'bg-pinkBorder text-white',
                 )}
               >
-                <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
-                  <img
-                    src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
-                    alt={collateral.collateralAssetSymbol}
-                  />
-                </div>
-                <span className="ml-4 text-grey min-w-14 text-sm">
-                  {collateral.collateralAssetSymbol}
-                </span>
-              </td>
-              <td className={tableCellCollateralStyle}>
-                <span className="text-grey block text-center text-sm">
-                  {priceFormat(intl, collateral.collateralAmount, 3)}
-                </span>
-              </td>
-              <td className={tableCellCollateralStyle}>
-                <span className="text-grey block text-center text-sm">
-                  {priceFormat(intl, collateral.borrowedAmount, 3)}
-                </span>
-              </td>
-              <td className={tableCellCollateralStyle}>
-                <span className="text-grey block text-center text-sm">
-                  {priceFormat(intl, collateral.interest, 3)}
-                </span>
-              </td>
-              <td className={tableCellCollateralStyle}>
-                <span className="text-grey block text-center text-sm">
-                  {priceFormat(intl, collateral.rewards, 3)}
-                </span>
-              </td>
-              <td
-                className={classNames(tableCellCollateralStyle, 'text-center')}
+                Repay
+              </button>
+              <button
+                onClick={() => showAddMoreModal(collateral)}
+                className={classNames(
+                  tableButtonStyle,
+                  'bg-white text-pinkBorder ml-2',
+                )}
               >
-                <button
-                  onClick={() => showRepayModal(collateral)}
-                  className={classNames(
-                    tableButtonStyle,
-                    'bg-pinkBorder text-white',
-                  )}
-                >
-                  Repay
-                </button>
-                <button
-                  onClick={() => showAddMoreModal(collateral)}
-                  className={classNames(
-                    tableButtonStyle,
-                    'bg-white text-pinkBorder ml-2',
-                  )}
-                >
-                  Add more
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                Add more
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -235,34 +233,40 @@ export default function Borrowing({
                       'flex items-center lg:px-12',
                     )}
                   >
-                    <div className="flex-shrink-0 h-8 w-8 xxs:h-12 xxs:w-12 bg-white rounded-full shadow-sm">
+                    <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
                       <img
                         src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
                         alt={item.poolAssetSymbol}
                       />
                     </div>
-                    <div className="ml-4 font-medium text-grey text-sm xxs:text-base">
+                    <div className="ml-4 font-medium text-grey text-sm">
                       {item.poolAssetSymbol}
                     </div>
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
-                      value={priceFormat(intl, item.interestApr)}
+                      value={`${priceFormat(intl, item.interestApr)}%`}
                     />
-                  </td>
-                  <td className={tableCellStyle}>
-                    <IconContainer value={priceFormat(intl, item.rewardsApr)} />
-                  </td>
-                  <td className={tableCellStyle}>
-                    <IconContainer value={priceFormat(intl, item.amount, 3)} />
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
-                      value={priceFormat(intl, item.interest, 3)}
+                      value={`${priceFormat(intl, item.rewardsApr)}%`}
                     />
                   </td>
                   <td className={tableCellStyle}>
-                    <IconContainer value={priceFormat(intl, item.rewards, 3)} />
+                    <IconContainer
+                      value={`${priceFormat(intl, item.amount, 3)} ${item.poolAssetSymbol}`}
+                    />
+                  </td>
+                  <td className={tableCellStyle}>
+                    <IconContainer
+                      value={`${priceFormat(intl, item.interest, 3)} ${item.poolAssetSymbol}`}
+                    />
+                  </td>
+                  <td className={tableCellStyle}>
+                    <IconContainer
+                      value={`${priceFormat(intl, item.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                    />
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
@@ -283,8 +287,9 @@ export default function Borrowing({
                 </tr>
                 {selected && (
                   <tr className="border-none">
-                    <td colSpan={7} className="p-4">
+                    <td colSpan={8} className="p-4">
                       <Collaterals
+                        asset={item.poolAssetSymbol}
                         collaterals={item.collaterals}
                         showRepayModal={() =>
                           setShowRepayModal({ show: true, item })

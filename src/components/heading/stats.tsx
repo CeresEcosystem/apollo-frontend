@@ -1,4 +1,5 @@
 import Gradient from '@components/gradient';
+import { TOKEN_NAME } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { priceFormat } from '@utils/helpers';
 import classNames from 'classnames';
@@ -134,11 +135,13 @@ function TotalRewards({ totalRewards }: { totalRewards: number }) {
         <span className={titleStyle}>REWARDS</span>
         <span className={subtitleStyle}>TOTAL</span>
       </div>
-      <span
-        className={classNames(valueStyle, 'bg-white bg-opacity-10 z-10 w-min')}
-      >
-        {`$${priceFormat(intl, totalRewards, 3)}`}
-      </span>
+      <div className="flex flex-col bg-white bg-opacity-10 z-10 w-min">
+        <span className={valueStyle}>
+          {`${priceFormat(intl, totalRewards, 3)}`}
+        </span>
+        <span className={subtitleStyle}>{TOKEN_NAME.toUpperCase()}</span>
+      </div>
+
       <FaCoins className="absolute right-4 top-2 h-32 w-auto xs:top-4 lg:top-2 xl:top-4 text-pinkIcon" />
     </div>
   );
