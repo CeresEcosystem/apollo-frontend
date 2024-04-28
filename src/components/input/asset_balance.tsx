@@ -1,13 +1,21 @@
 import { ICONS_URL } from '@constants/index';
+import { priceFormat } from '@utils/helpers';
 import { ChangeEvent } from 'react';
+import { useIntl } from 'react-intl';
 
 export default function AssetBalance({
   label,
   handleChange,
+  assetSymbol,
+  assetBalance,
 }: {
   label?: string; // eslint-disable-next-line no-unused-vars
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  assetSymbol: string | undefined;
+  assetBalance: number | undefined;
 }) {
+  const intl = useIntl();
+
   return (
     <div className="flex-shrink-0 mt-4">
       {label !== '' && <label className="block mb-1 text-grey">{label}</label>}
@@ -23,12 +31,12 @@ export default function AssetBalance({
         </div>
         <div className="flex flex-col items-end">
           <span className="flex items-center gap-x-2 font-semibold text-xl sm:text-2xl text-grey">
-            <img src={`${ICONS_URL}ETH.svg`} className="h-6 w-6" />
-            ETH
+            <img src={`${ICONS_URL}${assetSymbol}.svg`} className="h-6 w-6" />
+            {assetSymbol}
           </span>
           <div className="flex items-center gap-x-2">
             <span className="text-grey2 text-xs sm:text-sm whitespace-nowrap">
-              Balance: 0.0428499
+              {`Balance: ${priceFormat(intl, assetBalance ?? 0, 3)}`}
             </span>
             <button className="text-xs sm:text-sm font-medium text-grey">
               MAX

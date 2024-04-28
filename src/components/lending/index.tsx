@@ -3,12 +3,12 @@ import { IconContainer, SortIcon, TableContainer } from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
 import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 import { useState } from 'react';
-// import LendAssetModal from './lend_asset_modal';
+import LendAssetModal from './lend_asset_modal';
 import WithdrawModal from './withdraw_modal';
 import { LendingInfo, LendingWithdrawModal } from 'src/interfaces';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
-// import RewardsModal from '@components/rewards/rewards_modal';
+import RewardsModal from '@components/rewards/rewards_modal';
 
 const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
 const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-sm lg:px-6';
@@ -24,8 +24,8 @@ export default function Lending({
     'amount',
   );
 
-  // const [showLendModal, setShowLendModal] = useState(false);
-  // const [showRewardsModal, setShowRewardsModal] = useState(false);
+  const [showLendModal, setShowLendModal] = useState(false);
+  const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] =
     useState<LendingWithdrawModal>({
       show: false,
@@ -37,9 +37,9 @@ export default function Lending({
       <TableContainer
         title="LENDING"
         firstButtonTitle="Lend asset"
-        // firstButtonCallback={() => setShowLendModal(true)}
+        firstButtonCallback={() => setShowLendModal(true)}
         secondButtonTitle="Get rewards"
-        // secondButtonCallback={() => setShowRewardsModal(true)}
+        secondButtonCallback={() => setShowRewardsModal(true)}
       >
         <thead className="bg-grey bg-opacity-5">
           <tr>
@@ -122,16 +122,16 @@ export default function Lending({
           ))}
         </tbody>
       </TableContainer>
-      {/* <LendAssetModal
-        assets={data}
+      <LendAssetModal
+        lendingInfo={lendingInfo}
         showModal={showLendModal}
         closeModal={() => setShowLendModal(false)}
       />
       <RewardsModal
-        assets={data}
+        lendingInfo={lendingInfo}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
-      /> */}
+      />
       <WithdrawModal
         showModal={showWithdrawModal.show}
         closeModal={() =>

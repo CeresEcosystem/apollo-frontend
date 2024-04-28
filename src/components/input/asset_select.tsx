@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AssetSelectOption } from 'src/interfaces';
 import Select, { components } from 'react-select';
 import classNames from 'classnames';
+import { AssetSelectOption } from 'src/interfaces';
 
 const customStyles = {
   control: (provided: any) => ({
@@ -23,7 +23,7 @@ const customStyles = {
   }),
 };
 
-export default function AssetSelect({
+export default function AssetSelect<T extends AssetSelectOption>({
   options,
   selectedOption,
   handleChange,
@@ -31,14 +31,14 @@ export default function AssetSelect({
   spaceTop = false,
   isDisabled = false,
 }: {
-  options: AssetSelectOption[];
-  selectedOption: AssetSelectOption | null;
-  handleChange: (option: AssetSelectOption | null) => void;
+  options: T[];
+  selectedOption: T | null;
+  handleChange: (option: T | null) => void;
   label?: string;
   spaceTop?: boolean;
   isDisabled?: boolean;
 }) {
-  const Option = ({ data, ...props }: { data: AssetSelectOption }) => (
+  const Option = ({ data, ...props }: { data: T }) => (
     // @ts-expect-error  Type '{ children: Element; }' is missing the following properties
     <components.Option {...props}>
       <div className="flex items-center px-2">

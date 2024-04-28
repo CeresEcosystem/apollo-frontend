@@ -1,3 +1,18 @@
+export interface LendingAssetSelectOption {
+  label: string;
+  value: string;
+  icon: string;
+  balance: number;
+  apr: number;
+}
+
+export interface LendingRewardsSelectOption {
+  label: string;
+  value: string;
+  icon: string;
+  rewards: number;
+}
+
 export interface AssetSelectOption {
   label: string;
   value: string;
@@ -65,7 +80,11 @@ export interface GovernanceSelectedAnswer {
 }
 
 export interface LendingAssetFormData {
-  asset: AssetSelectOption | null;
+  asset: LendingAssetSelectOption | null;
+}
+
+export interface LendingRewardsFormData {
+  asset: LendingRewardsSelectOption | null;
 }
 
 export interface BorrowingAssetFormData {
