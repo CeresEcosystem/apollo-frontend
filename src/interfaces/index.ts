@@ -1,8 +1,13 @@
+export interface TokenPrices {
+  token: string;
+  price: number;
+  assetId: string;
+}
+
 export interface LendingAssetSelectOption {
   label: string;
   value: string;
   icon: string;
-  balance: number;
   apr: number;
 }
 
@@ -11,6 +16,13 @@ export interface LendingRewardsSelectOption {
   value: string;
   icon: string;
   rewards: number;
+}
+
+export interface BorrowingAssetSelectOption {
+  label: string;
+  value: string;
+  icon: string;
+  loanToValue: number;
 }
 
 export interface AssetSelectOption {
@@ -81,6 +93,20 @@ export interface GovernanceSelectedAnswer {
 
 export interface LendingAssetFormData {
   asset: LendingAssetSelectOption | null;
+  balance: string;
+  inputValue: string;
+  price: number;
+}
+
+export interface RepayCollateralFormData {
+  balance: string;
+  inputValue: string;
+  price: number;
+}
+
+export interface LendingWithdrawFormData {
+  inputValue: string;
+  price: number;
 }
 
 export interface LendingRewardsFormData {
@@ -88,8 +114,15 @@ export interface LendingRewardsFormData {
 }
 
 export interface BorrowingAssetFormData {
-  asset: AssetSelectOption | null;
-  collateral: AssetSelectOption | null;
+  asset: BorrowingAssetSelectOption | null;
+  collateral: BorrowingAssetSelectOption | null;
+  inputValue: string;
+  price: number;
+}
+
+export interface CollateralAddMoreFormData {
+  inputValue: string;
+  price: number;
 }
 
 export interface LendingInfo {
@@ -112,6 +145,7 @@ export interface Collateral {
 export interface BorrowingInfo {
   poolAssetId: string;
   poolAssetSymbol: string;
+  loanToValue: number;
   interestApr: number;
   rewardsApr: number;
   amount: number;
@@ -161,5 +195,6 @@ export interface TransactionOverviewData {
 
 export interface BorrowingCollateralModal {
   show: boolean;
-  item: BorrowingInfo | null;
+  asset: BorrowingInfo | null;
+  collateral: Collateral | null;
 }

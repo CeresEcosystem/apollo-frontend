@@ -7,7 +7,7 @@ import { DashboardData } from 'src/interfaces';
 const useDashboard = () => {
   // const { selectedAccount, keyring } = usePolkadot();
 
-  const { isLoading, error, data } = useQuery<DashboardData>({
+  const { isLoading, error, data, refetch } = useQuery<DashboardData>({
     queryKey: ['dashboardData'],
     queryFn: async () => {
       // const response = await fetch(
@@ -29,6 +29,7 @@ const useDashboard = () => {
   return {
     isLoading: isLoading || error || !data,
     data,
+    refetch,
   };
 };
 

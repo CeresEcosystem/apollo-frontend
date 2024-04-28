@@ -11,15 +11,19 @@ import { useNavigate } from 'react-router-dom';
 import Loader from './loader';
 
 function Dashboard() {
-  const { data, isLoading } = useDashboard();
+  const { data, isLoading, refetch } = useDashboard();
+
+  const reload = () => {
+    refetch();
+  };
 
   if (isLoading) return <Loader />;
 
   return (
     <PageContainer>
       <Stats statsData={data!.userData} forWallet />
-      <Lending lendingInfo={data!.lendingInfo} />
-      <Borrowing borrowingInfo={data!.borrowingInfo} />
+      <Lending lendingInfo={data!.lendingInfo} reload={reload} />
+      <Borrowing borrowingInfo={data!.borrowingInfo} reload={reload} />
     </PageContainer>
   );
 }

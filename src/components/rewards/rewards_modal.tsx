@@ -6,27 +6,34 @@ import {
   LendingRewardsSelectOption,
 } from 'src/interfaces';
 import TransactionOverview from '@components/transaction/transaction_overview';
-import TransactionFee from '@components/transaction/transaction_fee';
+// import TransactionFee from '@components/transaction/transaction_fee';
 import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
+import useRewards from '@hooks/use_rewards';
 
 export default function RewardsModal({
   showModal,
   closeModal,
   lendingInfo,
+  isLending,
+  reload,
 }: {
   showModal: boolean;
   closeModal: () => void;
   lendingInfo: LendingInfo[];
+  isLending: boolean;
+  reload: () => void;
 }) {
   const intl = useIntl();
 
   const [formData, setFormData] = useState<LendingRewardsFormData>({
     asset: null,
   });
+
+  const { loading, getRewards } = useRewards();
 
   const options: LendingRewardsSelectOption[] = lendingInfo.map(asset => {
     return {
@@ -63,11 +70,16 @@ export default function RewardsModal({
           ]}
         />
       )}
-      <TransactionFee />
+      {/* <TransactionFee /> */}
       <ModalButton
         title="Get rewards"
-        onClick={() => {}}
-        disabled={!formData.asset}
+        onClick={() =>
+          getRewards(formData.asset!.value, isLending, () => {
+            reload();
+            closeModal();
+          })
+        }
+        disabled={!formData.asset || formData.asset.rewards <= 0 || loading}
       />
     </Modal>
   );

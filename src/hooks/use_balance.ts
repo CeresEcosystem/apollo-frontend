@@ -21,7 +21,24 @@ const useBalance = () => {
     showErrorNotify('Please connect your wallet first.', true, TOAST_ID);
   }, [api, selectedAccount]);
 
-  return { getBalance };
+  const getBalanceForToken = useCallback(
+    async (tokenAddress: string) => {
+      if (selectedAccount) {
+        const balance = await api?.rpc.assets.freeBalance(
+          selectedAccount?.address,
+          tokenAddress,
+        );
+
+        // @ts-expect-error Property 'balance' does not exist on type 'string'.
+        return parse(balance?.toHuman()?.balance);
+      }
+
+      return '0';
+    },
+    [api, selectedAccount],
+  );
+
+  return { getBalance, getBalanceForToken };
 };
 
 export default useBalance;

@@ -2,86 +2,178 @@ import AssetBalance from '@components/input/asset_balance';
 import AssetSelect from '@components/input/asset_select';
 import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
-import TransactionFee from '@components/transaction/transaction_fee';
+// import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import { ICONS_URL } from '@constants/index';
-import { useState } from 'react';
+import useBorrowAsset from '@hooks/use_borrow_asset';
+import { priceFormat } from '@utils/helpers';
+import { ChangeEvent, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
-  AssetSelectOption,
-  BorrowingAssetFormData,
-  BorrowingDataItem,
+  BorrowingInfo,
+  Collateral,
+  CollateralAddMoreFormData,
 } from 'src/interfaces';
+import { useTokenPrice } from 'src/store';
 
 export default function AddMoreModal({
   showModal,
   closeModal,
+  asset,
   collateral,
-  assets,
+  reload,
 }: {
   showModal: boolean;
   closeModal: () => void;
-  collateral: BorrowingDataItem | null;
-  assets: BorrowingDataItem[];
+  asset: BorrowingInfo | null;
+  collateral: Collateral | null;
+  reload: () => void;
 }) {
-  const [formData, setFormData] = useState<BorrowingAssetFormData>({
-    asset: null,
-    collateral: null,
+  const [formData, setFormData] = useState<CollateralAddMoreFormData>({
+    inputValue: '',
+    price: 0,
   });
 
-  const options: AssetSelectOption[] = assets.map(asset => {
-    return {
-      label: asset.asset,
-      value: asset.id.toString(),
-      icon: `${ICONS_URL}${asset.asset}.svg`,
-    };
-  });
+  const intl = useIntl();
 
-  const handleAssetChange = (selectedOption: AssetSelectOption | null) => {
-    if (selectedOption !== formData.asset) {
-      setFormData(prevData => {
-        return { ...prevData, asset: selectedOption };
-      });
-    }
-  };
+  const { loading, borrowAsset } = useBorrowAsset();
 
-  const handleCorrateralChange = (selectedOption: AssetSelectOption | null) => {
-    if (selectedOption !== formData.collateral) {
-      setFormData(prevData => {
-        return { ...prevData, collateral: selectedOption };
-      });
+  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+
+  const borrowingTokenPrice = useMemo(() => {
+    return (
+      pricesForAllTokens.find(token => token.assetId === asset?.poolAssetId)
+        ?.price ?? 0
+    );
+  }, [pricesForAllTokens, asset?.poolAssetId]);
+
+  const collateralTokenPrice = useMemo(() => {
+    return (
+      pricesForAllTokens.find(
+        token => token.assetId === collateral?.collateralAssetId,
+      )?.price ?? 0
+    );
+  }, [pricesForAllTokens, collateral?.collateralAssetId]);
+
+  const collateralAmount = useMemo(() => {
+    if (asset) {
+      return (
+        ((Number(formData.inputValue) / asset.loanToValue) *
+          borrowingTokenPrice) /
+        collateralTokenPrice
+      );
     }
+
+    return 0;
+  }, [borrowingTokenPrice, collateralTokenPrice, asset, formData.inputValue]);
+
+  const maxBorrowingAmount = useMemo(() => {
+    if (asset) {
+      return (
+        (collateralAmount * collateralTokenPrice * asset.loanToValue) /
+        borrowingTokenPrice
+      );
+    }
+
+    return 0;
+  }, [borrowingTokenPrice, collateralAmount, collateralTokenPrice, asset]);
+
+  const handleAssetBalanceChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData(prevData => {
+      return {
+        ...prevData,
+        inputValue: e.target.value,
+        price: borrowingTokenPrice * Number(e.target.value),
+      };
+    });
   };
 
   return (
     <Modal
-      title={`Add more ${collateral?.asset}`}
+      title={`Add more ${asset?.poolAssetSymbol}`}
       showModal={showModal}
       closeModal={closeModal}
     >
-      <AssetSelect
-        options={options}
-        label="Collateral"
-        selectedOption={formData.collateral}
-        handleChange={handleCorrateralChange}
-        isDisabled
-      />
-      <AssetSelect
-        options={options}
-        selectedOption={formData.asset}
-        handleChange={handleAssetChange}
-        spaceTop
-      />
-      <AssetBalance label="Amount" handleChange={() => {}} />
-      {formData.asset && formData.collateral && (
-        <TransactionOverview
-          overviews={[
-            { label: 'Collateral', info: '100 XOR' },
-            { label: 'Max borrowing amount', info: '150 PSWAP' },
-          ]}
-        />
+      {asset && collateral && (
+        <>
+          <AssetSelect
+            options={[
+              {
+                label: collateral.collateralAssetSymbol,
+                value: collateral.collateralAssetId,
+                icon: `${ICONS_URL}${collateral.collateralAssetSymbol}.svg`,
+              },
+            ]}
+            label="Collateral"
+            selectedOption={{
+              label: collateral.collateralAssetSymbol,
+              value: collateral.collateralAssetId,
+              icon: `${ICONS_URL}${collateral.collateralAssetSymbol}.svg`,
+            }}
+            isDisabled
+          />
+          <AssetSelect
+            options={[
+              {
+                label: asset.poolAssetSymbol,
+                value: asset.poolAssetId,
+                icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
+              },
+            ]}
+            selectedOption={{
+              label: asset.poolAssetSymbol,
+              value: asset.poolAssetId,
+              icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
+            }}
+            spaceTop
+            isDisabled
+          />
+          <AssetBalance
+            label="Amount"
+            balance={formData.inputValue}
+            assetSymbol={asset.poolAssetSymbol}
+            handleAssetBalanceChange={handleAssetBalanceChange}
+            price={formData.price}
+            note="Minimum amount is 10$"
+            showBalance={false}
+          />
+          <TransactionOverview
+            overviews={[
+              {
+                label: 'Collateral',
+                info: `${priceFormat(intl, collateralAmount)} ${collateral.collateralAssetSymbol}`,
+              },
+              {
+                label: 'Max borrowing amount',
+                info: `${priceFormat(intl, maxBorrowingAmount)} ${asset.poolAssetSymbol}`,
+              },
+            ]}
+          />
+        </>
       )}
-      <TransactionFee />
-      <ModalButton title="Borrow asset" />
+      {/* <TransactionFee /> */}
+      <ModalButton
+        title="Borrow asset"
+        onClick={() =>
+          borrowAsset(
+            collateral!.collateralAssetId,
+            asset!.poolAssetId,
+            formData.inputValue,
+            () => {
+              reload();
+              closeModal();
+            },
+          )
+        }
+        disabled={
+          !asset ||
+          !collateral ||
+          Number(formData.inputValue) <= 0 ||
+          Number(formData.inputValue) > maxBorrowingAmount ||
+          loading ||
+          formData.price < 10
+        }
+      />
     </Modal>
   );
 }

@@ -1,9 +1,12 @@
 import { TOOLS_URL } from '@constants/index';
+import { TokenPrices } from 'src/interfaces';
 import { create } from 'zustand';
 
 interface ApolloPriceStore {
   price: number;
+  pricesForAllTokens: TokenPrices[];
   fetchPrice: () => Promise<void>;
+  fetchPricesForAllTokens: () => Promise<void>;
   init: () => Promise<void>;
 }
 
@@ -12,8 +15,9 @@ interface WalletModalStore {
   toggleWalletModal: () => void;
 }
 
-export const useApolloPrice = create<ApolloPriceStore>((set, get) => ({
+export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
   price: 0,
+  pricesForAllTokens: [],
   fetchPrice: async () => {
     const response = await fetch(`${TOOLS_URL}/prices/XOR`);
 
@@ -22,9 +26,22 @@ export const useApolloPrice = create<ApolloPriceStore>((set, get) => ({
       set({ price: apolloPrice });
     }
   },
+  fetchPricesForAllTokens: async () => {
+    const response = await fetch(`${TOOLS_URL}/prices`);
+
+    if (response.ok) {
+      const pricesForAllTokens = (await response.json()) as TokenPrices[];
+      set({ pricesForAllTokens });
+    }
+  },
   init: async () => {
     await get().fetchPrice();
-    setInterval(get().fetchPrice, 60000);
+    await get().fetchPricesForAllTokens();
+
+    setInterval(() => {
+      get().fetchPrice();
+      get().fetchPricesForAllTokens();
+    }, 60000);
   },
 }));
 

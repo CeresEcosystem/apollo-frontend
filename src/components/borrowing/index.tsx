@@ -12,17 +12,17 @@ import {
 } from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
 import { ICONS_URL, TOKEN_NAME } from '@constants/index';
-// import RewardsModal from '@components/rewards/rewards_modal';
+import RewardsModal from '@components/rewards/rewards_modal';
 import {
   BorrowingCollateralModal,
   BorrowingInfo,
   Collateral,
 } from 'src/interfaces';
-// import BorrowAssetModal from './borrow_asset_modal';
+import BorrowAssetModal from './borrow_asset_modal';
 import RepayModal from './repay_modal';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
-// import AddMoreModal from './add_more_modal';
+import AddMoreModal from './add_more_modal';
 
 function Collaterals({
   asset,
@@ -30,7 +30,7 @@ function Collaterals({
   showRepayModal,
   showAddMoreModal,
 }: {
-  asset: string;
+  asset: BorrowingInfo;
   collaterals: Collateral[];
   showRepayModal: (item: Collateral) => void;
   showAddMoreModal: (item: Collateral) => void;
@@ -75,12 +75,12 @@ function Collaterals({
             </td>
             <td className={tableCellCollateralStyle}>
               <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset}`}
+                {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`}
               </span>
             </td>
             <td className={tableCellCollateralStyle}>
               <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.interest, 3)} ${asset}`}
+                {`${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`}
               </span>
             </td>
             <td className={tableCellCollateralStyle}>
@@ -117,8 +117,10 @@ function Collaterals({
 
 export default function Borrowing({
   borrowingInfo,
+  reload,
 }: {
   borrowingInfo: BorrowingInfo[];
+  reload: () => void;
 }) {
   const { sortConfig, requestSort, sortedData } = useTableSort<BorrowingInfo>(
     borrowingInfo,
@@ -128,18 +130,20 @@ export default function Borrowing({
   const intl = useIntl();
 
   const [collateralId, setCollateralId] = useState<string | null>(null);
-  // const [showBorrowModal, setShowBorrowModal] = useState(false);
-  // const [showRewardsModal, setShowRewardsModal] = useState(false);
+  const [showBorrowModal, setShowBorrowModal] = useState(false);
+  const [showRewardsModal, setShowRewardsModal] = useState(false);
   const [showRepayModal, setShowRepayModal] =
     useState<BorrowingCollateralModal>({
       show: false,
-      item: null,
+      asset: null,
+      collateral: null,
     });
-  // const [showAddMoreModal, setShowAddMoreModal] =
-  //   useState<BorrowingCollateralModal>({
-  //     show: false,
-  //     item: null,
-  //   });
+  const [showAddMoreModal, setShowAddMoreModal] =
+    useState<BorrowingCollateralModal>({
+      show: false,
+      asset: null,
+      collateral: null,
+    });
 
   const toggleCollateralView = (id: string) => {
     if (collateralId === id) {
@@ -154,9 +158,9 @@ export default function Borrowing({
       <TableContainer
         title="BORROWING"
         firstButtonTitle="Borrow asset"
-        // firstButtonCallback={() => setShowBorrowModal(true)}
+        firstButtonCallback={() => setShowBorrowModal(true)}
         secondButtonTitle="Get rewards"
-        // secondButtonCallback={() => setShowRewardsModal(true)}
+        secondButtonCallback={() => setShowRewardsModal(true)}
       >
         <thead className="bg-grey bg-opacity-5">
           <tr>
@@ -289,12 +293,22 @@ export default function Borrowing({
                   <tr className="border-none">
                     <td colSpan={8} className="p-4">
                       <Collaterals
-                        asset={item.poolAssetSymbol}
+                        asset={item}
                         collaterals={item.collaterals}
-                        showRepayModal={() =>
-                          setShowRepayModal({ show: true, item })
+                        showRepayModal={(coll: Collateral) =>
+                          setShowRepayModal({
+                            show: true,
+                            asset: item,
+                            collateral: coll,
+                          })
                         }
-                        showAddMoreModal={() => {}} // setShowAddMoreModal({ show: true, item })
+                        showAddMoreModal={(coll: Collateral) =>
+                          setShowAddMoreModal({
+                            show: true,
+                            asset: item,
+                            collateral: coll,
+                          })
+                        }
                       />
                     </td>
                   </tr>
@@ -304,18 +318,22 @@ export default function Borrowing({
           })}
         </tbody>
       </TableContainer>
-      {/* <BorrowAssetModal
-        assets={data}
+      <BorrowAssetModal
+        borrowingInfo={sortedData}
         showModal={showBorrowModal}
         closeModal={() => setShowBorrowModal(false)}
-      /> */}
-      {/* <RewardsModal
-        assets={data}
+        reload={reload}
+      />
+      <RewardsModal
+        lendingInfo={[]}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
-      /> */}
+        isLending={false}
+        reload={reload}
+      />
       <RepayModal
-        collateral={showRepayModal.item}
+        asset={showRepayModal.asset}
+        collateral={showRepayModal.collateral}
         showModal={showRepayModal.show}
         closeModal={() =>
           setShowRepayModal(oldState => ({
@@ -323,9 +341,11 @@ export default function Borrowing({
             show: false,
           }))
         }
+        reload={reload}
       />
-      {/* <AddMoreModal
-        collateral={showAddMoreModal.item}
+      <AddMoreModal
+        asset={showAddMoreModal.asset}
+        collateral={showAddMoreModal.collateral}
         showModal={showAddMoreModal.show}
         closeModal={() =>
           setShowAddMoreModal(oldState => ({
@@ -333,8 +353,8 @@ export default function Borrowing({
             show: false,
           }))
         }
-        assets={data}
-      /> */}
+        reload={reload}
+      />
     </>
   );
 }

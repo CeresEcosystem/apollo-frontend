@@ -15,8 +15,10 @@ const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-sm lg:px-6';
 
 export default function Lending({
   lendingInfo,
+  reload,
 }: {
   lendingInfo: LendingInfo[];
+  reload: () => void;
 }) {
   const intl = useIntl();
   const { sortConfig, requestSort, sortedData } = useTableSort<LendingInfo>(
@@ -123,14 +125,17 @@ export default function Lending({
         </tbody>
       </TableContainer>
       <LendAssetModal
-        lendingInfo={lendingInfo}
+        lendingInfo={sortedData}
         showModal={showLendModal}
         closeModal={() => setShowLendModal(false)}
+        reload={reload}
       />
       <RewardsModal
         lendingInfo={lendingInfo}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
+        isLending
+        reload={reload}
       />
       <WithdrawModal
         showModal={showWithdrawModal.show}
@@ -141,6 +146,7 @@ export default function Lending({
           }))
         }
         asset={showWithdrawModal.item}
+        reload={reload}
       />
     </>
   );

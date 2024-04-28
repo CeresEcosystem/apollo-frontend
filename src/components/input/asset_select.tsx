@@ -33,7 +33,7 @@ export default function AssetSelect<T extends AssetSelectOption>({
 }: {
   options: T[];
   selectedOption: T | null;
-  handleChange: (option: T | null) => void;
+  handleChange?: (option: T | null) => void;
   label?: string;
   spaceTop?: boolean;
   isDisabled?: boolean;

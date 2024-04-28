@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import { Fragment } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
-import { useApolloPrice, useWalletModal } from 'src/store';
+import { useTokenPrice, useWalletModal } from 'src/store';
 
 const pages = [
   {
@@ -139,7 +139,7 @@ function ConnectButton() {
 }
 
 function ApolloPrice() {
-  const apolloPrice = useApolloPrice(state => state.price);
+  const apolloPrice = useTokenPrice(state => state.price);
 
   const intl = useIntl();
 
@@ -165,7 +165,7 @@ export default function Header() {
 
   const intl = useIntl();
 
-  const apolloPrice = useApolloPrice(state => state.price);
+  const apolloPrice = useTokenPrice(state => state.price);
 
   return (
     <div id="header">

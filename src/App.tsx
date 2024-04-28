@@ -5,12 +5,12 @@ import WalletModal from '@components/wallet/wallet_modal';
 import { usePolkadot } from '@context/polkadot_context';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
-import { useApolloPrice } from './store';
+import { useTokenPrice } from './store';
 import { useEffect } from 'react';
 
 export default function App() {
   const { loading } = usePolkadot();
-  const fetchApolloPrice = useApolloPrice(state => state.init);
+  const fetchApolloPrice = useTokenPrice(state => state.init);
 
   useEffect(() => {
     fetchApolloPrice();
