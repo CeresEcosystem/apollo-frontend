@@ -125,13 +125,28 @@ export interface StatsData {
   tvl: number;
   totalLent: number;
   totalBorrowed: number;
-  totalRewards: number;
+  totalRewards?: number;
+  totalUsers?: number;
 }
 
 export interface DashboardData {
   lendingInfo: LendingInfo[];
   borrowingInfo: BorrowingInfo[];
   userData: StatsData;
+}
+
+export interface MarketPool {
+  poolAssetId: string;
+  poolAssetSymbol: string;
+  lent: number;
+  borrowed: number;
+  lendingAPR: number;
+  borrowingAPR: number;
+}
+
+export interface MarketsData {
+  pools: MarketPool[];
+  stats: StatsData;
 }
 
 export interface LendingWithdrawModal {

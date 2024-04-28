@@ -3,86 +3,27 @@ import { ICONS_URL, TOAST_ID, WALLET_NOT_CONNECTED } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import useTableSort from '@hooks/use_table_sort';
+import { priceFormat } from '@utils/helpers';
 import { showErrorNotify } from '@utils/toast';
 import classNames from 'classnames';
+import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-
-interface DataItem {
-  id: number;
-  asset: string;
-  totalDeposited: string;
-  totalBorrowed: string;
-  deposit: number;
-  borrow: number;
-  maxLoop: number;
-}
-
-const data: DataItem[] = [
-  {
-    id: 1,
-    asset: 'PSWAP',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-  {
-    id: 2,
-    asset: 'CERES',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-  {
-    id: 3,
-    asset: 'XOR',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-  {
-    id: 4,
-    asset: 'VAL',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-  {
-    id: 5,
-    asset: 'HMX',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-  {
-    id: 6,
-    asset: 'DEO',
-    totalDeposited: '$137.07M',
-    totalBorrowed: '$127.02M',
-    deposit: 4.2,
-    borrow: 3.58,
-    maxLoop: 39.36,
-  },
-];
+import { MarketPool } from 'src/interfaces';
 
 const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
 const tableCellStyle = 'px-4 py-4 whitespace-nowrap lg:px-6';
 
-export default function MarketAssets() {
+export default function MarketPools({ pools }: { pools: MarketPool[] }) {
   const { selectedAccount } = usePolkadot();
+
+  const intl = useIntl();
 
   const navigate = useNavigate();
 
-  const { sortConfig, requestSort, sortedData } = useTableSort<DataItem>(data);
+  const { sortConfig, requestSort, sortedData } = useTableSort<MarketPool>(
+    pools,
+    'lendingAPR',
+  );
 
   const handleAssetClick = () => {
     if (!selectedAccount) {
@@ -101,28 +42,37 @@ export default function MarketAssets() {
           </th>
           <th
             className={classNames(tableHeadStyle, 'cursor-pointer')}
-            onClick={() => requestSort('deposit')}
+            onClick={() => requestSort('lendingAPR')}
           >
-            Deposit
-            {sortConfig.key === 'deposit' && (
+            Lending APR
+            {sortConfig.key === 'lendingAPR' && (
               <SortIcon direction={sortConfig.direction} />
             )}
           </th>
           <th
             className={classNames(tableHeadStyle, 'cursor-pointer')}
-            onClick={() => requestSort('borrow')}
+            onClick={() => requestSort('lent')}
           >
-            Borrow
-            {sortConfig.key === 'borrow' && (
+            Total Lent
+            {sortConfig.key === 'lent' && (
               <SortIcon direction={sortConfig.direction} />
             )}
           </th>
           <th
             className={classNames(tableHeadStyle, 'cursor-pointer')}
-            onClick={() => requestSort('maxLoop')}
+            onClick={() => requestSort('borrowingAPR')}
           >
-            Max loop
-            {sortConfig.key === 'maxLoop' && (
+            Borrowing APR
+            {sortConfig.key === 'borrowingAPR' && (
+              <SortIcon direction={sortConfig.direction} />
+            )}
+          </th>
+          <th
+            className={classNames(tableHeadStyle, 'cursor-pointer')}
+            onClick={() => requestSort('borrowed')}
+          >
+            Total Borrowed
+            {sortConfig.key === 'borrowed' && (
               <SortIcon direction={sortConfig.direction} />
             )}
           </th>
@@ -132,7 +82,7 @@ export default function MarketAssets() {
       <tbody className="divide-y divide-borderTable">
         {sortedData.map(item => (
           <tr
-            key={item.id}
+            key={item.poolAssetId}
             onClick={handleAssetClick}
             className="cursor-pointer hover:bg-grey3"
           >
@@ -142,23 +92,29 @@ export default function MarketAssets() {
                 'flex items-center lg:px-12',
               )}
             >
-              <div className="flex-shrink-0 h-8 w-8 xxs:h-12 xxs:w-12 bg-white rounded-full shadow-sm">
-                <img src={`${ICONS_URL}${item.asset}.svg`} alt={item.asset} />
+              <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+                <img
+                  src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
+                  alt={item.poolAssetSymbol}
+                />
               </div>
-              <div className="ml-4 flex flex-col font-medium text-grey text-sm xxs:text-base">
-                <span>{item.asset}</span>
-                <span className="text-grey2 text-xs">{`Deposited: ${item.totalDeposited}`}</span>
-                <span className="text-grey2 text-xs">{`Borrowed: ${item.totalBorrowed}`}</span>
-              </div>
+              <span className="ml-4 font-medium text-grey text-sm">
+                {item.poolAssetSymbol}
+              </span>
             </td>
             <td className={tableCellStyle}>
-              <IconContainer value={item.deposit.toString()} />
+              <IconContainer value={`${priceFormat(intl, item.lendingAPR)}%`} />
             </td>
             <td className={tableCellStyle}>
-              <IconContainer value={item.borrow.toString()} />
+              <IconContainer value={`$${priceFormat(intl, item.lent)}`} />
             </td>
             <td className={tableCellStyle}>
-              <IconContainer value={item.maxLoop.toString()} />
+              <IconContainer
+                value={`${priceFormat(intl, item.borrowingAPR)}%`}
+              />
+            </td>
+            <td className={tableCellStyle}>
+              <IconContainer value={`$${priceFormat(intl, item.borrowed)}`} />
             </td>
             <td className={tableCellStyle}>
               <div className="flex justify-center">

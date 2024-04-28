@@ -58,7 +58,6 @@ export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
   if (price !== null) {
     return intl.formatNumber(price, {
       maximumFractionDigits: decimals,
-      minimumFractionDigits: decimals,
       trailingZeroDisplay: 'stripIfInteger',
     });
   }

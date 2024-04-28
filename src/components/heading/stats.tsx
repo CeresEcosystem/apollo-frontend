@@ -103,7 +103,9 @@ function TotalBorrowed({
   );
 }
 
-function ActiveUsers() {
+function ActiveUsers({ totalUsers }: { totalUsers?: number }) {
+  const intl = useIntl();
+
   return (
     <div
       className={classNames(
@@ -115,13 +117,15 @@ function ActiveUsers() {
         <span className={titleStyle}>USERS</span>
         <span className={subtitleStyle}>TOTAL ACTIVE</span>
       </div>
-      <span className={valueStyle}>9,000+</span>
+      <span className={valueStyle}>
+        {priceFormat(intl, totalUsers ?? 0, 0)}
+      </span>
       <FaUsers className="absolute right-2 top-2 h-36 w-auto xs:h-48 lg:h-36 xl:h-48 text-pinkIcon" />
     </div>
   );
 }
 
-function TotalRewards({ totalRewards }: { totalRewards: number }) {
+function TotalRewards({ totalRewards }: { totalRewards?: number }) {
   const intl = useIntl();
 
   return (
@@ -137,11 +141,10 @@ function TotalRewards({ totalRewards }: { totalRewards: number }) {
       </div>
       <div className="flex flex-col bg-white bg-opacity-10 z-10 w-min">
         <span className={valueStyle}>
-          {`${priceFormat(intl, totalRewards, 3)}`}
+          {`${priceFormat(intl, totalRewards ?? 0, 3)}`}
         </span>
         <span className={subtitleStyle}>{TOKEN_NAME.toUpperCase()}</span>
       </div>
-
       <FaCoins className="absolute right-4 top-2 h-32 w-auto xs:top-4 lg:top-2 xl:top-4 text-pinkIcon" />
     </div>
   );
@@ -172,7 +175,7 @@ export default function Stats({
       {forWallet ? (
         <TotalRewards totalRewards={statsData.totalRewards} />
       ) : (
-        <ActiveUsers />
+        <ActiveUsers totalUsers={statsData.totalUsers} />
       )}
     </div>
   );
