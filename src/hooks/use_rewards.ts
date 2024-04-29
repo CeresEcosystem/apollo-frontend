@@ -22,56 +22,44 @@ const useRewards = () => {
           isLending,
         );
 
-        await rewardsExtrinsic
-          ?.signAndSend(
-            selectedAccount!.address,
-            { signer: selectedWalletProvider.signer },
-            ({ status, events }) => {
-              if (status?.isInBlock) {
-                events
-                  .filter(({ event }) =>
-                    api?.events?.system?.ExtrinsicFailed?.is(event),
-                  )
-                  .forEach(
-                    ({
-                      event: {
-                        data: [error],
-                      },
-                    }) => {
-                      // @ts-expect-error Property 'isModule' does not exist on type 'Codec'.
-                      if (error.isModule) {
-                        const decoded = api.registry.findMetaError(
-                          // @ts-expect-error Property 'isModule' does not exist on type 'Codec'.
-                          error.asModule,
-                        );
-
-                        updateNotify(
-                          toastId,
-                          `Transaction failed : ${decoded.docs[0]}`,
-                          'error',
-                        );
-                      } else {
-                        updateNotify(
-                          toastId,
-                          `Transaction failed : ${error}`,
-                          'error',
-                        );
-                      }
-
-                      setLoading(false);
-                    },
+        const tx = new Promise<boolean>(resolve => {
+          rewardsExtrinsic
+            ?.signAndSend(
+              selectedAccount!.address,
+              { signer: selectedWalletProvider.signer },
+              result => {
+                (async () => {
+                  if (result?.status?.isFinalized) {
+                    const failedEvents = result.events.filter(({ event }) =>
+                      api.events?.system?.ExtrinsicFailed?.is(event),
+                    );
+                    updateNotify(toastId, `Transaction failed`, 'error');
+                    resolve(failedEvents.length === 0);
+                  }
+                })().catch(error => {
+                  updateNotify(
+                    toastId,
+                    `Transaction failed - ${error}`,
+                    'error',
                   );
+                  resolve(false);
+                });
+              },
+            )
+            .catch(error => {
+              updateNotify(toastId, `Transaction failed - ${error}`, 'error');
+              resolve(false);
+            });
+        });
 
-                updateNotify(toastId, `Successfully get rewards`, 'success');
-                setLoading(false);
-                onSuccessCallback();
-              }
-            },
-          )
-          .catch(error => {
-            setLoading(false);
-            updateNotify(toastId, `Transaction failed : ${error}`, 'error');
-          });
+        const succeeded = await tx;
+
+        setLoading(false);
+
+        if (succeeded) {
+          updateNotify(toastId, `Successfully get rewards`, 'success');
+          onSuccessCallback();
+        }
       }
     },
     [api, selectedAccount, selectedWalletProvider],
