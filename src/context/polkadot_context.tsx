@@ -1,4 +1,4 @@
-import { Keyring } from '@polkadot/api';
+import { ApiPromise, Keyring, WsProvider } from '@polkadot/api';
 import { useWallets } from '@polkadot-onboard/react';
 import { Account, BaseWallet } from '@polkadot-onboard/core';
 import React, {
@@ -10,9 +10,17 @@ import React, {
   useState,
 } from 'react';
 import { showErrorNotify } from '@utils/toast';
-import { POLKADOT_ACCOUNT, POLKADOT_SOURCE } from '@constants/index';
+import {
+  POLKADOT_ACCOUNT,
+  POLKADOT_SOURCE,
+  // SORA_API,
+  SORA_API_TEST,
+} from '@constants/index';
+import { options } from '@utils/sora_options';
+import { ApiOptions } from '@polkadot/api/types';
 
 interface PolkadotContextType {
+  api: ApiPromise | undefined;
   keyring: Keyring;
   loading: boolean;
   accounts: Account[] | undefined;
@@ -35,6 +43,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedWalletProvider, setSelectedWalletProvider] = useState<
     BaseWallet | undefined
   >();
+  const [api, setApi] = useState<ApiPromise | undefined>();
 
   const keyring = useRef<Keyring>(new Keyring());
 
@@ -58,7 +67,12 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   const connect = useCallback(async (walletProvider: BaseWallet) => {
     try {
       await walletProvider.connect();
-      setSelectedWalletProvider(walletProvider);
+
+      if (walletProvider.signer) {
+        setSelectedWalletProvider(walletProvider);
+      } else {
+        window.location.reload();
+      }
     } catch (err) {
       showErrorNotify('Connection failed', true);
     }
@@ -77,18 +91,39 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   }, [selectedWalletProvider]);
 
   useEffect(() => {
-    function autoLoginSavedAccount(baseWallets: BaseWallet[]) {
+    async function autoLoginSavedAccount(baseWallets: BaseWallet[]) {
       const source = localStorage.getItem(POLKADOT_SOURCE);
       const provider = baseWallets.find(bw => bw.metadata.id === source);
 
       if (provider) {
-        connect(provider);
+        await connect(provider);
       }
     }
 
-    if (wallets) {
-      autoLoginSavedAccount(wallets);
+    async function setupApi() {
+      const provider = new WsProvider(SORA_API_TEST);
+
+      const soraOptions = options({ provider, noInitWarn: true });
+      const apiOptions = new (soraOptions.constructor as {
+        new (): ApiOptions;
+      })();
+
+      Object.assign(apiOptions, soraOptions);
+
+      const soraAPI = new ApiPromise(apiOptions);
+
+      await soraAPI.isReady;
+      setApi(soraAPI);
+    }
+
+    async function init(wallets: BaseWallet[]) {
+      await autoLoginSavedAccount(wallets);
+      await setupApi();
       setLoading(false);
+    }
+
+    if (wallets) {
+      init(wallets);
     }
   }, [wallets, connect]);
 
@@ -127,6 +162,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <PolkadotContext.Provider
       value={{
+        api,
         keyring: keyring.current,
         loading,
         accounts,

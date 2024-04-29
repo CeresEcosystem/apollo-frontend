@@ -3,18 +3,22 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import PolkadotProvider from '@context/polkadot_context.tsx';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import ErrorPage from '@pages/error/index.tsx';
-import ClaimPage from '@pages/claim/index.tsx';
-import PrivacyPolicy from '@pages/privacy_policy/index.tsx';
-import TermsOfUse from '@pages/terms_of_use/index.tsx';
 import { IntlProvider } from 'react-intl';
-import ApolloClaimProvider from '@context/apollo_claim_context.tsx';
 import { PolkadotWalletsContextProvider } from '@polkadot-onboard/react';
 import 'react-loading-skeleton/dist/skeleton.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'react-loading-skeleton/dist/skeleton.css';
 import './index.css';
 import { walletAggregator } from '@utils/wallet_connect.ts';
+import ReactGA from 'react-ga4';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import ErrorPage from '@pages/error/index.tsx';
+
+ReactGA.initialize('G-JYW28NEEEN');
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -23,16 +27,31 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        index: true,
         path: '/',
-        element: <ClaimPage />,
+        lazy: () => import('@pages/markets/index.tsx'),
+      },
+      {
+        path: 'dashboard',
+        lazy: () => import('@pages/dashboard/index.tsx'),
+      },
+      {
+        path: '/governance',
+        lazy: () => import('@pages/governance/index.tsx'),
+        children: [
+          {
+            path: '/governance/:pollId',
+            lazy: () => import('@pages/governance_poll/index.tsx'),
+          },
+        ],
       },
       {
         path: '/privacy-policy',
-        element: <PrivacyPolicy />,
+        lazy: () => import('@pages/privacy_policy/index.tsx'),
       },
       {
         path: '/terms-of-use',
-        element: <TermsOfUse />,
+        lazy: () => import('@pages/terms_of_use/index.tsx'),
       },
     ],
   },
@@ -41,16 +60,13 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <IntlProvider locale="en">
-      <PolkadotWalletsContextProvider
-        walletAggregator={walletAggregator}
-        initialWaitMs={2000}
-      >
-        <ApolloClaimProvider>
+      <QueryClientProvider client={queryClient}>
+        <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
           <PolkadotProvider>
             <RouterProvider router={router} />
           </PolkadotProvider>
-        </ApolloClaimProvider>
-      </PolkadotWalletsContextProvider>
+        </PolkadotWalletsContextProvider>
+      </QueryClientProvider>
     </IntlProvider>
   </React.StrictMode>,
 );

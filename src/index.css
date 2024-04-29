@@ -6,7 +6,7 @@
 
 :root {
   --background: #f7f7f7;
-  --pink: #eb0ead;
+  --primary: #eb0ead;
   --text: #001c31;
   --toastify-color-info: #eb0ead;
   --toastify-icon-color-info: var(--toastify-color-info);
@@ -15,7 +15,7 @@
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--pink) var(--background);
+  scrollbar-color: var(--primary) var(--background);
 }
 
 /* Chrome, Edge, and Safari */
@@ -24,12 +24,12 @@
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--pink);
+  background: var(--background);
   border-radius: 5px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--pink);
+  background-color: var(--primary);
   border-radius: 12px;
   border: 3px solid var(--background);
 }
@@ -39,7 +39,7 @@ body {
 }
 
 .background {
-  background-image: url('/bg_logo.png');
+  background-image: url('/bg_logo.webp');
   background-repeat: no-repeat;
   background-position: center right;
   background-size: contain;
@@ -49,6 +49,19 @@ body {
   .background {
     background-image: none;
   }
+}
+
+.css-14fqu07-control {
+  border: 1px solid var(--primary) !important;
+  box-shadow: none !important;
+}
+
+.css-tr4s17-option {
+  background-color: #f2f2f2 !important;
+}
+
+.css-d7l1ni-option {
+  background-color: #f2f2f2 !important;
 }
 
 /*

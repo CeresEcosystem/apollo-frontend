@@ -1,4 +1,7 @@
 import { Keyring } from '@polkadot/api';
+import moment from 'moment';
+import { IntlShape } from 'react-intl';
+import multipliers, { Multiplier } from './multipliers';
 
 export function getEncodedAddress(
   keyring: Keyring | null,
@@ -44,4 +47,38 @@ export function getAvatarTitle(accountName: string | undefined) {
 
 export function capitalize(word: string): string {
   return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+export function formatDateFromTimestamp(timestamp: number) {
+  const date = moment(new Date(timestamp), 'YYYY-MM-DD HH:MM');
+  return `${date.format('MMM DD, YYYY')} ${date.format('HH:mm')}`;
+}
+
+export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
+  if (price !== null) {
+    return intl.formatNumber(price, {
+      maximumFractionDigits: decimals,
+      trailingZeroDisplay: 'stripIfInteger',
+    });
+  }
+
+  return '0.00';
+};
+
+function isExistingMultiplier(
+  multiplier: string,
+): multiplier is keyof Multiplier {
+  return Object.keys(multipliers).includes(multiplier);
+}
+
+export function parse(data?: string) {
+  if (data) {
+    const dataSplit = data?.split(' ');
+
+    return dataSplit.length !== 1 && isExistingMultiplier(dataSplit[1])
+      ? (parseFloat(dataSplit[0]) * multipliers[dataSplit[1]]).toFixed(2)
+      : parseFloat(dataSplit[0]).toFixed(2);
+  }
+
+  return '0';
 }

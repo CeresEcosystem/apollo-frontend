@@ -3,7 +3,7 @@ import Paragraph from '@components/text_container/paragraph';
 import ParagraphList from '@components/text_container/paragraph_list';
 import ParagraphTitle from '@components/text_container/paragraph_title';
 
-export default function PrivacyPolicy() {
+export function Component() {
   return (
     <>
       <TextContainer>
@@ -98,3 +98,5 @@ export default function PrivacyPolicy() {
     </>
   );
 }
+
+Component.displayName = 'Privacy Policy';

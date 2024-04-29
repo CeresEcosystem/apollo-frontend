@@ -3,7 +3,7 @@ import Paragraph from '@components/text_container/paragraph';
 import ParagraphList from '@components/text_container/paragraph_list';
 import ParagraphTitle from '@components/text_container/paragraph_title';
 
-export default function TermsOfUse() {
+export function Component() {
   return (
     <>
       <TextContainer>
@@ -202,3 +202,5 @@ export default function TermsOfUse() {
     </>
   );
 }
+
+Component.displayName = 'Terms of use';
