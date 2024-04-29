@@ -23,7 +23,11 @@ function Dashboard() {
     <PageContainer>
       <Stats statsData={data!.userData} forWallet />
       <Lending lendingInfo={data!.lendingInfo} reload={reload} />
-      <Borrowing borrowingInfo={data!.borrowingInfo} reload={reload} />
+      <Borrowing
+        lendingInfo={data!.lendingInfo}
+        borrowingInfo={data!.borrowingInfo}
+        reload={reload}
+      />
     </PageContainer>
   );
 }

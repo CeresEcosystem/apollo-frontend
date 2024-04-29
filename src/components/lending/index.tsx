@@ -131,7 +131,7 @@ export default function Lending({
         reload={reload}
       />
       <RewardsModal
-        lendingInfo={lendingInfo}
+        assets={sortedData}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
         isLending

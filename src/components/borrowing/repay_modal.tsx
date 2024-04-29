@@ -81,7 +81,7 @@ export default function RepayModal({
     setFormData(prevData => {
       return {
         ...prevData,
-        inputValue: formData.balance,
+        inputValue: Math.min(Number(formData.balance), totalToRepay).toString(),
         price: tokenPrice * Number(formData.balance),
       };
     });

@@ -1,6 +1,7 @@
 import Modal from '@components/modal';
 import { useState } from 'react';
 import {
+  BorrowingInfo,
   LendingInfo,
   LendingRewardsFormData,
   LendingRewardsSelectOption,
@@ -17,13 +18,13 @@ import useRewards from '@hooks/use_rewards';
 export default function RewardsModal({
   showModal,
   closeModal,
-  lendingInfo,
+  assets,
   isLending,
   reload,
 }: {
   showModal: boolean;
   closeModal: () => void;
-  lendingInfo: LendingInfo[];
+  assets: LendingInfo[] | BorrowingInfo[];
   isLending: boolean;
   reload: () => void;
 }) {
@@ -35,7 +36,7 @@ export default function RewardsModal({
 
   const { loading, getRewards } = useRewards();
 
-  const options: LendingRewardsSelectOption[] = lendingInfo.map(asset => {
+  const options: LendingRewardsSelectOption[] = assets.map(asset => {
     return {
       label: asset.poolAssetSymbol,
       value: asset.poolAssetId,

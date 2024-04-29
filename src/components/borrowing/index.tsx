@@ -17,6 +17,7 @@ import {
   BorrowingCollateralModal,
   BorrowingInfo,
   Collateral,
+  LendingInfo,
 } from 'src/interfaces';
 import BorrowAssetModal from './borrow_asset_modal';
 import RepayModal from './repay_modal';
@@ -116,9 +117,11 @@ function Collaterals({
 }
 
 export default function Borrowing({
+  lendingInfo,
   borrowingInfo,
   reload,
 }: {
+  lendingInfo: LendingInfo[];
   borrowingInfo: BorrowingInfo[];
   reload: () => void;
 }) {
@@ -320,12 +323,13 @@ export default function Borrowing({
       </TableContainer>
       <BorrowAssetModal
         borrowingInfo={sortedData}
+        lendingInfo={lendingInfo}
         showModal={showBorrowModal}
         closeModal={() => setShowBorrowModal(false)}
         reload={reload}
       />
       <RewardsModal
-        lendingInfo={[]}
+        assets={sortedData}
         showModal={showRewardsModal}
         closeModal={() => setShowRewardsModal(false)}
         isLending={false}

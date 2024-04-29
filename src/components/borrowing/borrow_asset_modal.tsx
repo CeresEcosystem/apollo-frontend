@@ -4,6 +4,7 @@ import {
   BorrowingAssetFormData,
   BorrowingAssetSelectOption,
   BorrowingInfo,
+  LendingInfo,
 } from 'src/interfaces';
 import AssetBalance from '@components/input/asset_balance';
 import TransactionOverview from '@components/transaction/transaction_overview';
@@ -19,11 +20,13 @@ import useBorrowAsset from '@hooks/use_borrow_asset';
 export default function BorrowAssetModal({
   showModal,
   closeModal,
+  lendingInfo,
   borrowingInfo,
   reload,
 }: {
   showModal: boolean;
   closeModal: () => void;
+  lendingInfo: LendingInfo[];
   borrowingInfo: BorrowingInfo[];
   reload: () => void;
 }) {
@@ -56,21 +59,16 @@ export default function BorrowAssetModal({
   }, [pricesForAllTokens, formData.collateral]);
 
   const collateralAmount = useMemo(() => {
-    if (formData.asset) {
+    if (formData.collateral) {
       return (
-        ((Number(formData.inputValue) / formData.asset?.loanToValue) *
-          borrowingTokenPrice) /
-        collateralTokenPrice
+        lendingInfo.find(
+          lend => lend.poolAssetId === formData.collateral!.value,
+        )?.amount ?? 0
       );
     }
 
     return 0;
-  }, [
-    borrowingTokenPrice,
-    collateralTokenPrice,
-    formData.asset,
-    formData.inputValue,
-  ]);
+  }, [formData.collateral, lendingInfo]);
 
   const maxBorrowingAmount = useMemo(() => {
     if (formData.asset) {

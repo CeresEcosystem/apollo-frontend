@@ -56,16 +56,8 @@ export default function AddMoreModal({
   }, [pricesForAllTokens, collateral?.collateralAssetId]);
 
   const collateralAmount = useMemo(() => {
-    if (asset) {
-      return (
-        ((Number(formData.inputValue) / asset.loanToValue) *
-          borrowingTokenPrice) /
-        collateralTokenPrice
-      );
-    }
-
-    return 0;
-  }, [borrowingTokenPrice, collateralTokenPrice, asset, formData.inputValue]);
+    return collateral?.collateralAmount ?? 0;
+  }, [collateral?.collateralAmount]);
 
   const maxBorrowingAmount = useMemo(() => {
     if (asset) {
