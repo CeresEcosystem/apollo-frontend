@@ -13,6 +13,7 @@ import {
   BorrowingInfo,
   Collateral,
   CollateralAddMoreFormData,
+  LendingInfo,
 } from 'src/interfaces';
 import { useTokenPrice } from 'src/store';
 
@@ -20,12 +21,14 @@ export default function AddMoreModal({
   showModal,
   closeModal,
   asset,
+  lendingInfo,
   collateral,
   reload,
 }: {
   showModal: boolean;
   closeModal: () => void;
   asset: BorrowingInfo | null;
+  lendingInfo: LendingInfo[];
   collateral: Collateral | null;
   reload: () => void;
 }) {
@@ -56,19 +59,38 @@ export default function AddMoreModal({
   }, [pricesForAllTokens, collateral?.collateralAssetId]);
 
   const collateralAmount = useMemo(() => {
-    return collateral?.collateralAmount ?? 0;
-  }, [collateral?.collateralAmount]);
+    if (asset) {
+      return (
+        ((Number(formData.inputValue) / asset.loanToValue) *
+          borrowingTokenPrice) /
+        collateralTokenPrice
+      );
+    }
+
+    return 0;
+  }, [asset, borrowingTokenPrice, collateralTokenPrice, formData.inputValue]);
 
   const maxBorrowingAmount = useMemo(() => {
     if (asset) {
+      const cAmount =
+        lendingInfo.find(
+          lend => lend.poolAssetId === collateral?.collateralAssetId,
+        )?.amount ?? 0;
+
       return (
-        (collateralAmount * collateralTokenPrice * asset.loanToValue) /
+        (cAmount * collateralTokenPrice * asset.loanToValue) /
         borrowingTokenPrice
       );
     }
 
     return 0;
-  }, [borrowingTokenPrice, collateralAmount, collateralTokenPrice, asset]);
+  }, [
+    asset,
+    lendingInfo,
+    collateralTokenPrice,
+    borrowingTokenPrice,
+    collateral?.collateralAssetId,
+  ]);
 
   const handleAssetBalanceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData(prevData => {
@@ -76,6 +98,16 @@ export default function AddMoreModal({
         ...prevData,
         inputValue: e.target.value,
         price: borrowingTokenPrice * Number(e.target.value),
+      };
+    });
+  };
+
+  const onMaxPressed = () => {
+    setFormData(prevData => {
+      return {
+        ...prevData,
+        inputValue: maxBorrowingAmount.toString(),
+        price: borrowingTokenPrice * maxBorrowingAmount,
       };
     });
   };
@@ -126,8 +158,9 @@ export default function AddMoreModal({
             assetSymbol={asset.poolAssetSymbol}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
+            assetBalance={maxBorrowingAmount.toString()}
+            onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
-            showBalance={false}
           />
           <TransactionOverview
             overviews={[

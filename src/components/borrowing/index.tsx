@@ -351,6 +351,7 @@ export default function Borrowing({
         asset={showAddMoreModal.asset}
         collateral={showAddMoreModal.collateral}
         showModal={showAddMoreModal.show}
+        lendingInfo={lendingInfo}
         closeModal={() =>
           setShowAddMoreModal(oldState => ({
             ...oldState,

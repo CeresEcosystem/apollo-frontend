@@ -59,23 +59,31 @@ export default function BorrowAssetModal({
   }, [pricesForAllTokens, formData.collateral]);
 
   const collateralAmount = useMemo(() => {
-    if (formData.collateral) {
+    if (formData.asset) {
       return (
-        lendingInfo.find(
-          lend => lend.poolAssetId === formData.collateral!.value,
-        )?.amount ?? 0
+        ((Number(formData.inputValue) / formData.asset?.loanToValue) *
+          borrowingTokenPrice) /
+        collateralTokenPrice
       );
     }
 
     return 0;
-  }, [formData.collateral, lendingInfo]);
+  }, [
+    borrowingTokenPrice,
+    collateralTokenPrice,
+    formData.asset,
+    formData.inputValue,
+  ]);
 
   const maxBorrowingAmount = useMemo(() => {
     if (formData.asset) {
+      const cAmount =
+        lendingInfo.find(
+          lend => lend.poolAssetId === formData.collateral!.value,
+        )?.amount ?? 0;
+
       return (
-        (collateralAmount *
-          collateralTokenPrice *
-          formData.asset?.loanToValue) /
+        (cAmount * collateralTokenPrice * formData.asset?.loanToValue) /
         borrowingTokenPrice
       );
     }
@@ -83,9 +91,10 @@ export default function BorrowAssetModal({
     return 0;
   }, [
     borrowingTokenPrice,
-    collateralAmount,
     collateralTokenPrice,
     formData.asset,
+    formData.collateral,
+    lendingInfo,
   ]);
 
   const options: BorrowingAssetSelectOption[] = borrowingInfo.map(asset => {
@@ -143,6 +152,16 @@ export default function BorrowAssetModal({
     });
   };
 
+  const onMaxPressed = () => {
+    setFormData(prevData => {
+      return {
+        ...prevData,
+        inputValue: maxBorrowingAmount.toString(),
+        price: borrowingTokenPrice * maxBorrowingAmount,
+      };
+    });
+  };
+
   return (
     <Modal title="Borrow asset" showModal={showModal} closeModal={closeModal}>
       <AssetSelect
@@ -165,8 +184,9 @@ export default function BorrowAssetModal({
             assetSymbol={formData.asset?.label}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
+            assetBalance={maxBorrowingAmount.toString()}
+            onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
-            showBalance={false}
           />
           <TransactionOverview
             overviews={[
