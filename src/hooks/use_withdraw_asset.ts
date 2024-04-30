@@ -62,7 +62,8 @@ const useWithdrawAsset = () => {
           updateNotify(toastId, `Successfully withdraw`, 'success');
           ReactGA.event({
             category: 'Withdraw',
-            action: `Withdraw Asset - ${tokenAddress}`,
+            action: 'Withdraw button clicked',
+            label: `Withdraw Asset - ${tokenAddress}`,
             value: Number(amount),
           });
           onSuccessCallback();

@@ -62,7 +62,8 @@ const useLendAsset = () => {
           updateNotify(toastId, `Successfully lent`, 'success');
           ReactGA.event({
             category: 'Lending',
-            action: `Lend Asset - ${tokenAddress}`,
+            action: 'Lending button clicked',
+            label: `Lend Asset - ${tokenAddress}`,
             value: Number(amount),
           });
           onSuccessCallback();

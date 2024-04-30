@@ -61,7 +61,8 @@ const useRewards = () => {
           updateNotify(toastId, `Successfully get rewards`, 'success');
           ReactGA.event({
             category: 'Rewards',
-            action: `Get rewards for ${isLending ? 'lending' : 'borrowing'} asset - ${tokenAddress}`,
+            action: 'Get rewards button clicked',
+            label: `Get rewards for ${isLending ? 'lending' : 'borrowing'} asset - ${tokenAddress}`,
           });
           onSuccessCallback();
         }

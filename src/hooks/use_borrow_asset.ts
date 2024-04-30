@@ -64,7 +64,8 @@ const useBorrowAsset = () => {
           updateNotify(toastId, `Successfully borrowed`, 'success');
           ReactGA.event({
             category: 'Borrowing',
-            action: `Borrow Asset - ${tokenAddress}, collateral - ${collateralAddress}`,
+            action: 'Borrow button clicked',
+            label: `Borrow Asset - ${tokenAddress}, collateral - ${collateralAddress}`,
             value: Number(amount),
           });
           onSuccessCallback();

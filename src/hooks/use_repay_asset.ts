@@ -64,7 +64,8 @@ const useRepayAsset = () => {
           updateNotify(toastId, `Successfully repay`, 'success');
           ReactGA.event({
             category: 'Repay',
-            action: `Repay Asset - ${tokenAddress}, collateral - ${collateralTokenAddress}`,
+            action: 'Repay button clicked',
+            label: `Repay Asset - ${tokenAddress}, collateral - ${collateralTokenAddress}`,
             value: Number(amount),
           });
           onSuccessCallback();
