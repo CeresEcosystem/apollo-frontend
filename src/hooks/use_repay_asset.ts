@@ -2,6 +2,7 @@ import { usePolkadot } from '@context/polkadot_context';
 import { FPNumber } from '@utils/FPNumber';
 import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
+import ReactGA from 'react-ga4';
 
 const useRepayAsset = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
@@ -61,6 +62,11 @@ const useRepayAsset = () => {
 
         if (succeeded) {
           updateNotify(toastId, `Successfully repay`, 'success');
+          ReactGA.event({
+            category: 'Repay',
+            action: `Repay Asset - ${tokenAddress}, collateral - ${collateralTokenAddress}`,
+            value: Number(amount),
+          });
           onSuccessCallback();
         }
       }

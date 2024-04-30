@@ -2,6 +2,7 @@ import { usePolkadot } from '@context/polkadot_context';
 import { FPNumber } from '@utils/FPNumber';
 import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
+import ReactGA from 'react-ga4';
 
 const useBorrowAsset = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
@@ -61,6 +62,11 @@ const useBorrowAsset = () => {
 
         if (succeeded) {
           updateNotify(toastId, `Successfully borrowed`, 'success');
+          ReactGA.event({
+            category: 'Borrowing',
+            action: `Borrow Asset - ${tokenAddress}, collateral - ${collateralAddress}`,
+            value: Number(amount),
+          });
           onSuccessCallback();
         }
       }

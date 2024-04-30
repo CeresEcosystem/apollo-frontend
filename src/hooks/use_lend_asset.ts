@@ -2,6 +2,7 @@ import { usePolkadot } from '@context/polkadot_context';
 import { FPNumber } from '@utils/FPNumber';
 import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
+import ReactGA from 'react-ga4';
 
 const useLendAsset = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
@@ -59,6 +60,11 @@ const useLendAsset = () => {
 
         if (succeeded) {
           updateNotify(toastId, `Successfully lent`, 'success');
+          ReactGA.event({
+            category: 'Lending',
+            action: `Lend Asset - ${tokenAddress}`,
+            value: Number(amount),
+          });
           onSuccessCallback();
         }
       }

@@ -68,10 +68,14 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await walletProvider.connect();
 
-      if (walletProvider.signer) {
-        setSelectedWalletProvider(walletProvider);
+      if (walletProvider.metadata.id === 'polkadot-js') {
+        if (walletProvider.signer) {
+          setSelectedWalletProvider(walletProvider);
+        } else {
+          window.location.reload();
+        }
       } else {
-        window.location.reload();
+        setSelectedWalletProvider(walletProvider);
       }
     } catch (err) {
       showErrorNotify('Connection failed', true);

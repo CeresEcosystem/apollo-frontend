@@ -44,18 +44,27 @@ export default function BorrowAssetModal({
   const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
 
   const borrowingTokenPrice = useMemo(() => {
-    return (
-      pricesForAllTokens.find(token => token.assetId === formData.asset?.value)
-        ?.price ?? 0
-    );
+    if (formData.asset) {
+      return (
+        pricesForAllTokens.find(
+          token => token.assetId === formData.asset?.value,
+        )?.price ?? 0
+      );
+    }
+
+    return 0;
   }, [pricesForAllTokens, formData.asset]);
 
   const collateralTokenPrice = useMemo(() => {
-    return (
-      pricesForAllTokens.find(
-        token => token.assetId === formData.collateral?.value,
-      )?.price ?? 0
-    );
+    if (formData.collateral) {
+      return (
+        pricesForAllTokens.find(
+          token => token.assetId === formData.collateral?.value,
+        )?.price ?? 0
+      );
+    }
+
+    return 0;
   }, [pricesForAllTokens, formData.collateral]);
 
   const collateralAmount = useMemo(() => {
@@ -76,7 +85,7 @@ export default function BorrowAssetModal({
   ]);
 
   const maxBorrowingAmount = useMemo(() => {
-    if (formData.asset) {
+    if (formData.asset && formData.collateral) {
       const cAmount =
         lendingInfo.find(
           lend => lend.poolAssetId === formData.collateral!.value,

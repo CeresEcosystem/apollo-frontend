@@ -2,6 +2,7 @@ import { usePolkadot } from '@context/polkadot_context';
 import { FPNumber } from '@utils/FPNumber';
 import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
+import ReactGA from 'react-ga4';
 
 const useWithdrawAsset = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
@@ -59,6 +60,11 @@ const useWithdrawAsset = () => {
 
         if (succeeded) {
           updateNotify(toastId, `Successfully withdraw`, 'success');
+          ReactGA.event({
+            category: 'Withdraw',
+            action: `Withdraw Asset - ${tokenAddress}`,
+            value: Number(amount),
+          });
           onSuccessCallback();
         }
       }

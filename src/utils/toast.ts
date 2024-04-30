@@ -19,6 +19,8 @@ export const showErrorNotify = (
     autoClose: autoClose ? 4000 : autoClose,
     toastId,
     hideProgressBar: true,
+    closeButton: !autoClose,
+    closeOnClick: !autoClose,
   });
 
 export const showLoadingNotify = () =>

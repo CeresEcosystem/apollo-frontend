@@ -1,6 +1,7 @@
 import { usePolkadot } from '@context/polkadot_context';
 import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
+import ReactGA from 'react-ga4';
 
 const useRewards = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
@@ -58,6 +59,10 @@ const useRewards = () => {
 
         if (succeeded) {
           updateNotify(toastId, `Successfully get rewards`, 'success');
+          ReactGA.event({
+            category: 'Rewards',
+            action: `Get rewards for ${isLending ? 'lending' : 'borrowing'} asset - ${tokenAddress}`,
+          });
           onSuccessCallback();
         }
       }
