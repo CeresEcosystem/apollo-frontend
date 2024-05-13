@@ -32,7 +32,7 @@ import { Tooltip } from 'react-tooltip';
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
 
-  if (healthFactor <= 1.3) {
+  if (healthFactor > 0 && healthFactor <= 1.3) {
     return (
       <>
         <ExclamationTriangleIcon
