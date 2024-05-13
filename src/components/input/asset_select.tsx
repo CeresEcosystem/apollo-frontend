@@ -21,6 +21,10 @@ const customStyles = {
       outline: 'none',
     },
   }),
+  menuPortal: (provided: any) => ({
+    ...provided,
+    zIndex: 10,
+  }),
 };
 
 export default function AssetSelect<T extends AssetSelectOption>({
@@ -68,6 +72,7 @@ export default function AssetSelect<T extends AssetSelectOption>({
         options={options}
         onChange={handleChange}
         placeholder={label}
+        menuPortalTarget={document.body}
         isSearchable={false}
         maxMenuHeight={150}
         styles={customStyles}

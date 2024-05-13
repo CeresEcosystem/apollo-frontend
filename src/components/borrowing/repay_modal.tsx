@@ -78,11 +78,13 @@ export default function RepayModal({
   };
 
   const onMaxPressed = () => {
+    const maxValue = Math.min(Number(formData.balance), totalToRepay);
+
     setFormData(prevData => {
       return {
         ...prevData,
-        inputValue: Math.min(Number(formData.balance), totalToRepay).toString(),
-        price: tokenPrice * Number(formData.balance),
+        inputValue: maxValue.toString(),
+        price: tokenPrice * maxValue,
       };
     });
   };

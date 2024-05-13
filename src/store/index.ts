@@ -1,6 +1,7 @@
 import { TOOLS_URL } from '@constants/index';
 import { TokenPrices } from 'src/interfaces';
 import { create } from 'zustand';
+// import { persist } from 'zustand/middleware';
 
 interface ApolloPriceStore {
   price: number;
@@ -13,6 +14,17 @@ interface ApolloPriceStore {
 interface WalletModalStore {
   showWalletModal: boolean;
   toggleWalletModal: () => void;
+}
+
+// interface DisclaimerStore {
+//   isDisclaimerRead: boolean;
+//   setDisclaimerRed: () => void;
+// }
+
+interface DisclaimerModalStore {
+  showDisclaimerModal: boolean;
+  openDisclaimerModal: () => void;
+  closeDisclaimerModal: () => void;
 }
 
 export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
@@ -50,4 +62,25 @@ export const useWalletModal = create<WalletModalStore>((set, get) => ({
   toggleWalletModal: () => {
     set({ showWalletModal: !get().showWalletModal });
   },
+}));
+
+// export const useDisclaimer = create<
+//   DisclaimerStore,
+//   [['zustand/persist', DisclaimerStore]]
+// >(
+//   persist(
+//     set => ({
+//       isDisclaimerRead: false,
+//       setDisclaimerRed: () => set({ isDisclaimerRead: true }),
+//     }),
+//     {
+//       name: 'disclaimer',
+//     },
+//   ),
+// );
+
+export const useDisclaimerModal = create<DisclaimerModalStore>(set => ({
+  showDisclaimerModal: false,
+  openDisclaimerModal: () => set({ showDisclaimerModal: true }),
+  closeDisclaimerModal: () => set({ showDisclaimerModal: false }),
 }));
