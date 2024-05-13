@@ -55,7 +55,7 @@ export default function Modal({
                     </button>
                   )}
                 </div>
-                <div className="mt-6 px-4 overflow-y-auto max-h-[calc(100vh-150px)] sm:px-6">
+                <div className="mt-6 px-4 overflow-y-auto max-h-[calc(100vh-250px)] md:max-h-[calc(100vh-150px)] sm:px-6">
                   {children}
                 </div>
               </Dialog.Panel>
