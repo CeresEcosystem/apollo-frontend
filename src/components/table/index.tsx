@@ -76,13 +76,20 @@ export function SortIcon({ direction }: { direction: string }) {
   );
 }
 
-export function IconContainer({ value }: { value: string }) {
+export function IconContainer({
+  value,
+  trailing,
+}: {
+  value: string;
+  trailing?: React.ReactNode;
+}) {
   return (
     <div className="flex bg-white items-center mx-auto w-min gap-x-2 border border-border rounded-3xl py-1 px-2">
-      <div className="h-6 w-6 rounded-full bg-pinkIcon flex items-center justify-center">
+      <div className="h-6 w-6 rounded-full flex-shrink-0 bg-pinkIcon flex items-center justify-center">
         <img src="/value_icon.webp" />
       </div>
       <span className="font-medium text-grey text-sm">{value}</span>
+      {trailing}
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { Fragment, useState } from 'react';
 import classNames from 'classnames';
-import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import {
+  ChevronRightIcon,
+  ExclamationTriangleIcon,
+} from '@heroicons/react/24/outline';
 import {
   IconContainer,
   SortIcon,
@@ -24,6 +27,31 @@ import RepayModal from './repay_modal';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import AddMoreModal from './add_more_modal';
+import { Tooltip } from 'react-tooltip';
+
+function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
+  const id = 'health-factor';
+
+  if (healthFactor <= 1.3) {
+    return (
+      <>
+        <ExclamationTriangleIcon
+          data-tooltip-id={id}
+          className="text-red-600 h-6 flex-shrink-0"
+        />
+        <Tooltip
+          id={id}
+          content="Position is close to liquidation."
+          delayHide={1000}
+          place="top"
+          className="!bg-grey !rounded-3xl"
+        />
+      </>
+    );
+  }
+
+  return null;
+}
 
 function Collaterals({
   asset,
@@ -278,6 +306,9 @@ export default function Borrowing({
                   <td className={tableCellStyle}>
                     <IconContainer
                       value={priceFormat(intl, item.healthFactor)}
+                      trailing={
+                        <TooltipHealthFactor healthFactor={item.healthFactor} />
+                      }
                     />
                   </td>
                   <td className={classNames(tableCellStyle, 'text-center')}>
