@@ -67,80 +67,89 @@ function Collaterals({
   const intl = useIntl();
 
   return (
-    <table className="bg-backgroundBody rounded-2xl min-w-full">
-      <thead>
-        <tr>
-          <th className={tableHeadStyle}>Asset</th>
-          <th className={tableHeadStyle}>Collateral amount</th>
-          <th className={tableHeadStyle}>Borrowed amount</th>
-          <th className={tableHeadStyle}>Interest</th>
-          <th className={tableHeadStyle}>Rewards</th>
-          <th className={tableHeadStyle}>Actions</th>
-        </tr>
-      </thead>
-      <tbody className="divide-y divide-borderTable">
-        {collaterals.map(collateral => (
-          <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
-            <td
-              className={classNames(
-                tableCellCollateralStyle,
-                'flex items-center justify-center',
-              )}
-            >
-              <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
-                <img
-                  src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
-                  alt={collateral.collateralAssetSymbol}
-                />
-              </div>
-              <span className="ml-4 text-grey min-w-14 text-sm">
-                {collateral.collateralAssetSymbol}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.collateralAmount, 3)} ${collateral.collateralAssetSymbol}`}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`}
-              </span>
-            </td>
-            <td className={tableCellCollateralStyle}>
-              <span className="text-grey block text-center text-sm">
-                {`${priceFormat(intl, collateral.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
-              </span>
-            </td>
-            <td className={classNames(tableCellCollateralStyle, 'text-center')}>
-              <button
-                onClick={() => showRepayModal(collateral)}
-                className={classNames(
-                  tableButtonStyle,
-                  'bg-pinkBorder text-white',
-                )}
-              >
-                Repay
-              </button>
-              <button
-                onClick={() => showAddMoreModal(collateral)}
-                className={classNames(
-                  tableButtonStyle,
-                  'bg-white text-pinkBorder ml-2',
-                )}
-              >
-                Add more
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <tr className="border-none">
+      <td colSpan={8} className="p-4">
+        <table className="bg-backgroundBody rounded-2xl min-w-full">
+          <thead>
+            <tr>
+              <th className={tableHeadStyle}>Asset</th>
+              <th className={tableHeadStyle}>Collateral amount</th>
+              <th className={tableHeadStyle}>Borrowed amount</th>
+              <th className={tableHeadStyle}>Interest</th>
+              <th className={tableHeadStyle}>Rewards</th>
+              <th className={tableHeadStyle}>Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-borderTable">
+            {collaterals.map(collateral => (
+              <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
+                <td
+                  className={classNames(
+                    tableCellCollateralStyle,
+                    'flex items-center justify-center',
+                  )}
+                >
+                  <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
+                    <img
+                      src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
+                      alt={collateral.collateralAssetSymbol}
+                    />
+                  </div>
+                  <span className="ml-4 text-grey min-w-14 text-sm">
+                    {collateral.collateralAssetSymbol}
+                  </span>
+                </td>
+                <td className={tableCellCollateralStyle}>
+                  <span className="text-grey block text-center text-sm">
+                    {`${priceFormat(intl, collateral.collateralAmount, 3)} ${collateral.collateralAssetSymbol}`}
+                  </span>
+                </td>
+                <td className={tableCellCollateralStyle}>
+                  <span className="text-grey block text-center text-sm">
+                    {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`}
+                  </span>
+                </td>
+                <td className={tableCellCollateralStyle}>
+                  <span className="text-grey block text-center text-sm">
+                    {`${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`}
+                  </span>
+                </td>
+                <td className={tableCellCollateralStyle}>
+                  <span className="text-grey block text-center text-sm">
+                    {`${priceFormat(intl, collateral.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                  </span>
+                </td>
+                <td
+                  className={classNames(
+                    tableCellCollateralStyle,
+                    'text-center',
+                  )}
+                >
+                  <button
+                    onClick={() => showRepayModal(collateral)}
+                    className={classNames(
+                      tableButtonStyle,
+                      'bg-pinkBorder text-white',
+                    )}
+                  >
+                    Repay
+                  </button>
+                  <button
+                    onClick={() => showAddMoreModal(collateral)}
+                    className={classNames(
+                      tableButtonStyle,
+                      'bg-white text-pinkBorder ml-2',
+                    )}
+                  >
+                    Add more
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </td>
+    </tr>
   );
 }
 
@@ -323,29 +332,25 @@ export default function Borrowing({
                     )}
                   </td>
                 </tr>
-                {selected && (
-                  <tr className="border-none">
-                    <td colSpan={8} className="p-4">
-                      <Collaterals
-                        asset={item}
-                        collaterals={item.collaterals}
-                        showRepayModal={(coll: Collateral) =>
-                          setShowRepayModal({
-                            show: true,
-                            asset: item,
-                            collateral: coll,
-                          })
-                        }
-                        showAddMoreModal={(coll: Collateral) =>
-                          setShowAddMoreModal({
-                            show: true,
-                            asset: item,
-                            collateral: coll,
-                          })
-                        }
-                      />
-                    </td>
-                  </tr>
+                {item.collaterals.length > 0 && selected && (
+                  <Collaterals
+                    asset={item}
+                    collaterals={item.collaterals}
+                    showRepayModal={(coll: Collateral) =>
+                      setShowRepayModal({
+                        show: true,
+                        asset: item,
+                        collateral: coll,
+                      })
+                    }
+                    showAddMoreModal={(coll: Collateral) =>
+                      setShowAddMoreModal({
+                        show: true,
+                        asset: item,
+                        collateral: coll,
+                      })
+                    }
+                  />
                 )}
               </Fragment>
             );
