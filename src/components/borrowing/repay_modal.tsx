@@ -5,7 +5,9 @@ import ModalButton from '@components/modal/modal_button';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import useBalance from '@hooks/use_balance';
 import useRepayAsset from '@hooks/use_repay_asset';
+import { priceFormat } from '@utils/helpers';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
 import {
   BorrowingInfo,
   Collateral,
@@ -27,6 +29,8 @@ export default function RepayModal({
   reload: () => void;
 }) {
   const { getBalanceForToken } = useBalance();
+
+  const intl = useIntl();
 
   const { loading, repayAsset } = useRepayAsset();
 
@@ -110,11 +114,11 @@ export default function RepayModal({
             overviews={[
               {
                 label: 'Borrowed amount',
-                info: `${collateral?.borrowedAmount} ${asset?.poolAssetSymbol}`,
+                info: `${priceFormat(intl, collateral.borrowedAmount)} ${asset.poolAssetSymbol}`,
               },
               {
                 label: 'Interest',
-                info: `${collateral?.interest} ${asset?.poolAssetSymbol}`,
+                info: `${priceFormat(intl, collateral.interest)} ${asset.poolAssetSymbol}`,
               },
             ]}
           />
@@ -123,7 +127,7 @@ export default function RepayModal({
             overviews={[
               {
                 label: 'Total possible amount to repay',
-                info: `${totalToRepay} ${asset?.poolAssetSymbol}`,
+                info: `${priceFormat(intl, totalToRepay)} ${asset.poolAssetSymbol}`,
               },
             ]}
           />
