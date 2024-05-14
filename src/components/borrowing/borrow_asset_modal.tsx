@@ -203,11 +203,11 @@ export default function BorrowAssetModal({
             overviews={[
               {
                 label: 'Collateral',
-                info: `${priceFormat(intl, collateralAmount)} ${formData.collateral.label}`,
+                info: `${priceFormat(intl, collateralAmount, 3)} ${formData.collateral.label}`,
               },
               {
                 label: 'Max borrowing amount',
-                info: `${priceFormat(intl, maxBorrowingAmount)} ${formData.asset.label}`,
+                info: `${priceFormat(intl, maxBorrowingAmount, 3)} ${formData.asset.label}`,
               },
             ]}
           />

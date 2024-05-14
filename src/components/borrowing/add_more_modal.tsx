@@ -166,11 +166,11 @@ export default function AddMoreModal({
             overviews={[
               {
                 label: 'Collateral',
-                info: `${priceFormat(intl, collateralAmount)} ${collateral.collateralAssetSymbol}`,
+                info: `${priceFormat(intl, collateralAmount, 3)} ${collateral.collateralAssetSymbol}`,
               },
               {
                 label: 'Max borrowing amount',
-                info: `${priceFormat(intl, maxBorrowingAmount)} ${asset.poolAssetSymbol}`,
+                info: `${priceFormat(intl, maxBorrowingAmount, 3)} ${asset.poolAssetSymbol}`,
               },
             ]}
           />

@@ -59,7 +59,7 @@ const useWithdrawAsset = () => {
         setLoading(false);
 
         if (succeeded) {
-          updateNotify(toastId, `Successfully withdraw`, 'success');
+          updateNotify(toastId, `Successfully withdrawn`, 'success');
           ReactGA.event({
             category: 'Withdraw',
             action: 'Withdraw button clicked',

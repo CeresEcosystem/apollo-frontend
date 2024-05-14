@@ -58,7 +58,7 @@ const useRewards = () => {
         setLoading(false);
 
         if (succeeded) {
-          updateNotify(toastId, `Successfully get rewards`, 'success');
+          updateNotify(toastId, `Successfully got rewards`, 'success');
           ReactGA.event({
             category: 'Rewards',
             action: 'Get rewards button clicked',

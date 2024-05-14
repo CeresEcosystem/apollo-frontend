@@ -14,16 +14,22 @@ const useRepayAsset = () => {
       collateralTokenAddress: string,
       tokenAddress: string,
       amount: string,
+      maxAmount: number,
       onSuccessCallback: () => void,
     ) => {
       if (api && selectedWalletProvider) {
         setLoading(true);
+
         const toastId = showLoadingNotify();
+
+        let amountNumber = Number(amount);
+        amountNumber =
+          amountNumber === maxAmount ? amountNumber + 0.01 : amountNumber;
 
         const repayExtrinsic = api.tx.apolloPlatform.repay(
           collateralTokenAddress,
           tokenAddress,
-          FPNumber.fromNatural(amount).bnToString(),
+          FPNumber.fromNatural(amountNumber).bnToString(),
         );
 
         const tx = new Promise<boolean>(resolve => {
@@ -61,12 +67,12 @@ const useRepayAsset = () => {
         setLoading(false);
 
         if (succeeded) {
-          updateNotify(toastId, `Successfully repay`, 'success');
+          updateNotify(toastId, `Successfully repaid`, 'success');
           ReactGA.event({
             category: 'Repay',
             action: 'Repay button clicked',
             label: `Repay Asset - ${tokenAddress}, collateral - ${collateralTokenAddress}`,
-            value: Number(amount),
+            value: amountNumber,
           });
           onSuccessCallback();
         }

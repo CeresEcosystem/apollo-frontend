@@ -114,11 +114,11 @@ export default function RepayModal({
             overviews={[
               {
                 label: 'Borrowed amount',
-                info: `${priceFormat(intl, collateral.borrowedAmount)} ${asset.poolAssetSymbol}`,
+                info: `${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`,
               },
               {
                 label: 'Interest',
-                info: `${priceFormat(intl, collateral.interest)} ${asset.poolAssetSymbol}`,
+                info: `${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`,
               },
             ]}
           />
@@ -127,7 +127,7 @@ export default function RepayModal({
             overviews={[
               {
                 label: 'Total possible amount to repay',
-                info: `${priceFormat(intl, totalToRepay)} ${asset.poolAssetSymbol}`,
+                info: `${priceFormat(intl, totalToRepay, 3)} ${asset.poolAssetSymbol}`,
               },
             ]}
           />
@@ -142,6 +142,7 @@ export default function RepayModal({
             collateral!.collateralAssetId,
             asset!.poolAssetId,
             formData.inputValue,
+            Math.min(Number(formData.balance), totalToRepay),
             () => {
               reload();
               closeModal();
