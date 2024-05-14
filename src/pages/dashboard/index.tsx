@@ -21,7 +21,7 @@ function Dashboard() {
 
   return (
     <PageContainer>
-      <Stats statsData={data!.userData} forWallet />
+      <Stats data={data!.userData} forWallet />
       <Lending lendingInfo={data!.lendingInfo} reload={reload} />
       <Borrowing
         lendingInfo={data!.lendingInfo}

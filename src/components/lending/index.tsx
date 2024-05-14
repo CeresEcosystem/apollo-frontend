@@ -111,7 +111,7 @@ export default function Lending({
                 />
               </td>
               <td className={classNames(tableCellStyle, 'text-center')}>
-                {item.amount > 0 && (
+                {Number(item.amount) > 0 && (
                   <button
                     onClick={() => setShowWithdrawModal({ show: true, item })}
                     className="bg-white rounded-3xl text-grey border border-pinkIcon font-semibold text-sm py-2 px-6 lg:px-8"

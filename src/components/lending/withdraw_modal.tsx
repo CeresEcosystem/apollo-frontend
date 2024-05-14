@@ -43,7 +43,7 @@ export default function WithdrawModal({
 
   const onMaxPressed = () => {
     setFormData({
-      inputValue: asset?.amount?.toString() ?? '',
+      inputValue: asset?.amount ?? '',
       price: tokenPrice * Number(asset?.amount),
     });
   };
@@ -58,7 +58,7 @@ export default function WithdrawModal({
         <AssetBalance
           balance={formData.inputValue}
           assetSymbol={asset.poolAssetSymbol}
-          assetBalance={asset.amount.toString()}
+          assetBalance={asset.amount}
           handleAssetBalanceChange={handleAssetBalanceChange}
           onMaxPressed={onMaxPressed}
           price={formData.price}

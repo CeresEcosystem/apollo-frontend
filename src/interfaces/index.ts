@@ -15,14 +15,14 @@ export interface LendingRewardsSelectOption {
   label: string;
   value: string;
   icon: string;
-  rewards: number;
+  rewards: string;
 }
 
 export interface BorrowingAssetSelectOption {
   label: string;
   value: string;
   icon: string;
-  loanToValue: number;
+  loanToValue: string;
 }
 
 export interface AssetSelectOption {
@@ -129,38 +129,45 @@ export interface LendingInfo {
   poolAssetId: string;
   poolAssetSymbol: string;
   apr: number;
-  amount: number;
-  rewards: number;
+  amount: string;
+  rewards: string;
 }
 
 export interface Collateral {
   collateralAssetId: string;
   collateralAssetSymbol: string;
-  collateralAmount: number;
-  borrowedAmount: number;
-  interest: number;
-  rewards: number;
+  collateralAmount: string;
+  borrowedAmount: string;
+  interest: string;
+  rewards: string;
 }
 
 export interface BorrowingInfo {
   poolAssetId: string;
   poolAssetSymbol: string;
-  loanToValue: number;
+  loanToValue: string;
   interestApr: number;
   rewardsApr: number;
-  amount: number;
-  interest: number;
-  rewards: number;
+  amount: string;
+  interest: string;
+  rewards: string;
   healthFactor: number;
   collaterals: Collateral[];
+  totalCollateralsInUsd: string;
 }
 
 export interface StatsData {
   tvl: number;
   totalLent: number;
   totalBorrowed: number;
-  totalRewards?: number;
-  totalUsers?: number;
+  totalUsers: number;
+}
+
+export interface UserData {
+  tvl: string;
+  totalLent: string;
+  totalBorrowed: string;
+  totalRewards: string;
 }
 
 export interface DashboardData {

@@ -70,7 +70,7 @@ export default function BorrowAssetModal({
   const collateralAmount = useMemo(() => {
     if (formData.asset) {
       return (
-        ((Number(formData.inputValue) / formData.asset?.loanToValue) *
+        ((Number(formData.inputValue) / Number(formData.asset?.loanToValue)) *
           borrowingTokenPrice) /
         collateralTokenPrice
       );
@@ -92,7 +92,9 @@ export default function BorrowAssetModal({
         )?.amount ?? 0;
 
       return (
-        (cAmount * collateralTokenPrice * formData.asset?.loanToValue) /
+        (Number(cAmount) *
+          collateralTokenPrice *
+          Number(formData.asset?.loanToValue)) /
         borrowingTokenPrice
       );
     }

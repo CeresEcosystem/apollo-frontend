@@ -54,9 +54,15 @@ export function formatDateFromTimestamp(timestamp: number) {
   return `${date.format('MMM DD, YYYY')} ${date.format('HH:mm')}`;
 }
 
-export const priceFormat = (intl: IntlShape, price: number, decimals = 2) => {
+export const priceFormat = (
+  intl: IntlShape,
+  price: number | string,
+  decimals = 2,
+) => {
   if (price !== null) {
-    return intl.formatNumber(price, {
+    const priceNumber = typeof price === 'string' ? Number(price) : price;
+
+    return intl.formatNumber(priceNumber, {
       maximumFractionDigits: decimals,
       trailingZeroDisplay: 'stripIfInteger',
     });

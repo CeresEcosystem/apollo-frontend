@@ -13,7 +13,7 @@ export function Component() {
   return (
     <PageContainer>
       <ConnectWalletHeading />
-      <Stats statsData={data!.stats} />
+      <Stats data={data!.stats} />
       <MarketPools pools={data!.pools} />
     </PageContainer>
   );

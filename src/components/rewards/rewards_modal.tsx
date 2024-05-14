@@ -80,7 +80,9 @@ export default function RewardsModal({
             closeModal();
           })
         }
-        disabled={!formData.asset || formData.asset.rewards <= 0 || loading}
+        disabled={
+          !formData.asset || Number(formData.asset.rewards) <= 0 || loading
+        }
       />
     </Modal>
   );

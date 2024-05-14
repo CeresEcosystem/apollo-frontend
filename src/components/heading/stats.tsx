@@ -5,7 +5,7 @@ import { priceFormat } from '@utils/helpers';
 import classNames from 'classnames';
 import { FaLock, FaUsers, FaCoins } from 'react-icons/fa';
 import { useIntl } from 'react-intl';
-import { StatsData } from 'src/interfaces';
+import { StatsData, UserData } from 'src/interfaces';
 
 const containerStyle =
   'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
@@ -20,7 +20,7 @@ function LockedValue({
   tvl,
   forWallet = false,
 }: {
-  tvl: number;
+  tvl: string | number;
   forWallet?: boolean;
 }) {
   const intl = useIntl();
@@ -54,7 +54,7 @@ function TotalLent({
   totalLent,
   forWallet = false,
 }: {
-  totalLent: number;
+  totalLent: string | number;
   forWallet?: boolean;
 }) {
   const intl = useIntl();
@@ -81,7 +81,7 @@ function TotalBorrowed({
   totalBorrowed,
   forWallet = false,
 }: {
-  totalBorrowed: number;
+  totalBorrowed: string | number;
   forWallet?: boolean;
 }) {
   const intl = useIntl();
@@ -103,7 +103,7 @@ function TotalBorrowed({
   );
 }
 
-function ActiveUsers({ totalUsers }: { totalUsers?: number }) {
+function ActiveUsers({ totalUsers }: { totalUsers: number }) {
   const intl = useIntl();
 
   return (
@@ -117,15 +117,13 @@ function ActiveUsers({ totalUsers }: { totalUsers?: number }) {
         <span className={titleStyle}>USERS</span>
         <span className={subtitleStyle}>TOTAL ACTIVE</span>
       </div>
-      <span className={valueStyle}>
-        {priceFormat(intl, totalUsers ?? 0, 0)}
-      </span>
+      <span className={valueStyle}>{priceFormat(intl, totalUsers, 0)}</span>
       <FaUsers className="absolute right-2 top-2 h-36 w-auto xs:h-48 lg:h-36 xl:h-48 text-pinkIcon" />
     </div>
   );
 }
 
-function TotalRewards({ totalRewards }: { totalRewards?: number }) {
+function TotalRewards({ totalRewards }: { totalRewards: string }) {
   const intl = useIntl();
 
   return (
@@ -141,7 +139,7 @@ function TotalRewards({ totalRewards }: { totalRewards?: number }) {
       </div>
       <div className="flex flex-col bg-white bg-opacity-10 z-10 w-min">
         <span className={valueStyle}>
-          {`${priceFormat(intl, totalRewards ?? 0, 3)}`}
+          {`${priceFormat(intl, totalRewards, 3)}`}
         </span>
         <span className={subtitleStyle}>{TOKEN_NAME.toUpperCase()}</span>
       </div>
@@ -151,10 +149,10 @@ function TotalRewards({ totalRewards }: { totalRewards?: number }) {
 }
 
 export default function Stats({
-  statsData,
+  data,
   forWallet = false,
 }: {
-  statsData: StatsData;
+  data: StatsData | UserData;
   forWallet?: boolean;
 }) {
   const { selectedAccount } = usePolkadot();
@@ -166,16 +164,13 @@ export default function Stats({
         selectedAccount ?? 'mt-6 md:mt-10',
       )}
     >
-      <LockedValue tvl={statsData.tvl} />
-      <TotalLent totalLent={statsData.totalLent} forWallet={forWallet} />
-      <TotalBorrowed
-        totalBorrowed={statsData.totalBorrowed}
-        forWallet={forWallet}
-      />
-      {forWallet ? (
-        <TotalRewards totalRewards={statsData.totalRewards} />
+      <LockedValue tvl={data.tvl} />
+      <TotalLent totalLent={data.totalLent} forWallet={forWallet} />
+      <TotalBorrowed totalBorrowed={data.totalBorrowed} forWallet={forWallet} />
+      {forWallet && 'totalRewards' in data ? (
+        <TotalRewards totalRewards={data.totalRewards} />
       ) : (
-        <ActiveUsers totalUsers={statsData.totalUsers} />
+        'totalUsers' in data && <ActiveUsers totalUsers={data.totalUsers} />
       )}
     </div>
   );

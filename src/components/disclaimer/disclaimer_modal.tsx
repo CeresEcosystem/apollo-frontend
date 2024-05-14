@@ -2,9 +2,8 @@ import Modal from '@components/modal';
 import { useDisclaimerModal } from 'src/store';
 
 export default function DisclaimerModal() {
-  const { showDisclaimerModal, closeDisclaimerModal } = useDisclaimerModal(
-    state => state,
-  );
+  const { showDisclaimerModal, closeDisclaimerModal, setDisclaimerRead } =
+    useDisclaimerModal(state => state);
 
   return (
     <Modal
@@ -97,7 +96,10 @@ export default function DisclaimerModal() {
       </div>
       <div className="mt-10 flex justify-center">
         <div
-          onClick={() => closeDisclaimerModal()}
+          onClick={() => {
+            setDisclaimerRead();
+            closeDisclaimerModal();
+          }}
           className="bg-pinkBorder text-center cursor-pointer text-white w-1/2 rounded-3xl border-2 border-pinkBorder font-semibold py-2 px-8 text-xs xxs:text-sm sm:text-base mx-auto"
         >
           Close

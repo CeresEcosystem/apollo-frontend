@@ -14,8 +14,8 @@ export default function App() {
 
   const fetchApolloPrice = useTokenPrice(state => state.init);
 
-  const openDisclaimerModal = useDisclaimerModal(
-    state => state.openDisclaimerModal,
+  const { isDisclaimerRead, openDisclaimerModal } = useDisclaimerModal(
+    state => state,
   );
 
   useEffect(() => {
@@ -23,10 +23,12 @@ export default function App() {
   }, [fetchApolloPrice]);
 
   useEffect(() => {
-    setTimeout(() => {
-      openDisclaimerModal();
-    }, 2000);
-  }, [openDisclaimerModal]);
+    if (!isDisclaimerRead) {
+      setTimeout(() => {
+        openDisclaimerModal();
+      }, 2000);
+    }
+  }, [isDisclaimerRead, openDisclaimerModal]);
 
   if (loading) {
     return <PageLoader />;

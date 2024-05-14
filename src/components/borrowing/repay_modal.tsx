@@ -47,7 +47,7 @@ export default function RepayModal({
 
   const totalToRepay = useMemo(() => {
     if (collateral) {
-      return collateral.borrowedAmount + collateral.interest;
+      return Number(collateral.borrowedAmount) + Number(collateral.interest);
     }
 
     return 0;
