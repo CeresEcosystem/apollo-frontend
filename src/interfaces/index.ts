@@ -1,3 +1,8 @@
+export interface SelectOption {
+  label: string;
+  value: string;
+}
+
 export interface TokenPrices {
   token: string;
   price: number;
@@ -204,4 +209,35 @@ export interface BorrowingCollateralModal {
   show: boolean;
   asset: BorrowingInfo | null;
   collateral: Collateral | null;
+}
+
+export interface PageMeta {
+  pageNumber: number;
+  pageSize: number;
+  totalCount: number;
+  pageCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+}
+
+export interface HistoryItem {
+  blockNum: string;
+  method: string;
+  token: string;
+  amount: number | null;
+  collateralToken: string | null;
+  collateralAmount: number | null;
+  createdAt: string;
+}
+
+export interface HistoryData {
+  data: HistoryItem[];
+  meta: PageMeta;
+}
+
+export interface HistoryFilterData {
+  dateFrom: Date | null;
+  dateTo: Date | null;
+  asset: SelectOption | '';
+  action: SelectOption | '';
 }

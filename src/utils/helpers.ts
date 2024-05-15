@@ -54,6 +54,13 @@ export function formatDateFromTimestamp(timestamp: number) {
   return `${date.format('MMM DD, YYYY')} ${date.format('HH:mm')}`;
 }
 
+export function formatDateAndTime(date: string) {
+  const dateFormatted = moment(date);
+  return `${dateFormatted.format('YYYY-MM-DD')} ${dateFormatted.format(
+    'HH:mm',
+  )}`;
+}
+
 export const priceFormat = (
   intl: IntlShape,
   price: number | string,

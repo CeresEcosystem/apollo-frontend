@@ -23,7 +23,8 @@ const useDashboard = () => {
   });
 
   return {
-    isLoading: isLoading || error || !data,
+    isLoading,
+    error,
     data,
     refetch,
   };

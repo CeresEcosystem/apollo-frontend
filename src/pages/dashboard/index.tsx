@@ -9,25 +9,27 @@ import { showErrorNotify } from '@utils/toast';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loader from './loader';
+import History from '@components/history';
 
 function Dashboard() {
-  const { data, isLoading, refetch } = useDashboard();
+  const { data, isLoading, error, refetch } = useDashboard();
 
   const reload = () => {
     refetch();
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || error || !data) return <Loader />;
 
   return (
     <PageContainer>
-      <Stats data={data!.userData} forWallet />
-      <Lending lendingInfo={data!.lendingInfo} reload={reload} />
+      <Stats data={data.userData} forWallet />
+      <Lending lendingInfo={data.lendingInfo} reload={reload} />
       <Borrowing
-        lendingInfo={data!.lendingInfo}
-        borrowingInfo={data!.borrowingInfo}
+        lendingInfo={data.lendingInfo}
+        borrowingInfo={data.borrowingInfo}
         reload={reload}
       />
+      <History dashboardData={data} />
     </PageContainer>
   );
 }

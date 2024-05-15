@@ -26,7 +26,6 @@ const useClaim = () => {
 
         if (response.ok) {
           const acc = (await response.json()) as ClaimableAccount;
-          console.log(JSON.stringify(acc));
           setClaimableAccount(acc);
         }
 

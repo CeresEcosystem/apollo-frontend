@@ -16,6 +16,7 @@ export function TableContainer({
   firstButtonCallback,
   secondButtonTitle,
   secondButtonCallback,
+  topMargin = true,
   children,
 }: {
   title?: string;
@@ -23,11 +24,12 @@ export function TableContainer({
   firstButtonCallback?: () => void;
   secondButtonTitle?: string;
   secondButtonCallback?: () => void;
+  topMargin?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <>
-      <div className="mt-16">
+      <div className={topMargin ? 'mt-16' : 'mt-8'}>
         {title && (
           <h2 className="font-bold text-xl text-grey tracking-widest">
             {title}
@@ -36,7 +38,7 @@ export function TableContainer({
         <div className="max-w-full overflow-x-auto">
           <table
             className={classNames(
-              'bg-tableBackground rounded-2xl shadow-sm min-w-[768px] md:min-w-full overflow-hidden divide-y divide-borderTable',
+              'bg-tableBackground relative rounded-2xl shadow-sm min-w-[768px] md:min-w-full overflow-hidden divide-y divide-borderTable',
               title ? 'mt-5' : 'mt-0',
             )}
           >
