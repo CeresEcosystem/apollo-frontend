@@ -24,11 +24,17 @@ const useHistory = (data: DashboardData) => {
         historyOptions += `&dateTo=${historyFilterData.dateTo.toISOString()}`;
       }
 
-      if (historyFilterData.asset !== '') {
+      if (
+        historyFilterData.asset !== '' &&
+        historyFilterData.asset.value !== ''
+      ) {
         historyOptions += `&token=${historyFilterData.asset.label}`;
       }
 
-      if (historyFilterData.action !== '') {
+      if (
+        historyFilterData.action !== '' &&
+        historyFilterData.action.value !== ''
+      ) {
         historyOptions += `&method=${historyFilterData.action.value}`;
       }
 

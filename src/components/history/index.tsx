@@ -1,7 +1,7 @@
 import ListPagination from '@components/pagination/list_pagination';
 import TableSkeleton from '@components/skeleton/table_skeleton';
 import { IconContainer, TableContainer } from '@components/table';
-import { ICONS_URL } from '@constants/index';
+import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 import { formatDateAndTime, priceFormat } from '@utils/helpers';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
@@ -84,7 +84,7 @@ export default function History({
                   <td className={tableCellStyle}>
                     {item.amount && (
                       <IconContainer
-                        value={`${priceFormat(intl, item.amount)} ${item.token}`}
+                        value={`${priceFormat(intl, item.amount)} ${item.method === 'ClaimedLendingRewards' || item.method === 'ClaimedBorrowingRewards' ? TOKEN_NAME.toUpperCase() : item.token}`}
                       />
                     )}
                   </td>
