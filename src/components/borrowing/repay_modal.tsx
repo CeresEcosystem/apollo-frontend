@@ -71,6 +71,18 @@ export default function RepayModal({
     }
   }, [asset, getBalanceForToken]);
 
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          balance: '',
+          inputValue: '',
+          price: 0,
+        });
+      }, 500);
+    }
+  }, [showModal]);
+
   const handleAssetBalanceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData(prevData => {
       return {

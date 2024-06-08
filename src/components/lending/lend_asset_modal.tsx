@@ -64,6 +64,19 @@ export default function LendAssetModal({
     }
   }, [formData.asset, getBalanceForToken]);
 
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          asset: null,
+          balance: '',
+          inputValue: '',
+          price: 0,
+        });
+      }, 500);
+    }
+  }, [showModal]);
+
   const options: LendingAssetSelectOption[] = lendingInfo.map(asset => {
     return {
       label: asset.poolAssetSymbol,

@@ -1,5 +1,5 @@
 import Modal from '@components/modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BorrowingInfo,
   LendingInfo,
@@ -52,6 +52,16 @@ export default function RewardsModal({
       });
     }
   };
+
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          asset: null,
+        });
+      }, 500);
+    }
+  }, [showModal]);
 
   return (
     <Modal title="Rewards" showModal={showModal} closeModal={closeModal}>

@@ -1,5 +1,5 @@
 import Modal from '@components/modal';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import {
   BorrowingAssetFormData,
   BorrowingAssetSelectOption,
@@ -107,6 +107,19 @@ export default function BorrowAssetModal({
     formData.collateral,
     lendingInfo,
   ]);
+
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          asset: null,
+          collateral: null,
+          inputValue: '',
+          price: 0,
+        });
+      }, 500);
+    }
+  }, [showModal]);
 
   const options: BorrowingAssetSelectOption[] = borrowingInfo.map(asset => {
     return {

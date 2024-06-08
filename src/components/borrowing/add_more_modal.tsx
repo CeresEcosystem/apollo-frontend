@@ -7,7 +7,7 @@ import TransactionOverview from '@components/transaction/transaction_overview';
 import { ICONS_URL } from '@constants/index';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import { priceFormat } from '@utils/helpers';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   BorrowingInfo,
@@ -91,6 +91,17 @@ export default function AddMoreModal({
     borrowingTokenPrice,
     collateral?.collateralAssetId,
   ]);
+
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          inputValue: '',
+          price: 0,
+        });
+      }, 500);
+    }
+  }, [showModal]);
 
   const handleAssetBalanceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData(prevData => {

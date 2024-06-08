@@ -3,7 +3,7 @@ import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
 import useWithdrawAsset from '@hooks/use_withdraw_asset';
 // import TransactionFee from '@components/transaction/transaction_fee';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { LendingInfo, LendingWithdrawFormData } from 'src/interfaces';
 import { useTokenPrice } from 'src/store';
 
@@ -47,6 +47,17 @@ export default function WithdrawModal({
       price: tokenPrice * Number(asset?.amount),
     });
   };
+
+  useEffect(() => {
+    if (!showModal) {
+      setTimeout(() => {
+        setFormData({
+          inputValue: '',
+          price: 0,
+        });
+      }, 500);
+    }
+  }, [showModal]);
 
   return (
     <Modal
