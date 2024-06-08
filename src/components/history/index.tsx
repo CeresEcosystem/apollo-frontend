@@ -10,9 +10,10 @@ import SpinnerSM from '@components/loader/spinner_sm';
 import useHistory from '@hooks/use_history';
 import { DashboardData } from 'src/interfaces';
 
-const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
-const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-sm lg:px-6';
-const tableTextCellStyle = 'font-medium text-grey text-sm';
+const tableHeadStyle =
+  'px-4 py-4 text-center font-medium text-grey text-sm lg:px-6';
+const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-xs lg:px-6';
+const tableTextCellStyle = 'font-medium text-grey text-xs';
 
 export default function History({
   dashboardData,
@@ -68,13 +69,13 @@ export default function History({
                       'flex items-center lg:px-12',
                     )}
                   >
-                    <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+                    <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                       <img
                         src={`${ICONS_URL}${item.token}.svg`}
                         alt={item.token}
                       />
                     </div>
-                    <div className="ml-4 font-medium text-grey text-sm">
+                    <div className="ml-4 font-medium text-grey text-xs">
                       {item.token}
                     </div>
                   </td>
@@ -96,13 +97,13 @@ export default function History({
                   >
                     {item.collateralToken && (
                       <>
-                        <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+                        <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                           <img
                             src={`${ICONS_URL}${item.collateralToken}.svg`}
                             alt={item.collateralToken}
                           />
                         </div>
-                        <div className="ml-4 font-medium text-grey text-sm">
+                        <div className="ml-4 font-medium text-grey text-xs">
                           {item.collateralToken}
                         </div>
                       </>

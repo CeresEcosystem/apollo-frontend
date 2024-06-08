@@ -177,14 +177,14 @@ export default function BorrowAssetModal({
     <Modal title="Borrow asset" showModal={showModal} closeModal={closeModal}>
       <AssetSelect
         options={options}
-        label="Select collateral"
-        selectedOption={formData.collateral}
-        handleChange={handleCorrateralChange}
+        selectedOption={formData.asset}
+        handleChange={handleAssetChange}
       />
       <AssetSelect
         options={options}
-        selectedOption={formData.asset}
-        handleChange={handleAssetChange}
+        label="Select collateral"
+        selectedOption={formData.collateral}
+        handleChange={handleCorrateralChange}
         spaceTop
       />
       {formData.asset && formData.collateral && (
@@ -198,6 +198,15 @@ export default function BorrowAssetModal({
             assetBalance={maxBorrowingAmount.toString()}
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
+          />
+          <TransactionOverview
+            overviews={[
+              {
+                label: 'Loan-to-Value',
+                info: `${priceFormat(intl, Number(formData.asset.loanToValue) * 100)}%`,
+              },
+            ]}
+            showLabel={false}
           />
           <TransactionOverview
             overviews={[

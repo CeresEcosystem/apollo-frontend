@@ -123,6 +123,21 @@ export default function AddMoreModal({
           <AssetSelect
             options={[
               {
+                label: asset.poolAssetSymbol,
+                value: asset.poolAssetId,
+                icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
+              },
+            ]}
+            selectedOption={{
+              label: asset.poolAssetSymbol,
+              value: asset.poolAssetId,
+              icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
+            }}
+            isDisabled
+          />
+          <AssetSelect
+            options={[
+              {
                 label: collateral.collateralAssetSymbol,
                 value: collateral.collateralAssetId,
                 icon: `${ICONS_URL}${collateral.collateralAssetSymbol}.svg`,
@@ -135,22 +150,7 @@ export default function AddMoreModal({
               icon: `${ICONS_URL}${collateral.collateralAssetSymbol}.svg`,
             }}
             isDisabled
-          />
-          <AssetSelect
-            options={[
-              {
-                label: asset.poolAssetSymbol,
-                value: asset.poolAssetId,
-                icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
-              },
-            ]}
-            selectedOption={{
-              label: asset.poolAssetSymbol,
-              value: asset.poolAssetId,
-              icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
-            }}
             spaceTop
-            isDisabled
           />
           <AssetBalance
             label="Amount"
@@ -161,6 +161,15 @@ export default function AddMoreModal({
             assetBalance={maxBorrowingAmount.toString()}
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
+          />
+          <TransactionOverview
+            overviews={[
+              {
+                label: 'Loan-to-Value',
+                info: `${priceFormat(intl, Number(asset!.loanToValue) * 100)}%`,
+              },
+            ]}
+            showLabel={false}
           />
           <TransactionOverview
             overviews={[

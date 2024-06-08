@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 
 export const tableHeadStyle =
-  'px-4 py-4 text-center font-medium text-grey lg:px-6';
-export const tableCellStyle = 'px-4 py-4 whitespace-nowrap lg:px-6';
+  'px-4 py-4 whitespace-nowrap text-center font-medium text-grey text-sm lg:px-6';
+export const tableCellStyle = 'px-4 py-4 whitespace-nowrap lg:px-6 text-sm';
 export const tableCellCollateralStyle = 'px-4 py-2 whitespace-nowrap lg:px-6';
 export const tableButtonStyle =
   'rounded-3xl border border-pinkBorder font-semibold py-2 px-4 text-xs';
 const buttonStyle =
-  'rounded-3xl border-2 border-pinkBorder font-semibold py-2 px-8 text-xs xxs:text-sm sm:text-base';
+  'rounded-3xl border-2 border-pinkBorder font-semibold py-2 px-6 text-xs xxs:text-sm';
 
 export function TableContainer({
   title,
@@ -81,17 +81,31 @@ export function SortIcon({ direction }: { direction: string }) {
 export function IconContainer({
   value,
   trailing,
+  secondValue,
 }: {
   value: string;
   trailing?: React.ReactNode;
+  secondValue?: string;
 }) {
   return (
-    <div className="flex bg-white items-center mx-auto w-min gap-x-2 border border-border rounded-3xl py-1 px-2">
-      <div className="h-6 w-6 rounded-full flex-shrink-0 bg-pinkIcon flex items-center justify-center">
+    <div
+      className={classNames(
+        'flex bg-white items-center mx-auto w-min gap-x-2 border border-border rounded-3xl py-1',
+        secondValue ? 'px-3' : 'px-2',
+      )}
+    >
+      <div className="h-5 w-5 p-0.5 rounded-full flex-shrink-0 bg-pinkIcon flex items-center justify-center">
         <img src="/value_icon.webp" />
       </div>
-      <span className="font-medium text-grey text-sm">{value}</span>
-      {trailing}
+      <div className="flex flex-col gap-y-0">
+        <div className="flex items-center gap-x-2">
+          <span className="font-medium text-grey text-xs">{value}</span>
+          {trailing}
+        </div>
+        <span className="font-medium text-grey2 text-[10px] leading-4">
+          {secondValue}
+        </span>
+      </div>
     </div>
   );
 }

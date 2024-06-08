@@ -1,17 +1,21 @@
 import classNames from 'classnames';
-import { IconContainer, SortIcon, TableContainer } from '@components/table';
+import {
+  IconContainer,
+  SortIcon,
+  TableContainer,
+  tableCellStyle,
+  tableHeadStyle,
+} from '@components/table';
 import useTableSort from '@hooks/use_table_sort';
 import { ICONS_URL, TOKEN_NAME } from '@constants/index';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import LendAssetModal from './lend_asset_modal';
 import WithdrawModal from './withdraw_modal';
 import { LendingInfo, LendingWithdrawModal } from 'src/interfaces';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import RewardsModal from '@components/rewards/rewards_modal';
-
-const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
-const tableCellStyle = 'px-4 py-4 whitespace-nowrap text-sm lg:px-6';
+import { useTokenPrice } from 'src/store';
 
 export default function Lending({
   lendingInfo,
@@ -21,10 +25,13 @@ export default function Lending({
   reload: () => void;
 }) {
   const intl = useIntl();
+
   const { sortConfig, requestSort, sortedData } = useTableSort<LendingInfo>(
     lendingInfo,
     'amount',
   );
+
+  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
 
   const [showLendModal, setShowLendModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
@@ -33,6 +40,20 @@ export default function Lending({
       show: false,
       item: null,
     });
+
+  const data = useMemo(() => {
+    return sortedData.map(item => {
+      const price =
+        pricesForAllTokens.find(token => token.assetId === item.poolAssetId)
+          ?.price ?? 0;
+
+      return {
+        ...item,
+        price: price * Number(item.amount),
+        reward: 1 * Number(item.rewards), // add Apollo price
+      };
+    });
+  }, [sortedData, pricesForAllTokens]);
 
   return (
     <>
@@ -79,7 +100,7 @@ export default function Lending({
           </tr>
         </thead>
         <tbody className="divide-y divide-borderTable">
-          {sortedData.map(item => (
+          {data.map(item => (
             <tr key={item.poolAssetSymbol} className="hover:bg-grey3">
               <td
                 className={classNames(
@@ -87,13 +108,13 @@ export default function Lending({
                   'flex items-center lg:px-12',
                 )}
               >
-                <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+                <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                   <img
                     src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
                     alt={item.poolAssetSymbol}
                   />
                 </div>
-                <div className="ml-4 font-medium text-grey text-sm">
+                <div className="ml-4 font-medium text-grey text-xs">
                   {item.poolAssetSymbol}
                 </div>
               </td>
@@ -103,18 +124,20 @@ export default function Lending({
               <td className={tableCellStyle}>
                 <IconContainer
                   value={`${priceFormat(intl, item.amount, 3)} ${item.poolAssetSymbol}`}
+                  secondValue={`$${priceFormat(intl, item.price, 3)}`}
                 />
               </td>
               <td className={tableCellStyle}>
                 <IconContainer
                   value={`${priceFormat(intl, item.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                  secondValue={`$${priceFormat(intl, item.reward, 3)}`}
                 />
               </td>
               <td className={classNames(tableCellStyle, 'text-center')}>
                 {Number(item.amount) > 0 && (
                   <button
                     onClick={() => setShowWithdrawModal({ show: true, item })}
-                    className="bg-white rounded-3xl text-grey border border-pinkIcon font-semibold text-sm py-2 px-6 lg:px-8"
+                    className="bg-white rounded-3xl text-grey border border-pinkIcon font-semibold text-xs py-2 px-4 lg:px-6"
                   >
                     Withdraw
                   </button>

@@ -10,11 +10,12 @@ import { StatsData, UserData } from 'src/interfaces';
 const containerStyle =
   'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
 const titleStyle =
-  'block text-grey font-bold leading-tight text-lg xxs:text-xl xs:text-2xl lg:text-xl xl:text-2xl';
+  'block text-grey font-bold leading-tight text-base xxs:text-lg xs:text-xl lg:text-lg xl:text-xl';
 const subtitleStyle =
-  'tracking-widest whitespace-nowrap font-semibold text-[10px] xxs:text-xs lg:text-[10px] xl:text-xs text-grey2';
+  'tracking-widest whitespace-nowrap font-semibold text-xs text-grey2';
 const valueStyle =
-  'text-grey font-bold text-2xl xxs:text-3xl xs:text-4xl lg:text-2xl xl:text-3xl 2xl:text-4xl';
+  'text-grey font-bold text-xl xxs:text-2xl xs:text-3xl lg:text-xl xl:text-2xl 2xl:text-3xl';
+const textOverflow = 'text-ellipsis whitespace-nowrap overflow-hidden';
 
 function LockedValue({
   tvl,
@@ -41,7 +42,7 @@ function LockedValue({
             </span>
           </div>
           <span
-            className={classNames(valueStyle, 'text-white')}
+            className={classNames(valueStyle, textOverflow, 'text-white')}
           >{`$${priceFormat(intl, tvl, 3)}`}</span>
         </div>
       </Gradient>
@@ -67,7 +68,7 @@ function TotalLent({
       )}
     >
       <span
-        className={valueStyle}
+        className={classNames(valueStyle, textOverflow)}
       >{`$${priceFormat(intl, totalLent, 3)}`}</span>
       <div>
         <span className={titleStyle}>LENT</span>
@@ -94,7 +95,7 @@ function TotalBorrowed({
       )}
     >
       <span
-        className={valueStyle}
+        className={classNames(valueStyle, textOverflow)}
       >{`$${priceFormat(intl, totalBorrowed, 3)}`}</span>
       <span
         className={subtitleStyle}

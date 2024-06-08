@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import {
   ChevronRightIcon,
@@ -28,6 +28,7 @@ import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import AddMoreModal from './add_more_modal';
 import { Tooltip } from 'react-tooltip';
+import { useTokenPrice } from 'src/store';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -37,7 +38,7 @@ function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
       <>
         <ExclamationTriangleIcon
           data-tooltip-id={id}
-          className="text-red-600 h-6 flex-shrink-0"
+          className="text-red-600 h-4 flex-shrink-0"
         />
         <Tooltip
           id={id}
@@ -55,20 +56,41 @@ function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
 
 function Collaterals({
   asset,
+  price,
   collaterals,
   showRepayModal,
   showAddMoreModal,
 }: {
   asset: BorrowingInfo;
+  price: number;
   collaterals: Collateral[];
   showRepayModal: (item: Collateral) => void;
   showAddMoreModal: (item: Collateral) => void;
 }) {
   const intl = useIntl();
 
+  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+
+  const data = useMemo(() => {
+    return collaterals.map(item => {
+      const priceCollateral =
+        pricesForAllTokens.find(
+          token => token.assetId === item.collateralAssetId,
+        )?.price ?? 0;
+
+      return {
+        ...item,
+        collateralAmountPrice: priceCollateral * Number(item.collateralAmount),
+        borrowedPrice: price * Number(item.borrowedAmount),
+        interestPrice: price * Number(item.interest),
+        reward: 1 * Number(item.rewards), // add Apollo price
+      };
+    });
+  }, [collaterals, price, pricesForAllTokens]);
+
   return (
     <tr className="border-none">
-      <td colSpan={8} className="p-4">
+      <td colSpan={9} className="p-4">
         <table className="bg-backgroundBody rounded-2xl min-w-full">
           <thead>
             <tr>
@@ -81,7 +103,7 @@ function Collaterals({
             </tr>
           </thead>
           <tbody className="divide-y divide-borderTable">
-            {collaterals.map(collateral => (
+            {data.map(collateral => (
               <tr key={collateral.collateralAssetId} className="hover:bg-grey3">
                 <td
                   className={classNames(
@@ -91,33 +113,53 @@ function Collaterals({
                 >
                   <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                     <img
-                      src={`https://data.cerestoken.io/storage/icons/${collateral.collateralAssetSymbol}.svg`}
+                      src={`${ICONS_URL}${collateral.collateralAssetSymbol}.svg`}
                       alt={collateral.collateralAssetSymbol}
                     />
                   </div>
-                  <span className="ml-4 text-grey min-w-14 text-sm">
+                  <span className="ml-4 text-grey min-w-14 text-xs">
                     {collateral.collateralAssetSymbol}
                   </span>
                 </td>
                 <td className={tableCellCollateralStyle}>
-                  <span className="text-grey block text-center text-sm">
-                    {`${priceFormat(intl, collateral.collateralAmount, 3)} ${collateral.collateralAssetSymbol}`}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-grey block text-center text-xs">
+                      {`${priceFormat(intl, collateral.collateralAmount, 3)} ${collateral.collateralAssetSymbol}`}
+                    </span>
+                    <span className="text-grey2 block text-center text-[10px]">
+                      {`$${priceFormat(intl, collateral.collateralAmountPrice, 3)}`}
+                    </span>
+                  </div>
                 </td>
                 <td className={tableCellCollateralStyle}>
-                  <span className="text-grey block text-center text-sm">
-                    {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-grey block text-center text-xs">
+                      {`${priceFormat(intl, collateral.borrowedAmount, 3)} ${asset.poolAssetSymbol}`}
+                    </span>
+                    <span className="text-grey2 block text-center text-[10px]">
+                      {`$${priceFormat(intl, collateral.borrowedPrice, 3)}`}
+                    </span>
+                  </div>
                 </td>
                 <td className={tableCellCollateralStyle}>
-                  <span className="text-grey block text-center text-sm">
-                    {`${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-grey block text-center text-xs">
+                      {`${priceFormat(intl, collateral.interest, 3)} ${asset.poolAssetSymbol}`}
+                    </span>
+                    <span className="text-grey2 block text-center text-[10px]">
+                      {`$${priceFormat(intl, collateral.interestPrice, 3)}`}
+                    </span>
+                  </div>
                 </td>
                 <td className={tableCellCollateralStyle}>
-                  <span className="text-grey block text-center text-sm">
-                    {`${priceFormat(intl, collateral.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="text-grey block text-center text-xs">
+                      {`${priceFormat(intl, collateral.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                    </span>
+                    <span className="text-grey2 block text-center text-[10px]">
+                      {`$${priceFormat(intl, collateral.reward, 3)}`}
+                    </span>
+                  </div>
                 </td>
                 <td
                   className={classNames(
@@ -166,6 +208,24 @@ export default function Borrowing({
     borrowingInfo,
     'amount',
   );
+
+  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+
+  const data = useMemo(() => {
+    return sortedData.map(item => {
+      const price =
+        pricesForAllTokens.find(token => token.assetId === item.poolAssetId)
+          ?.price ?? 0;
+
+      return {
+        ...item,
+        price,
+        amountPrice: price * Number(item.amount),
+        interestPrice: price * Number(item.interest),
+        reward: 1 * Number(item.rewards), // add Apollo price
+      };
+    });
+  }, [sortedData, pricesForAllTokens]);
 
   const intl = useIntl();
 
@@ -227,6 +287,15 @@ export default function Borrowing({
             </th>
             <th
               className={classNames(tableHeadStyle, 'cursor-pointer')}
+              onClick={() => requestSort('loanToValue')}
+            >
+              Loan-to-Value
+              {sortConfig.key === 'loanToValue' && (
+                <SortIcon direction={sortConfig.direction} />
+              )}
+            </th>
+            <th
+              className={classNames(tableHeadStyle, 'cursor-pointer')}
               onClick={() => requestSort('amount')}
             >
               Amount
@@ -265,7 +334,7 @@ export default function Borrowing({
           </tr>
         </thead>
         <tbody className="divide-y divide-borderTable">
-          {sortedData.map(item => {
+          {data.map(item => {
             const selected = collateralId === item.poolAssetId;
 
             return (
@@ -277,13 +346,13 @@ export default function Borrowing({
                       'flex items-center lg:px-12',
                     )}
                   >
-                    <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+                    <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                       <img
                         src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
                         alt={item.poolAssetSymbol}
                       />
                     </div>
-                    <div className="ml-4 font-medium text-grey text-sm">
+                    <div className="ml-4 font-medium text-grey text-xs">
                       {item.poolAssetSymbol}
                     </div>
                   </td>
@@ -299,17 +368,25 @@ export default function Borrowing({
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
+                      value={`${priceFormat(intl, Number(item.loanToValue) * 100)}%`}
+                    />
+                  </td>
+                  <td className={tableCellStyle}>
+                    <IconContainer
                       value={`${priceFormat(intl, item.amount, 3)} ${item.poolAssetSymbol}`}
+                      secondValue={`$${priceFormat(intl, item.amountPrice, 3)}`}
                     />
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
                       value={`${priceFormat(intl, item.interest, 3)} ${item.poolAssetSymbol}`}
+                      secondValue={`$${priceFormat(intl, item.interestPrice, 3)}`}
                     />
                   </td>
                   <td className={tableCellStyle}>
                     <IconContainer
                       value={`${priceFormat(intl, item.rewards, 3)} ${TOKEN_NAME.toUpperCase()}`}
+                      secondValue={`$${priceFormat(intl, item.reward, 3)}`}
                     />
                   </td>
                   <td className={tableCellStyle}>
@@ -324,7 +401,7 @@ export default function Borrowing({
                     {item.collaterals.length > 0 && (
                       <button
                         onClick={() => toggleCollateralView(item.poolAssetId)}
-                        className="text-pinkIcon font-semibold text-sm outline-none"
+                        className="text-pinkIcon font-semibold text-xs outline-none"
                       >
                         {selected ? 'Hide collaterals' : 'Show collaterals'}
                         <ChevronRightIcon className="h-4 inline-block text-grey ml-2" />
@@ -335,6 +412,7 @@ export default function Borrowing({
                 {item.collaterals.length > 0 && selected && (
                   <Collaterals
                     asset={item}
+                    price={item.price}
                     collaterals={item.collaterals}
                     showRepayModal={(coll: Collateral) =>
                       setShowRepayModal({
