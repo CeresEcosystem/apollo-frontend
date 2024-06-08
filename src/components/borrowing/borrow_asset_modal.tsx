@@ -12,10 +12,10 @@ import TransactionOverview from '@components/transaction/transaction_overview';
 import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL } from '@constants/index';
-import { useTokenPrice } from 'src/store';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import useBorrowAsset from '@hooks/use_borrow_asset';
+import usePrice from '@hooks/use_price';
 
 export default function BorrowAssetModal({
   showModal,
@@ -41,31 +41,23 @@ export default function BorrowAssetModal({
 
   const { loading, borrowAsset } = useBorrowAsset();
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const borrowingTokenPrice = useMemo(() => {
     if (formData.asset) {
-      return (
-        pricesForAllTokens.find(
-          token => token.assetId === formData.asset?.value,
-        )?.price ?? 0
-      );
+      return getPriceForToken(formData.asset.value);
     }
 
     return 0;
-  }, [pricesForAllTokens, formData.asset]);
+  }, [getPriceForToken, formData.asset]);
 
   const collateralTokenPrice = useMemo(() => {
     if (formData.collateral) {
-      return (
-        pricesForAllTokens.find(
-          token => token.assetId === formData.collateral?.value,
-        )?.price ?? 0
-      );
+      return getPriceForToken(formData.collateral.value);
     }
 
     return 0;
-  }, [pricesForAllTokens, formData.collateral]);
+  }, [getPriceForToken, formData.collateral]);
 
   const collateralAmount = useMemo(() => {
     if (formData.asset) {

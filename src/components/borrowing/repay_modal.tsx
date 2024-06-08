@@ -4,6 +4,7 @@ import ModalButton from '@components/modal/modal_button';
 // import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import useBalance from '@hooks/use_balance';
+import usePrice from '@hooks/use_price';
 import useRepayAsset from '@hooks/use_repay_asset';
 import { priceFormat } from '@utils/helpers';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
@@ -13,7 +14,6 @@ import {
   Collateral,
   RepayCollateralFormData,
 } from 'src/interfaces';
-import { useTokenPrice } from 'src/store';
 
 export default function RepayModal({
   showModal,
@@ -34,7 +34,7 @@ export default function RepayModal({
 
   const { loading, repayAsset } = useRepayAsset();
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const [formData, setFormData] = useState<RepayCollateralFormData>({
     balance: '',
@@ -43,11 +43,8 @@ export default function RepayModal({
   });
 
   const tokenPrice = useMemo(() => {
-    return (
-      pricesForAllTokens.find(token => token.assetId === asset?.poolAssetId)
-        ?.price ?? 0
-    );
-  }, [pricesForAllTokens, asset?.poolAssetId]);
+    return asset ? getPriceForToken(asset.poolAssetId) : 0;
+  }, [getPriceForToken, asset]);
 
   const totalToRepay = useMemo(() => {
     if (collateral) {

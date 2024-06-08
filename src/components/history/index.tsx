@@ -9,6 +9,7 @@ import Filters from './filters';
 import SpinnerSM from '@components/loader/spinner_sm';
 import useHistory from '@hooks/use_history';
 import { DashboardData } from 'src/interfaces';
+import usePrice from '@hooks/use_price';
 
 const tableHeadStyle =
   'px-4 py-4 text-center font-medium text-grey text-sm lg:px-6';
@@ -31,6 +32,8 @@ export default function History({
   } = useHistory(dashboardData);
 
   const intl = useIntl();
+
+  const { getPriceForToken } = usePrice();
 
   if (!historyData)
     return <TableSkeleton showButtons={false} title="HISTORY" />;
@@ -86,6 +89,21 @@ export default function History({
                     {item.amount && (
                       <IconContainer
                         value={`${priceFormat(intl, item.amount)} ${item.method === 'ClaimedLendingRewards' || item.method === 'ClaimedBorrowingRewards' ? TOKEN_NAME.toUpperCase() : item.token}`}
+                        secondValue={
+                          item.method === 'ClaimedLendingRewards' ||
+                          item.method === 'ClaimedBorrowingRewards'
+                            ? `$${priceFormat(
+                                intl,
+                                getPriceForToken(TOKEN_NAME.toUpperCase()) *
+                                  item.amount,
+                                3,
+                              )}`
+                            : `$${priceFormat(
+                                intl,
+                                getPriceForToken(item.token) * item.amount,
+                                3,
+                              )}`
+                        }
                       />
                     )}
                   </td>
@@ -113,6 +131,16 @@ export default function History({
                     {item.collateralAmount && (
                       <IconContainer
                         value={`${priceFormat(intl, item.collateralAmount)} ${item.collateralToken}`}
+                        secondValue={`$${
+                          item.collateralToken
+                            ? priceFormat(
+                                intl,
+                                getPriceForToken(item.collateralToken) *
+                                  item.collateralAmount,
+                                3,
+                              )
+                            : '$0'
+                        }`}
                       />
                     )}
                   </td>

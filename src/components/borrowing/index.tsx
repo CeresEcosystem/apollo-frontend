@@ -28,7 +28,7 @@ import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import AddMoreModal from './add_more_modal';
 import { Tooltip } from 'react-tooltip';
-import { useTokenPrice } from 'src/store';
+import usePrice from '@hooks/use_price';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -69,14 +69,11 @@ function Collaterals({
 }) {
   const intl = useIntl();
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const data = useMemo(() => {
     return collaterals.map(item => {
-      const priceCollateral =
-        pricesForAllTokens.find(
-          token => token.assetId === item.collateralAssetId,
-        )?.price ?? 0;
+      const priceCollateral = getPriceForToken(item.collateralAssetId);
 
       return {
         ...item,
@@ -86,7 +83,7 @@ function Collaterals({
         reward: 1 * Number(item.rewards), // add Apollo price
       };
     });
-  }, [collaterals, price, pricesForAllTokens]);
+  }, [collaterals, price, getPriceForToken]);
 
   return (
     <tr className="border-none">
@@ -209,23 +206,21 @@ export default function Borrowing({
     'amount',
   );
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const data = useMemo(() => {
     return sortedData.map(item => {
-      const price =
-        pricesForAllTokens.find(token => token.assetId === item.poolAssetId)
-          ?.price ?? 0;
+      const poolAssetPrice = getPriceForToken(item.poolAssetId);
 
       return {
         ...item,
-        price,
-        amountPrice: price * Number(item.amount),
-        interestPrice: price * Number(item.interest),
+        price: poolAssetPrice,
+        amountPrice: poolAssetPrice * Number(item.amount),
+        interestPrice: poolAssetPrice * Number(item.interest),
         reward: 1 * Number(item.rewards), // add Apollo price
       };
     });
-  }, [sortedData, pricesForAllTokens]);
+  }, [sortedData, getPriceForToken]);
 
   const intl = useIntl();
 

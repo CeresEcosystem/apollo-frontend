@@ -4,6 +4,7 @@ import { TOAST_ID, TOKEN_NAME, WALLET_NOT_CONNECTED } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { Popover, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import usePrice from '@hooks/use_price';
 import {
   formatWalletAddress,
   getAvatarTitle,
@@ -12,10 +13,10 @@ import {
 } from '@utils/helpers';
 import { showErrorNotify } from '@utils/toast';
 import classNames from 'classnames';
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
-import { useTokenPrice, useWalletModal } from 'src/store';
+import { useWalletModal } from 'src/store';
 
 const pages = [
   {
@@ -139,7 +140,11 @@ function ConnectButton() {
 }
 
 function ApolloPrice() {
-  const apolloPrice = useTokenPrice(state => state.price);
+  const { getPriceForToken } = usePrice();
+
+  const apolloPrice = useMemo(() => {
+    return getPriceForToken(TOKEN_NAME.toUpperCase());
+  }, [getPriceForToken]);
 
   const intl = useIntl();
 
@@ -165,7 +170,11 @@ export default function Header() {
 
   const intl = useIntl();
 
-  const apolloPrice = useTokenPrice(state => state.price);
+  const { getPriceForToken } = usePrice();
+
+  const apolloPrice = useMemo(() => {
+    return getPriceForToken(TOKEN_NAME.toUpperCase());
+  }, [getPriceForToken]);
 
   return (
     <div id="header">

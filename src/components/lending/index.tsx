@@ -15,7 +15,7 @@ import { LendingInfo, LendingWithdrawModal } from 'src/interfaces';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import RewardsModal from '@components/rewards/rewards_modal';
-import { useTokenPrice } from 'src/store';
+import usePrice from '@hooks/use_price';
 
 export default function Lending({
   lendingInfo,
@@ -31,7 +31,7 @@ export default function Lending({
     'amount',
   );
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const [showLendModal, setShowLendModal] = useState(false);
   const [showRewardsModal, setShowRewardsModal] = useState(false);
@@ -43,9 +43,7 @@ export default function Lending({
 
   const data = useMemo(() => {
     return sortedData.map(item => {
-      const price =
-        pricesForAllTokens.find(token => token.assetId === item.poolAssetId)
-          ?.price ?? 0;
+      const price = getPriceForToken(item.poolAssetId);
 
       return {
         ...item,
@@ -53,7 +51,7 @@ export default function Lending({
         reward: 1 * Number(item.rewards), // add Apollo price
       };
     });
-  }, [sortedData, pricesForAllTokens]);
+  }, [sortedData, getPriceForToken]);
 
   return (
     <>

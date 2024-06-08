@@ -1,11 +1,11 @@
 import AssetBalance from '@components/input/asset_balance';
 import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
+import usePrice from '@hooks/use_price';
 import useWithdrawAsset from '@hooks/use_withdraw_asset';
 // import TransactionFee from '@components/transaction/transaction_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { LendingInfo, LendingWithdrawFormData } from 'src/interfaces';
-import { useTokenPrice } from 'src/store';
 
 export default function WithdrawModal({
   showModal,
@@ -25,14 +25,11 @@ export default function WithdrawModal({
 
   const { loading, withdrawAsset } = useWithdrawAsset();
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const tokenPrice = useMemo(() => {
-    return (
-      pricesForAllTokens.find(token => token.assetId === asset?.poolAssetId)
-        ?.price ?? 0
-    );
-  }, [pricesForAllTokens, asset?.poolAssetId]);
+    return asset ? getPriceForToken(asset.poolAssetId) : 0;
+  }, [getPriceForToken, asset]);
 
   const handleAssetBalanceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({

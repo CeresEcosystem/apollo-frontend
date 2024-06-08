@@ -4,10 +4,8 @@ import { create } from 'zustand';
 // import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface ApolloPriceStore {
-  price: number;
-  pricesForAllTokens: TokenPrices[];
-  fetchPrice: () => Promise<void>;
-  fetchPricesForAllTokens: () => Promise<void>;
+  prices: TokenPrices[];
+  fetchPrices: () => Promise<void>;
   init: () => Promise<void>;
 }
 
@@ -29,32 +27,28 @@ interface DisclaimerModalStore {
   closeDisclaimerModal: () => void;
 }
 
-export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
-  price: 0,
-  pricesForAllTokens: [],
-  fetchPrice: async () => {
-    const response = await fetch(`${TOOLS_URL}/prices/XOR`);
+const tokens = ['APOLLO', 'XOR', 'DAI', 'ETH', 'VAL', 'PSWAP'];
 
-    if (response.ok) {
-      const apolloPrice = await response.json();
-      set({ price: apolloPrice });
-    }
-  },
-  fetchPricesForAllTokens: async () => {
+export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
+  prices: [],
+  fetchPrices: async () => {
     const response = await fetch(`${TOOLS_URL}/prices`);
 
     if (response.ok) {
       const pricesForAllTokens = (await response.json()) as TokenPrices[];
-      set({ pricesForAllTokens });
+
+      const pricesData = pricesForAllTokens.filter(price =>
+        tokens.includes(price.token),
+      );
+
+      set({ prices: pricesData });
     }
   },
   init: async () => {
-    await get().fetchPrice();
-    await get().fetchPricesForAllTokens();
+    await get().fetchPrices();
 
     setInterval(() => {
-      get().fetchPrice();
-      get().fetchPricesForAllTokens();
+      get().fetchPrices();
     }, 60000);
   },
 }));

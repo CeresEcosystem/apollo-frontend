@@ -14,8 +14,8 @@ import { ICONS_URL } from '@constants/index';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import useBalance from '@hooks/use_balance';
-import { useTokenPrice } from 'src/store';
 import useLendAsset from '@hooks/use_lend_asset';
+import usePrice from '@hooks/use_price';
 
 export default function LendAssetModal({
   showModal,
@@ -32,7 +32,7 @@ export default function LendAssetModal({
 
   const { getBalanceForToken } = useBalance();
 
-  const pricesForAllTokens = useTokenPrice(state => state.pricesForAllTokens);
+  const { getPriceForToken } = usePrice();
 
   const { loading, lendAsset } = useLendAsset();
 
@@ -44,11 +44,8 @@ export default function LendAssetModal({
   });
 
   const tokenPrice = useMemo(() => {
-    return (
-      pricesForAllTokens.find(token => token.assetId === formData.asset?.value)
-        ?.price ?? 0
-    );
-  }, [pricesForAllTokens, formData.asset]);
+    return formData.asset ? getPriceForToken(formData.asset.value) : 0;
+  }, [getPriceForToken, formData.asset]);
 
   useEffect(() => {
     function fetchBalance() {
