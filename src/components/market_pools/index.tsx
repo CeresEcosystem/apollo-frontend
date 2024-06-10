@@ -1,4 +1,10 @@
-import { IconContainer, SortIcon, TableContainer } from '@components/table';
+import {
+  IconContainer,
+  SortIcon,
+  TableContainer,
+  tableCellStyle,
+  tableHeadStyle,
+} from '@components/table';
 import { ICONS_URL, TOAST_ID, WALLET_NOT_CONNECTED } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
@@ -9,9 +15,6 @@ import classNames from 'classnames';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { MarketPool } from 'src/interfaces';
-
-const tableHeadStyle = 'px-4 py-4 text-center font-medium text-grey lg:px-6';
-const tableCellStyle = 'px-4 py-4 whitespace-nowrap lg:px-6';
 
 export default function MarketPools({ pools }: { pools: MarketPool[] }) {
   const { selectedAccount } = usePolkadot();
@@ -92,13 +95,13 @@ export default function MarketPools({ pools }: { pools: MarketPool[] }) {
                 'flex items-center lg:px-12',
               )}
             >
-              <div className="flex-shrink-0 h-8 w-8 xxs:h-10 xxs:w-10 bg-white rounded-full shadow-sm">
+              <div className="flex-shrink-0 h-8 w-8 bg-white rounded-full shadow-sm">
                 <img
                   src={`${ICONS_URL}${item.poolAssetSymbol}.svg`}
                   alt={item.poolAssetSymbol}
                 />
               </div>
-              <span className="ml-4 font-medium text-grey text-sm">
+              <span className="ml-4 font-medium text-grey text-xs">
                 {item.poolAssetSymbol}
               </span>
             </td>

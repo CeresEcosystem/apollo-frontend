@@ -44,11 +44,12 @@ export default function Lending({
   const data = useMemo(() => {
     return sortedData.map(item => {
       const price = getPriceForToken(item.poolAssetId);
+      const apolloPrice = getPriceForToken(TOKEN_NAME.toUpperCase());
 
       return {
         ...item,
         price: price * Number(item.amount),
-        reward: 1 * Number(item.rewards), // add Apollo price
+        reward: apolloPrice * Number(item.rewards),
       };
     });
   }, [sortedData, getPriceForToken]);

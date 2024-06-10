@@ -74,13 +74,14 @@ function Collaterals({
   const data = useMemo(() => {
     return collaterals.map(item => {
       const priceCollateral = getPriceForToken(item.collateralAssetId);
+      const apolloPrice = getPriceForToken(TOKEN_NAME.toUpperCase());
 
       return {
         ...item,
         collateralAmountPrice: priceCollateral * Number(item.collateralAmount),
         borrowedPrice: price * Number(item.borrowedAmount),
         interestPrice: price * Number(item.interest),
-        reward: 1 * Number(item.rewards), // add Apollo price
+        reward: apolloPrice * Number(item.rewards),
       };
     });
   }, [collaterals, price, getPriceForToken]);
@@ -211,13 +212,14 @@ export default function Borrowing({
   const data = useMemo(() => {
     return sortedData.map(item => {
       const poolAssetPrice = getPriceForToken(item.poolAssetId);
+      const apolloPrice = getPriceForToken(TOKEN_NAME.toUpperCase());
 
       return {
         ...item,
         price: poolAssetPrice,
         amountPrice: poolAssetPrice * Number(item.amount),
         interestPrice: poolAssetPrice * Number(item.interest),
-        reward: 1 * Number(item.rewards), // add Apollo price
+        reward: apolloPrice * Number(item.rewards),
       };
     });
   }, [sortedData, getPriceForToken]);
