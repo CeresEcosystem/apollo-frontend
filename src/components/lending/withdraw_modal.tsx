@@ -3,9 +3,10 @@ import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
 import usePrice from '@hooks/use_price';
 import useWithdrawAsset from '@hooks/use_withdraw_asset';
-// import TransactionFee from '@components/transaction/transaction_fee';
+import TransactionFee from '@components/transaction/transaction_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { LendingInfo, LendingWithdrawFormData } from 'src/interfaces';
+import { withdrawFee } from '@utils/xor_fee';
 
 export default function WithdrawModal({
   showModal,
@@ -72,7 +73,7 @@ export default function WithdrawModal({
           price={formData.price}
         />
       )}
-      {/* <TransactionFee /> */}
+      <TransactionFee fee={withdrawFee} />
       <ModalButton
         title="Withdraw"
         onClick={() =>

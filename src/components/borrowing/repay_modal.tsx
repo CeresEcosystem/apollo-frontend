@@ -1,12 +1,13 @@
 import AssetBalance from '@components/input/asset_balance';
 import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
-// import TransactionFee from '@components/transaction/transaction_fee';
+import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import useBalance from '@hooks/use_balance';
 import usePrice from '@hooks/use_price';
 import useRepayAsset from '@hooks/use_repay_asset';
 import { priceFormat } from '@utils/helpers';
+import { repayFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
@@ -143,7 +144,7 @@ export default function RepayModal({
         </>
       )}
 
-      {/* <TransactionFee /> */}
+      <TransactionFee fee={repayFee} />
       <ModalButton
         title="Repay"
         onClick={() =>
