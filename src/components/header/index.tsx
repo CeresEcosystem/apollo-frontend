@@ -16,7 +16,7 @@ import classNames from 'classnames';
 import { Fragment, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Link, useLocation } from 'react-router-dom';
-// import { useWalletModal } from 'src/store';
+import { useWalletModal } from 'src/store';
 
 const pages = [
   {
@@ -92,11 +92,11 @@ function PageLinks() {
 
 function ConnectButton() {
   const { selectedAccount, keyring } = usePolkadot();
-  // const toggleWalletModal = useWalletModal(state => state.toggleWalletModal);
+  const toggleWalletModal = useWalletModal(state => state.toggleWalletModal);
 
   return (
     <div
-      // onClick={() => toggleWalletModal()}
+      onClick={() => toggleWalletModal()}
       className="cursor-pointer rounded-3xl shadow-buttonShadow overflow-hidden max-w-60"
     >
       {selectedAccount ? (

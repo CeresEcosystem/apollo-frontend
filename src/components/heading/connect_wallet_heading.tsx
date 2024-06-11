@@ -13,7 +13,6 @@ export default function ConnectWalletHeading() {
         </h1>
         <button
           onClick={() => toggleWalletModal()}
-          disabled
           className="py-1 xxs:py-2 px-4 border-2 rounded-3xl border-pinkBorder outline-none lg:py-3 lg:px-8"
         >
           <span className="font-semibold text-white text-xs xxs:text-sm lg:text-base xl:text-lg">
