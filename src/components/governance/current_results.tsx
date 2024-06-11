@@ -1,4 +1,5 @@
 import ProgressBarLinear from '@components/progress_bar/progress_bar_linear';
+import { TOKEN_NAME } from '@constants/index';
 import { GovernacePollResults } from 'src/interfaces';
 
 export default function CurrentResults({
@@ -19,7 +20,7 @@ export default function CurrentResults({
             {Object.keys(results).map(option => {
               return (
                 <div key={option}>
-                  <span className="font-semibold text-grey">{`${option} (${results[option].sumFormatted} CERES)`}</span>
+                  <span className="font-semibold text-grey">{`${option} (${results[option].sumFormatted} ${TOKEN_NAME.toUpperCase()})`}</span>
                   <ProgressBarLinear progress={results[option].percentage} />
                 </div>
               );

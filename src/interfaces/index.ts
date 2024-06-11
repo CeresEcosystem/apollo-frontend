@@ -98,13 +98,13 @@ export interface GovernanceSelectedAnswer {
 
 export interface LendingAssetFormData {
   asset: LendingAssetSelectOption | null;
-  balance: string;
+  balance: number;
   inputValue: string;
   price: number;
 }
 
 export interface RepayCollateralFormData {
-  balance: string;
+  balance: number;
   inputValue: string;
   price: number;
 }

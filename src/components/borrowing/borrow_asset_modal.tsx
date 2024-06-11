@@ -8,7 +8,7 @@ import {
 } from 'src/interfaces';
 import AssetBalance from '@components/input/asset_balance';
 import TransactionOverview from '@components/transaction/transaction_overview';
-// import TransactionFee from '@components/transaction/transaction_fee';
+import TransactionFee from '@components/transaction/transaction_fee';
 import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL } from '@constants/index';
@@ -17,6 +17,7 @@ import { useIntl } from 'react-intl';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import usePrice from '@hooks/use_price';
 import LoanToValue from '@components/table/load_to_value';
+import { borrowFee } from '@utils/xor_fee';
 
 export default function BorrowAssetModal({
   showModal,
@@ -222,7 +223,7 @@ export default function BorrowAssetModal({
           />
         </>
       )}
-      {/* <TransactionFee /> */}
+      <TransactionFee fee={borrowFee} />
       <ModalButton
         title="Borrow asset"
         onClick={() =>

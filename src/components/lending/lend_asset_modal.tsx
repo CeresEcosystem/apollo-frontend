@@ -7,7 +7,7 @@ import {
 } from 'src/interfaces';
 import AssetBalance from '@components/input/asset_balance';
 import TransactionOverview from '@components/transaction/transaction_overview';
-// import TransactionFee from '@components/transaction/transaction_fee';
+import TransactionFee from '@components/transaction/transaction_fee';
 import ModalButton from '@components/modal/modal_button';
 import AssetSelect from '@components/input/asset_select';
 import { ICONS_URL } from '@constants/index';
@@ -16,6 +16,7 @@ import { useIntl } from 'react-intl';
 import useBalance from '@hooks/use_balance';
 import useLendAsset from '@hooks/use_lend_asset';
 import usePrice from '@hooks/use_price';
+import { lendFee } from '@utils/xor_fee';
 
 export default function LendAssetModal({
   showModal,
@@ -38,7 +39,7 @@ export default function LendAssetModal({
 
   const [formData, setFormData] = useState<LendingAssetFormData>({
     asset: null,
-    balance: '',
+    balance: 0,
     inputValue: '',
     price: 0,
   });
@@ -66,7 +67,7 @@ export default function LendAssetModal({
       setTimeout(() => {
         setFormData({
           asset: null,
-          balance: '',
+          balance: 0,
           inputValue: '',
           price: 0,
         });
@@ -110,8 +111,8 @@ export default function LendAssetModal({
     setFormData(prevData => {
       return {
         ...prevData,
-        inputValue: formData.balance,
-        price: tokenPrice * Number(formData.balance),
+        inputValue: formData.balance.toString(),
+        price: tokenPrice * formData.balance,
       };
     });
   };
@@ -129,7 +130,7 @@ export default function LendAssetModal({
             label="Amount"
             balance={formData.inputValue}
             assetSymbol={formData.asset?.label}
-            assetBalance={formData.balance}
+            assetBalance={priceFormat(intl, formData.balance, 3)}
             handleAssetBalanceChange={handleAssetBalanceChange}
             onMaxPressed={onMaxPressed}
             price={formData.price}
@@ -145,7 +146,7 @@ export default function LendAssetModal({
           />
         </>
       )}
-      {/* <TransactionFee /> */}
+      <TransactionFee fee={lendFee} />
       <ModalButton
         title="Lend asset"
         onClick={() =>
@@ -157,7 +158,7 @@ export default function LendAssetModal({
         disabled={
           !formData.asset ||
           Number(formData.inputValue) <= 0 ||
-          Number(formData.inputValue) > Number(formData.balance) ||
+          Number(formData.inputValue) > formData.balance ||
           loading ||
           formData.price < 10
         }

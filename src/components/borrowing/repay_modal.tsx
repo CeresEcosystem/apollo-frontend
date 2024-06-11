@@ -37,7 +37,7 @@ export default function RepayModal({
   const { getPriceForToken } = usePrice();
 
   const [formData, setFormData] = useState<RepayCollateralFormData>({
-    balance: '',
+    balance: 0,
     inputValue: '',
     price: 0,
   });
@@ -72,7 +72,7 @@ export default function RepayModal({
     if (!showModal) {
       setTimeout(() => {
         setFormData({
-          balance: '',
+          balance: 0,
           inputValue: '',
           price: 0,
         });
@@ -91,7 +91,7 @@ export default function RepayModal({
   };
 
   const onMaxPressed = () => {
-    const maxValue = Math.min(Number(formData.balance), totalToRepay);
+    const maxValue = Math.min(formData.balance, totalToRepay);
 
     setFormData(prevData => {
       return {
@@ -114,7 +114,7 @@ export default function RepayModal({
             label="Amount"
             balance={formData.inputValue}
             assetSymbol={asset.poolAssetSymbol}
-            assetBalance={formData.balance}
+            assetBalance={priceFormat(intl, formData.balance, 3)}
             handleAssetBalanceChange={handleAssetBalanceChange}
             onMaxPressed={onMaxPressed}
             price={formData.price}
@@ -151,7 +151,7 @@ export default function RepayModal({
             collateral!.collateralAssetId,
             asset!.poolAssetId,
             formData.inputValue,
-            Math.min(Number(formData.balance), totalToRepay),
+            Math.min(formData.balance, totalToRepay),
             () => {
               reload();
               closeModal();
@@ -162,7 +162,7 @@ export default function RepayModal({
           !asset ||
           !collateral ||
           Number(formData.inputValue) <= 0 ||
-          Number(formData.inputValue) > Number(formData.balance) ||
+          Number(formData.inputValue) > formData.balance ||
           Number(formData.inputValue) > totalToRepay ||
           loading
         }

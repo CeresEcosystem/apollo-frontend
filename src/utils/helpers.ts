@@ -89,9 +89,9 @@ export function parse(data?: string) {
     const dataSplit = data?.split(' ');
 
     return dataSplit.length !== 1 && isExistingMultiplier(dataSplit[1])
-      ? (parseFloat(dataSplit[0]) * multipliers[dataSplit[1]]).toFixed(2)
-      : parseFloat(dataSplit[0]).toFixed(2);
+      ? Number(dataSplit[0]) * multipliers[dataSplit[1]]
+      : Number(dataSplit[0]);
   }
 
-  return '0';
+  return 0;
 }

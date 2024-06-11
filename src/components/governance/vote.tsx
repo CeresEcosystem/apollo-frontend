@@ -84,7 +84,7 @@ export default function Vote({
             onClick={async () => {
               if (selectedAccount) {
                 const b = await getBalance();
-                setBalance(b);
+                setBalance(b?.toString());
                 setShowModal(true);
               } else {
                 showErrorNotify(

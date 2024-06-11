@@ -1,4 +1,4 @@
-import { CERES_ADDRESS, TOAST_ID } from '@constants/index';
+import { APOLLO_ADDRESS, TOAST_ID } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { parse } from '@utils/helpers';
 import { showErrorNotify } from '@utils/toast';
@@ -11,7 +11,7 @@ const useBalance = () => {
     if (selectedAccount) {
       const balance = await api?.rpc.assets.freeBalance(
         selectedAccount?.address,
-        CERES_ADDRESS,
+        APOLLO_ADDRESS,
       );
 
       // @ts-expect-error Property 'balance' does not exist on type 'string'.
@@ -33,7 +33,7 @@ const useBalance = () => {
         return parse(balance?.toHuman()?.balance);
       }
 
-      return '0';
+      return 0;
     },
     [api, selectedAccount],
   );
