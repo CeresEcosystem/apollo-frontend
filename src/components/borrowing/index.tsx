@@ -29,6 +29,7 @@ import { useIntl } from 'react-intl';
 import AddMoreModal from './add_more_modal';
 import { Tooltip } from 'react-tooltip';
 import usePrice from '@hooks/use_price';
+import { FaQuestionCircle } from 'react-icons/fa';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -52,6 +53,26 @@ function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   }
 
   return null;
+}
+
+function TooltipLoanToValueQuestion() {
+  const id = 'loan-to-value-question';
+
+  return (
+    <>
+      <FaQuestionCircle
+        data-tooltip-id={id}
+        className="cursor-pointer w-4 inline-block ml-2 text-grey"
+      />
+      <Tooltip
+        id={id}
+        content="The Loan to Value (“LTV”) ratio defines the maximum amount of assets that can be borrowed with a specific collateral. It is expressed as a percentage (e.g., at LTV=75%, for every 1 ETH worth of collateral, borrowers will be able to borrow 0.75 ETH worth of the corresponding currency."
+        delayHide={1000}
+        place="top"
+        className="!bg-grey !rounded-3xl max-w-md text-wrap"
+      />
+    </>
+  );
 }
 
 function Collaterals({
@@ -290,6 +311,7 @@ export default function Borrowing({
               {sortConfig.key === 'loanToValue' && (
                 <SortIcon direction={sortConfig.direction} />
               )}
+              <TooltipLoanToValueQuestion />
             </th>
             <th
               className={classNames(tableHeadStyle, 'cursor-pointer')}

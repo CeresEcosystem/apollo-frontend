@@ -16,6 +16,7 @@ import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import usePrice from '@hooks/use_price';
+import LoanToValue from '@components/table/load_to_value';
 
 export default function BorrowAssetModal({
   showModal,
@@ -204,14 +205,8 @@ export default function BorrowAssetModal({
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
           />
-          <TransactionOverview
-            overviews={[
-              {
-                label: 'Loan-to-Value',
-                info: `${priceFormat(intl, Number(formData.asset.loanToValue) * 100)}%`,
-              },
-            ]}
-            showLabel={false}
+          <LoanToValue
+            loan={`${priceFormat(intl, Number(formData.asset.loanToValue) * 100)}%`}
           />
           <TransactionOverview
             overviews={[

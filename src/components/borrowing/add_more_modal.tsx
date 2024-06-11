@@ -2,6 +2,7 @@ import AssetBalance from '@components/input/asset_balance';
 import AssetSelect from '@components/input/asset_select';
 import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
+import LoanToValue from '@components/table/load_to_value';
 // import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import { ICONS_URL } from '@constants/index';
@@ -166,14 +167,8 @@ export default function AddMoreModal({
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
           />
-          <TransactionOverview
-            overviews={[
-              {
-                label: 'Loan-to-Value',
-                info: `${priceFormat(intl, Number(asset!.loanToValue) * 100)}%`,
-              },
-            ]}
-            showLabel={false}
+          <LoanToValue
+            loan={`${priceFormat(intl, Number(asset!.loanToValue) * 100)}%`}
           />
           <TransactionOverview
             overviews={[
