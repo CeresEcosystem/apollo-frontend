@@ -67,7 +67,7 @@ export default function BorrowAssetModal({
         (((Number(formData.inputValue) / Number(formData.asset?.loanToValue)) *
           borrowingTokenPrice) /
           collateralTokenPrice) *
-        0.995
+        0.99
       );
     }
 
@@ -91,7 +91,7 @@ export default function BorrowAssetModal({
           collateralTokenPrice *
           Number(formData.asset?.loanToValue)) /
           borrowingTokenPrice) *
-        0.995
+        0.99
       );
     }
 

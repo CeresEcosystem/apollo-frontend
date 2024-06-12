@@ -58,7 +58,7 @@ export default function AddMoreModal({
         (((Number(formData.inputValue) / Number(asset.loanToValue)) *
           borrowingTokenPrice) /
           collateralTokenPrice) *
-        0.995
+        0.99
       );
     }
 
@@ -75,7 +75,7 @@ export default function AddMoreModal({
       return (
         ((Number(cAmount) * collateralTokenPrice * Number(asset.loanToValue)) /
           borrowingTokenPrice) *
-        0.995
+        0.99
       );
     }
 
