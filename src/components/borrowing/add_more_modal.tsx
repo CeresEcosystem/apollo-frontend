@@ -55,9 +55,10 @@ export default function AddMoreModal({
   const collateralAmount = useMemo(() => {
     if (asset) {
       return (
-        ((Number(formData.inputValue) / Number(asset.loanToValue)) *
+        (((Number(formData.inputValue) / Number(asset.loanToValue)) *
           borrowingTokenPrice) /
-        collateralTokenPrice
+          collateralTokenPrice) *
+        0.995
       );
     }
 
@@ -72,8 +73,9 @@ export default function AddMoreModal({
         )?.amount ?? 0;
 
       return (
-        (Number(cAmount) * collateralTokenPrice * Number(asset.loanToValue)) /
-        borrowingTokenPrice
+        ((Number(cAmount) * collateralTokenPrice * Number(asset.loanToValue)) /
+          borrowingTokenPrice) *
+        0.995
       );
     }
 

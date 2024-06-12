@@ -24,7 +24,7 @@ const useRepayAsset = () => {
 
         let amountNumber = Number(amount);
         amountNumber =
-          amountNumber === maxAmount ? amountNumber + 0.01 : amountNumber;
+          amountNumber === maxAmount ? amountNumber * 1.005 : amountNumber;
 
         const repayExtrinsic = api.tx.apolloPlatform.repay(
           collateralTokenAddress,
