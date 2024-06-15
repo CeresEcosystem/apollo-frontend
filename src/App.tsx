@@ -5,7 +5,7 @@ import WalletModal from '@components/wallet/wallet_modal';
 import { usePolkadot } from '@context/polkadot_context';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 import { ToastContainer, Zoom } from 'react-toastify';
-import { useDisclaimerModal, useTokenPrice } from './store';
+import { useDisclaimer, useDisclaimerModal, useTokenPrice } from './store';
 import { useEffect } from 'react';
 import DisclaimerModal from '@components/disclaimer/disclaimer_modal';
 
@@ -14,9 +14,9 @@ export default function App() {
 
   const fetchApolloPrice = useTokenPrice(state => state.init);
 
-  const { isDisclaimerRead, openDisclaimerModal } = useDisclaimerModal(
-    state => state,
-  );
+  const { isDisclaimerRead } = useDisclaimer(state => state);
+
+  const { openDisclaimerModal } = useDisclaimerModal(state => state);
 
   useEffect(() => {
     fetchApolloPrice();

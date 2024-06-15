@@ -1,9 +1,11 @@
 import Modal from '@components/modal';
-import { useDisclaimerModal } from 'src/store';
+import { useDisclaimer, useDisclaimerModal } from 'src/store';
 
 export default function DisclaimerModal() {
-  const { showDisclaimerModal, closeDisclaimerModal, setDisclaimerRead } =
-    useDisclaimerModal(state => state);
+  const { setDisclaimerRead } = useDisclaimer(state => state);
+  const { showDisclaimerModal, closeDisclaimerModal } = useDisclaimerModal(
+    state => state,
+  );
 
   return (
     <Modal

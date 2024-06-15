@@ -1,7 +1,7 @@
 import { TOOLS_URL } from '@constants/index';
 import { TokenPrices } from 'src/interfaces';
 import { create } from 'zustand';
-// import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface ApolloPriceStore {
   prices: TokenPrices[];
@@ -14,14 +14,12 @@ interface WalletModalStore {
   toggleWalletModal: () => void;
 }
 
-// interface DisclaimerStore {
-//   isDisclaimerRead: boolean;
-//   setDisclaimerRed: () => void;
-// }
-
-interface DisclaimerModalStore {
+interface DisclaimerStore {
   isDisclaimerRead: boolean;
   setDisclaimerRead: () => void;
+}
+
+interface DisclaimerModalStore {
   showDisclaimerModal: boolean;
   openDisclaimerModal: () => void;
   closeDisclaimerModal: () => void;
@@ -60,25 +58,23 @@ export const useWalletModal = create<WalletModalStore>((set, get) => ({
   },
 }));
 
-// export const useDisclaimer = create<
-//   DisclaimerStore,
-//   [['zustand/persist', DisclaimerStore]]
-// >(
-//   persist(
-//     set => ({
-//       isDisclaimerRead: false,
-//       setDisclaimerRed: () => set({ isDisclaimerRead: true }),
-//     }),
-//     {
-//       name: 'disclaimer',
-//       storage: createJSONStorage(() => sessionStorage, {}),
-//     },
-//   ),
-// );
+export const useDisclaimer = create<
+  DisclaimerStore,
+  [['zustand/persist', DisclaimerStore]]
+>(
+  persist(
+    set => ({
+      isDisclaimerRead: false,
+      setDisclaimerRead: () => set({ isDisclaimerRead: true }),
+    }),
+    {
+      name: 'disclaimer',
+      storage: createJSONStorage(() => sessionStorage, {}),
+    },
+  ),
+);
 
 export const useDisclaimerModal = create<DisclaimerModalStore>(set => ({
-  isDisclaimerRead: false,
-  setDisclaimerRead: () => set({ isDisclaimerRead: true }),
   showDisclaimerModal: false,
   openDisclaimerModal: () => set({ showDisclaimerModal: true }),
   closeDisclaimerModal: () => set({ showDisclaimerModal: false }),
