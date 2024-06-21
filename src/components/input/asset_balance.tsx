@@ -18,7 +18,7 @@ export default function AssetBalance({
   handleAssetBalanceChange: (e: ChangeEvent<HTMLInputElement>) => void;
   balance: string;
   assetSymbol: string | undefined;
-  assetBalance?: string;
+  assetBalance?: number | string;
   onMaxPressed?: () => void;
   price: number;
   note?: string;

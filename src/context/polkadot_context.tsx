@@ -13,8 +13,8 @@ import { showErrorNotify } from '@utils/toast';
 import {
   POLKADOT_ACCOUNT,
   POLKADOT_SOURCE,
-  SORA_API,
-  // SORA_API_TEST,
+  // SORA_API,
+  SORA_API_TEST,
 } from '@constants/index';
 import { options } from '@utils/sora_options';
 import { ApiOptions } from '@polkadot/api/types';
@@ -105,7 +105,7 @@ const PolkadotProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     async function setupApi() {
-      const provider = new WsProvider(SORA_API);
+      const provider = new WsProvider(SORA_API_TEST);
 
       const soraOptions = options({ provider, noInitWarn: true });
       const apiOptions = new (soraOptions.constructor as {

@@ -115,7 +115,7 @@ export default function RepayModal({
             label="Amount"
             balance={formData.inputValue}
             assetSymbol={asset.poolAssetSymbol}
-            assetBalance={priceFormat(intl, formData.balance, 3)}
+            assetBalance={formData.balance}
             handleAssetBalanceChange={handleAssetBalanceChange}
             onMaxPressed={onMaxPressed}
             price={formData.price}

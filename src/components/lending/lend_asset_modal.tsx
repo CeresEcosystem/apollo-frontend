@@ -130,7 +130,7 @@ export default function LendAssetModal({
             label="Amount"
             balance={formData.inputValue}
             assetSymbol={formData.asset?.label}
-            assetBalance={priceFormat(intl, formData.balance, 3)}
+            assetBalance={formData.balance}
             handleAssetBalanceChange={handleAssetBalanceChange}
             onMaxPressed={onMaxPressed}
             price={formData.price}

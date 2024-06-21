@@ -14,6 +14,7 @@ const useBorrowAsset = () => {
       collateralAddress: string,
       tokenAddress: string,
       amount: string,
+      ltv: number,
       onSuccessCallback: () => void,
     ) => {
       if (api && selectedWalletProvider) {
@@ -24,6 +25,7 @@ const useBorrowAsset = () => {
           collateralAddress,
           tokenAddress,
           FPNumber.fromNatural(amount).bnToString(),
+          FPNumber.fromNatural(ltv / 100).bnToString(),
         );
 
         const tx = new Promise<boolean>(resolve => {

@@ -181,3 +181,36 @@ body {
 .react-datepicker__close-icon::after {
   background-color: #c50b8f !important;
 }
+
+/*
+	*
+	* range slider
+	*
+	*/
+
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  background: #f8f8f8;
+  outline: none;
+  border-radius: 24px;
+  border: 1px solid #cecece;
+}
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: #cf3aa3;
+  cursor: pointer;
+}
+.range-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #cf3aa3;
+  border-radius: 100%;
+  cursor: pointer;
+}
