@@ -132,6 +132,12 @@ export interface BorrowMoreFormData {
   ltv: number;
 }
 
+export interface AddCollateralFormData {
+  inputValue: string;
+  price: number;
+  balance: number;
+}
+
 export interface LendingInfo {
   poolAssetId: string;
   poolAssetSymbol: string;

@@ -30,6 +30,7 @@ import BorrowMoreModal from './borrow_more_modal';
 import { Tooltip } from 'react-tooltip';
 import usePrice from '@hooks/use_price';
 import TooltipLoanToValueQuestion from '@components/table/tooltip_loan_to_value';
+import AddCollateralModal from './add_collateral_modal';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -61,12 +62,14 @@ function Collaterals({
   collaterals,
   showRepayModal,
   showBorrowMoreModal,
+  showAddCollateralModal,
 }: {
   asset: BorrowingInfo;
   price: number;
   collaterals: Collateral[];
   showRepayModal: (item: Collateral) => void;
   showBorrowMoreModal: (item: Collateral) => void;
+  showAddCollateralModal: (item: Collateral) => void;
 }) {
   const intl = useIntl();
 
@@ -185,7 +188,7 @@ function Collaterals({
                     Borrow more
                   </button>
                   <button
-                    onClick={() => showBorrowMoreModal(collateral)}
+                    onClick={() => showAddCollateralModal(collateral)}
                     className={classNames(
                       tableButtonStyle,
                       'bg-white text-pinkBorder ml-2',
@@ -246,6 +249,12 @@ export default function Borrowing({
       collateral: null,
     });
   const [showBorrowMoreModal, setShowBorrowMoreModal] =
+    useState<BorrowingCollateralModal>({
+      show: false,
+      asset: null,
+      collateral: null,
+    });
+  const [showAddCollateralModal, setShowAddCollateralModal] =
     useState<BorrowingCollateralModal>({
       show: false,
       asset: null,
@@ -436,6 +445,13 @@ export default function Borrowing({
                         collateral: coll,
                       })
                     }
+                    showAddCollateralModal={(coll: Collateral) =>
+                      setShowAddCollateralModal({
+                        show: true,
+                        asset: item,
+                        collateral: coll,
+                      })
+                    }
                   />
                 )}
               </Fragment>
@@ -476,6 +492,19 @@ export default function Borrowing({
         lendingInfo={lendingInfo}
         closeModal={() =>
           setShowBorrowMoreModal(oldState => ({
+            ...oldState,
+            show: false,
+          }))
+        }
+        reload={reload}
+      />
+      <AddCollateralModal
+        asset={showAddCollateralModal.asset}
+        collateral={showAddCollateralModal.collateral}
+        showModal={showAddCollateralModal.show}
+        lendingInfo={lendingInfo}
+        closeModal={() =>
+          setShowAddCollateralModal(oldState => ({
             ...oldState,
             show: false,
           }))
