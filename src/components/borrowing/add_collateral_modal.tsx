@@ -5,7 +5,6 @@ import ModalButton from '@components/modal/modal_button';
 import TransactionFee from '@components/transaction/transaction_fee';
 import { ICONS_URL } from '@constants/index';
 import useAddCollateral from '@hooks/use_add_collateral';
-import useBalance from '@hooks/use_balance';
 import usePrice from '@hooks/use_price';
 import { lendFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
@@ -20,6 +19,7 @@ export default function AddCollateralModal({
   showModal,
   closeModal,
   asset,
+  lendingInfo,
   collateral,
   reload,
 }: {
@@ -30,12 +30,9 @@ export default function AddCollateralModal({
   collateral: Collateral | null;
   reload: () => void;
 }) {
-  const { getBalanceForToken } = useBalance();
-
   const [formData, setFormData] = useState<AddCollateralFormData>({
     inputValue: '',
     price: 0,
-    balance: 0,
   });
 
   const { loading, addCollateral } = useAddCollateral();
@@ -46,19 +43,18 @@ export default function AddCollateralModal({
     return collateral ? getPriceForToken(collateral.collateralAssetId) : 0;
   }, [getPriceForToken, collateral]);
 
-  useEffect(() => {
-    function fetchBalance() {
-      getBalanceForToken(collateral!.collateralAssetId).then(balance => {
-        setFormData(prevData => {
-          return { ...prevData, balance };
-        });
-      });
+  const maxCollateralAmount = useMemo(() => {
+    if (asset) {
+      const cAmount =
+        lendingInfo.find(
+          lend => lend.poolAssetId === collateral?.collateralAssetId,
+        )?.amount ?? '0';
+
+      return Number(cAmount);
     }
 
-    if (collateral) {
-      fetchBalance();
-    }
-  }, [collateral, getBalanceForToken]);
+    return 0;
+  }, [asset, lendingInfo, collateral?.collateralAssetId]);
 
   useEffect(() => {
     if (!showModal) {
@@ -66,7 +62,6 @@ export default function AddCollateralModal({
         setFormData({
           inputValue: '',
           price: 0,
-          balance: 0,
         });
       }, 500);
     }
@@ -86,8 +81,8 @@ export default function AddCollateralModal({
     setFormData(prevData => {
       return {
         ...prevData,
-        inputValue: formData.balance.toString(),
-        price: borrowingTokenPrice * formData.balance,
+        inputValue: maxCollateralAmount.toString(),
+        price: borrowingTokenPrice * maxCollateralAmount,
       };
     });
   };
@@ -138,7 +133,7 @@ export default function AddCollateralModal({
             assetSymbol={collateral.collateralAssetSymbol}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
-            assetBalance={formData.balance}
+            assetBalance={maxCollateralAmount}
             onMaxPressed={onMaxPressed}
           />
         </>
@@ -161,7 +156,7 @@ export default function AddCollateralModal({
           !asset ||
           !collateral ||
           Number(formData.inputValue) <= 0 ||
-          Number(formData.inputValue) > formData.balance ||
+          Number(formData.inputValue) > maxCollateralAmount ||
           loading
         }
       />

@@ -135,7 +135,6 @@ export interface BorrowMoreFormData {
 export interface AddCollateralFormData {
   inputValue: string;
   price: number;
-  balance: number;
 }
 
 export interface LendingInfo {
