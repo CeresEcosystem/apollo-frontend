@@ -165,7 +165,7 @@ export default function AddMoreModal({
             assetSymbol={asset.poolAssetSymbol}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
-            assetBalance={maxBorrowingAmount.toString()}
+            assetBalance={maxBorrowingAmount}
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
           />

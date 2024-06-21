@@ -204,7 +204,7 @@ export default function BorrowAssetModal({
             assetSymbol={formData.asset?.label}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
-            assetBalance={maxBorrowingAmount.toString()}
+            assetBalance={maxBorrowingAmount}
             onMaxPressed={onMaxPressed}
             note="Minimum amount is 10$"
           />
