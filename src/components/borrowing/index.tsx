@@ -26,10 +26,11 @@ import BorrowAssetModal from './borrow_asset_modal';
 import RepayModal from './repay_modal';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
-import AddMoreModal from './add_more_modal';
+import BorrowMoreModal from './borrow_more_modal';
 import { Tooltip } from 'react-tooltip';
 import usePrice from '@hooks/use_price';
-import { FaQuestionCircle } from 'react-icons/fa';
+import TooltipLoanToValueQuestion from '@components/table/tooltip_loan_to_value';
+import AddCollateralModal from './add_collateral_modal';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -55,38 +56,20 @@ function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   return null;
 }
 
-function TooltipLoanToValueQuestion() {
-  const id = 'loan-to-value-question';
-
-  return (
-    <>
-      <FaQuestionCircle
-        data-tooltip-id={id}
-        className="cursor-pointer w-4 inline-block ml-2 text-grey"
-      />
-      <Tooltip
-        id={id}
-        content="The Loan to Value (“LTV”) ratio defines the maximum amount of assets that can be borrowed with a specific collateral. It is expressed as a percentage (e.g., at LTV=75%, for every 1 ETH worth of collateral, borrowers will be able to borrow 0.75 ETH worth of the corresponding currency."
-        delayHide={1000}
-        place="top"
-        className="!bg-grey !rounded-3xl max-w-md text-wrap"
-      />
-    </>
-  );
-}
-
 function Collaterals({
   asset,
   price,
   collaterals,
   showRepayModal,
-  showAddMoreModal,
+  showBorrowMoreModal,
+  showAddCollateralModal,
 }: {
   asset: BorrowingInfo;
   price: number;
   collaterals: Collateral[];
   showRepayModal: (item: Collateral) => void;
-  showAddMoreModal: (item: Collateral) => void;
+  showBorrowMoreModal: (item: Collateral) => void;
+  showAddCollateralModal: (item: Collateral) => void;
 }) {
   const intl = useIntl();
 
@@ -190,19 +173,28 @@ function Collaterals({
                     onClick={() => showRepayModal(collateral)}
                     className={classNames(
                       tableButtonStyle,
-                      'bg-pinkBorder text-white',
+                      'bg-white text-pinkBorder',
                     )}
                   >
                     Repay
                   </button>
                   <button
-                    onClick={() => showAddMoreModal(collateral)}
+                    onClick={() => showBorrowMoreModal(collateral)}
+                    className={classNames(
+                      tableButtonStyle,
+                      'bg-pinkBorder text-white ml-2',
+                    )}
+                  >
+                    Borrow more
+                  </button>
+                  <button
+                    onClick={() => showAddCollateralModal(collateral)}
                     className={classNames(
                       tableButtonStyle,
                       'bg-white text-pinkBorder ml-2',
                     )}
                   >
-                    Add more
+                    Add collateral
                   </button>
                 </td>
               </tr>
@@ -256,7 +248,13 @@ export default function Borrowing({
       asset: null,
       collateral: null,
     });
-  const [showAddMoreModal, setShowAddMoreModal] =
+  const [showBorrowMoreModal, setShowBorrowMoreModal] =
+    useState<BorrowingCollateralModal>({
+      show: false,
+      asset: null,
+      collateral: null,
+    });
+  const [showAddCollateralModal, setShowAddCollateralModal] =
     useState<BorrowingCollateralModal>({
       show: false,
       asset: null,
@@ -440,8 +438,15 @@ export default function Borrowing({
                         collateral: coll,
                       })
                     }
-                    showAddMoreModal={(coll: Collateral) =>
-                      setShowAddMoreModal({
+                    showBorrowMoreModal={(coll: Collateral) =>
+                      setShowBorrowMoreModal({
+                        show: true,
+                        asset: item,
+                        collateral: coll,
+                      })
+                    }
+                    showAddCollateralModal={(coll: Collateral) =>
+                      setShowAddCollateralModal({
                         show: true,
                         asset: item,
                         collateral: coll,
@@ -480,13 +485,26 @@ export default function Borrowing({
         }
         reload={reload}
       />
-      <AddMoreModal
-        asset={showAddMoreModal.asset}
-        collateral={showAddMoreModal.collateral}
-        showModal={showAddMoreModal.show}
+      <BorrowMoreModal
+        asset={showBorrowMoreModal.asset}
+        collateral={showBorrowMoreModal.collateral}
+        showModal={showBorrowMoreModal.show}
         lendingInfo={lendingInfo}
         closeModal={() =>
-          setShowAddMoreModal(oldState => ({
+          setShowBorrowMoreModal(oldState => ({
+            ...oldState,
+            show: false,
+          }))
+        }
+        reload={reload}
+      />
+      <AddCollateralModal
+        asset={showAddCollateralModal.asset}
+        collateral={showAddCollateralModal.collateral}
+        showModal={showAddCollateralModal.show}
+        lendingInfo={lendingInfo}
+        closeModal={() =>
+          setShowAddCollateralModal(oldState => ({
             ...oldState,
             show: false,
           }))

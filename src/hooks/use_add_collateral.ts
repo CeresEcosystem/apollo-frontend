@@ -4,32 +4,30 @@ import { showLoadingNotify, updateNotify } from '@utils/toast';
 import { useCallback, useState } from 'react';
 import ReactGA from 'react-ga4';
 
-const useBorrowAsset = () => {
+const useAddCollateral = () => {
   const { selectedAccount, api, selectedWalletProvider } = usePolkadot();
 
   const [loading, setLoading] = useState(false);
 
-  const borrowAsset = useCallback(
+  const addCollateral = useCallback(
     async (
       collateralAddress: string,
       tokenAddress: string,
       amount: string,
-      ltv: number,
       onSuccessCallback: () => void,
     ) => {
       if (api && selectedWalletProvider) {
         setLoading(true);
         const toastId = showLoadingNotify();
 
-        const borrowExtrinsic = api.tx.apolloPlatform.borrow(
+        const addCollateralExtrinsic = api.tx.apolloPlatform.addCollateral(
           collateralAddress,
-          tokenAddress,
           FPNumber.fromNatural(amount).bnToString(),
-          FPNumber.fromNatural(ltv / 100).bnToString(),
+          tokenAddress,
         );
 
         const tx = new Promise<boolean>(resolve => {
-          borrowExtrinsic
+          addCollateralExtrinsic
             ?.signAndSend(
               selectedAccount!.address,
               { signer: selectedWalletProvider.signer },
@@ -63,11 +61,11 @@ const useBorrowAsset = () => {
         setLoading(false);
 
         if (succeeded) {
-          updateNotify(toastId, `Successfully borrowed`, 'success');
+          updateNotify(toastId, `Successfully added collateral`, 'success');
           ReactGA.event({
-            category: 'Borrowing',
-            action: 'Borrow button clicked',
-            label: `Borrow Asset - ${tokenAddress}, collateral - ${collateralAddress}`,
+            category: 'Adding collateral',
+            action: 'Add collateral button clicked',
+            label: `Asset - ${tokenAddress}, collateral - ${collateralAddress}`,
             value: Number(amount),
           });
           onSuccessCallback();
@@ -77,7 +75,7 @@ const useBorrowAsset = () => {
     [api, selectedAccount, selectedWalletProvider],
   );
 
-  return { loading, borrowAsset };
+  return { loading, addCollateral };
 };
 
-export default useBorrowAsset;
+export default useAddCollateral;

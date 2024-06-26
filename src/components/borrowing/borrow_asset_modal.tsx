@@ -16,7 +16,7 @@ import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import usePrice from '@hooks/use_price';
-import LoanToValue from '@components/table/load_to_value';
+import LoanToValue from '@components/table/loan_to_value';
 import { borrowFee } from '@utils/xor_fee';
 
 export default function BorrowAssetModal({
@@ -39,6 +39,7 @@ export default function BorrowAssetModal({
     collateral: null,
     inputValue: '',
     price: 0,
+    ltv: 0,
   });
 
   const { loading, borrowAsset } = useBorrowAsset();
@@ -64,7 +65,7 @@ export default function BorrowAssetModal({
   const collateralAmount = useMemo(() => {
     if (formData.asset) {
       return (
-        (((Number(formData.inputValue) / Number(formData.asset?.loanToValue)) *
+        (((Number(formData.inputValue) / (formData.ltv / 100)) *
           borrowingTokenPrice) /
           collateralTokenPrice) *
         0.99
@@ -77,6 +78,7 @@ export default function BorrowAssetModal({
     collateralTokenPrice,
     formData.asset,
     formData.inputValue,
+    formData.ltv,
   ]);
 
   const maxBorrowingAmount = useMemo(() => {
@@ -87,9 +89,7 @@ export default function BorrowAssetModal({
         )?.amount ?? 0;
 
       return (
-        ((Number(cAmount) *
-          collateralTokenPrice *
-          Number(formData.asset?.loanToValue)) /
+        ((Number(cAmount) * collateralTokenPrice * (formData.ltv / 100)) /
           borrowingTokenPrice) *
         0.99
       );
@@ -101,6 +101,7 @@ export default function BorrowAssetModal({
     collateralTokenPrice,
     formData.asset,
     formData.collateral,
+    formData.ltv,
     lendingInfo,
   ]);
 
@@ -112,6 +113,7 @@ export default function BorrowAssetModal({
           collateral: null,
           inputValue: '',
           price: 0,
+          ltv: 0,
         });
       }, 500);
     }
@@ -122,14 +124,14 @@ export default function BorrowAssetModal({
       label: asset.poolAssetSymbol,
       value: asset.poolAssetId,
       icon: `${ICONS_URL}${asset.poolAssetSymbol}.svg`,
-      loanToValue: asset.loanToValue,
+      loanToValue: Number(asset.loanToValue) * 100,
     };
   });
 
   const handleAssetChange = (
     selectedOption: BorrowingAssetSelectOption | null,
   ) => {
-    if (selectedOption !== formData.asset) {
+    if (selectedOption && selectedOption !== formData.asset) {
       setFormData(prevData => {
         return {
           asset: selectedOption,
@@ -139,6 +141,7 @@ export default function BorrowAssetModal({
               : prevData.collateral,
           inputValue: '',
           price: 0,
+          ltv: selectedOption.loanToValue,
         };
       });
     }
@@ -150,6 +153,7 @@ export default function BorrowAssetModal({
     if (selectedOption !== formData.collateral) {
       setFormData(prevData => {
         return {
+          ...prevData,
           collateral: selectedOption,
           asset:
             prevData.asset?.value === selectedOption?.value
@@ -209,7 +213,11 @@ export default function BorrowAssetModal({
             note="Minimum amount is 10$"
           />
           <LoanToValue
-            loan={`${priceFormat(intl, Number(formData.asset.loanToValue) * 100)}%`}
+            maxLoan={formData.asset.loanToValue}
+            ltv={formData.ltv}
+            setLTV={(ltv: number) =>
+              setFormData(prevData => ({ ...prevData, ltv }))
+            }
           />
           <TransactionOverview
             overviews={[
@@ -233,6 +241,7 @@ export default function BorrowAssetModal({
             formData.collateral!.value,
             formData.asset!.value,
             formData.inputValue,
+            formData.ltv,
             () => {
               reload();
               closeModal();

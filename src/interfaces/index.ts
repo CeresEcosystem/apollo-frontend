@@ -27,7 +27,7 @@ export interface BorrowingAssetSelectOption {
   label: string;
   value: string;
   icon: string;
-  loanToValue: string;
+  loanToValue: number;
 }
 
 export interface AssetSelectOption {
@@ -123,9 +123,16 @@ export interface BorrowingAssetFormData {
   collateral: BorrowingAssetSelectOption | null;
   inputValue: string;
   price: number;
+  ltv: number;
 }
 
-export interface CollateralAddMoreFormData {
+export interface BorrowMoreFormData {
+  inputValue: string;
+  price: number;
+  ltv: number;
+}
+
+export interface AddCollateralFormData {
   inputValue: string;
   price: number;
 }

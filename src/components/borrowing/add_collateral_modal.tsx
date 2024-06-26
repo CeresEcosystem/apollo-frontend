@@ -2,23 +2,20 @@ import AssetBalance from '@components/input/asset_balance';
 import AssetSelect from '@components/input/asset_select';
 import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
-import LoanToValue from '@components/table/load_to_value';
-// import TransactionFee from '@components/transaction/transaction_fee';
-import TransactionOverview from '@components/transaction/transaction_overview';
+import TransactionFee from '@components/transaction/transaction_fee';
 import { ICONS_URL } from '@constants/index';
-import useBorrowAsset from '@hooks/use_borrow_asset';
+import useAddCollateral from '@hooks/use_add_collateral';
 import usePrice from '@hooks/use_price';
-import { priceFormat } from '@utils/helpers';
+import { lendFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { useIntl } from 'react-intl';
 import {
   BorrowingInfo,
   Collateral,
-  CollateralAddMoreFormData,
   LendingInfo,
+  AddCollateralFormData,
 } from 'src/interfaces';
 
-export default function AddMoreModal({
+export default function AddCollateralModal({
   showModal,
   closeModal,
   asset,
@@ -33,60 +30,31 @@ export default function AddMoreModal({
   collateral: Collateral | null;
   reload: () => void;
 }) {
-  const [formData, setFormData] = useState<CollateralAddMoreFormData>({
+  const [formData, setFormData] = useState<AddCollateralFormData>({
     inputValue: '',
     price: 0,
   });
 
-  const intl = useIntl();
-
-  const { loading, borrowAsset } = useBorrowAsset();
+  const { loading, addCollateral } = useAddCollateral();
 
   const { getPriceForToken } = usePrice();
 
   const borrowingTokenPrice = useMemo(() => {
-    return asset ? getPriceForToken(asset.poolAssetId) : 0;
-  }, [getPriceForToken, asset]);
-
-  const collateralTokenPrice = useMemo(() => {
     return collateral ? getPriceForToken(collateral.collateralAssetId) : 0;
   }, [getPriceForToken, collateral]);
 
-  const collateralAmount = useMemo(() => {
-    if (asset) {
-      return (
-        (((Number(formData.inputValue) / Number(asset.loanToValue)) *
-          borrowingTokenPrice) /
-          collateralTokenPrice) *
-        0.99
-      );
-    }
-
-    return 0;
-  }, [asset, borrowingTokenPrice, collateralTokenPrice, formData.inputValue]);
-
-  const maxBorrowingAmount = useMemo(() => {
+  const maxCollateralAmount = useMemo(() => {
     if (asset) {
       const cAmount =
         lendingInfo.find(
           lend => lend.poolAssetId === collateral?.collateralAssetId,
-        )?.amount ?? 0;
+        )?.amount ?? '0';
 
-      return (
-        ((Number(cAmount) * collateralTokenPrice * Number(asset.loanToValue)) /
-          borrowingTokenPrice) *
-        0.99
-      );
+      return Number(cAmount);
     }
 
     return 0;
-  }, [
-    asset,
-    lendingInfo,
-    collateralTokenPrice,
-    borrowingTokenPrice,
-    collateral?.collateralAssetId,
-  ]);
+  }, [asset, lendingInfo, collateral?.collateralAssetId]);
 
   useEffect(() => {
     if (!showModal) {
@@ -113,15 +81,15 @@ export default function AddMoreModal({
     setFormData(prevData => {
       return {
         ...prevData,
-        inputValue: maxBorrowingAmount.toString(),
-        price: borrowingTokenPrice * maxBorrowingAmount,
+        inputValue: maxCollateralAmount.toString(),
+        price: borrowingTokenPrice * maxCollateralAmount,
       };
     });
   };
 
   return (
     <Modal
-      title={`Add more ${asset?.poolAssetSymbol}`}
+      title={`Add collateral ${collateral?.collateralAssetSymbol}`}
       showModal={showModal}
       closeModal={closeModal}
     >
@@ -162,35 +130,19 @@ export default function AddMoreModal({
           <AssetBalance
             label="Amount"
             balance={formData.inputValue}
-            assetSymbol={asset.poolAssetSymbol}
+            assetSymbol={collateral.collateralAssetSymbol}
             handleAssetBalanceChange={handleAssetBalanceChange}
             price={formData.price}
-            assetBalance={maxBorrowingAmount}
+            assetBalance={maxCollateralAmount}
             onMaxPressed={onMaxPressed}
-            note="Minimum amount is 10$"
-          />
-          <LoanToValue
-            loan={`${priceFormat(intl, Number(asset!.loanToValue) * 100)}%`}
-          />
-          <TransactionOverview
-            overviews={[
-              {
-                label: 'Collateral',
-                info: `${priceFormat(intl, collateralAmount, 3)} ${collateral.collateralAssetSymbol}`,
-              },
-              {
-                label: 'Max borrowing amount',
-                info: `${priceFormat(intl, maxBorrowingAmount, 3)} ${asset.poolAssetSymbol}`,
-              },
-            ]}
           />
         </>
       )}
-      {/* <TransactionFee /> */}
+      <TransactionFee fee={lendFee} />
       <ModalButton
-        title="Borrow asset"
+        title="Add collateral"
         onClick={() =>
-          borrowAsset(
+          addCollateral(
             collateral!.collateralAssetId,
             asset!.poolAssetId,
             formData.inputValue,
@@ -204,9 +156,8 @@ export default function AddMoreModal({
           !asset ||
           !collateral ||
           Number(formData.inputValue) <= 0 ||
-          Number(formData.inputValue) > maxBorrowingAmount ||
-          loading ||
-          formData.price < 10
+          Number(formData.inputValue) > maxCollateralAmount ||
+          loading
         }
       />
     </Modal>
