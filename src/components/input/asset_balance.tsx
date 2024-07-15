@@ -38,7 +38,9 @@ export default function AssetBalance({
             onChange={handleAssetBalanceChange}
             className="block font-medium text-xl sm:text-2xl w-full border-0 outline-none ring-0 bg-transparent text-grey placeholder:text-grey2 focus:outline-none"
           />
-          <span className="text-grey2 text-xs sm:text-sm">{`$${priceFormat(intl, price)}`}</span>
+          <div className="max-w-32 truncate overflow-hidden">
+            <span className="text-grey2 text-ellipsis text-xs sm:text-sm">{`$${priceFormat(intl, price)}`}</span>
+          </div>
         </div>
         <div className="flex flex-col items-end">
           <span className="flex items-center gap-x-2 font-semibold text-xl sm:text-2xl text-grey">
