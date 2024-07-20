@@ -1,10 +1,11 @@
-import { TOOLS_URL } from '@constants/index';
+import { TOKEN_NAME, TOOLS_URL } from '@constants/index';
 import { TokenPrices } from 'src/interfaces';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface ApolloPriceStore {
   prices: TokenPrices[];
+  apolloPrice: number;
   fetchPrices: () => Promise<void>;
   init: () => Promise<void>;
 }
@@ -25,21 +26,27 @@ interface DisclaimerModalStore {
   closeDisclaimerModal: () => void;
 }
 
-const tokens = ['APOLLO', 'XOR', 'DAI', 'ETH', 'VAL', 'PSWAP', 'KSM', 'DOT'];
+const tokens = ['XOR', 'DAI', 'ETH', 'VAL', 'PSWAP', 'DOT'];
 
 export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
   prices: [],
+  apolloPrice: 0,
   fetchPrices: async () => {
     const response = await fetch(`${TOOLS_URL}/prices`);
 
     if (response.ok) {
       const pricesForAllTokens = (await response.json()) as TokenPrices[];
 
-      const pricesData = pricesForAllTokens.filter(price =>
-        tokens.includes(price.token),
+      const pricesData = pricesForAllTokens.filter(t =>
+        tokens.includes(t.token),
       );
 
       set({ prices: pricesData });
+      set({
+        apolloPrice:
+          pricesForAllTokens.find(t => t.token === TOKEN_NAME.toUpperCase())
+            ?.price ?? 0,
+      });
     }
   },
   init: async () => {
@@ -69,7 +76,7 @@ export const useDisclaimer = create<
     }),
     {
       name: 'disclaimer',
-      storage: createJSONStorage(() => sessionStorage, {}),
+      storage: createJSONStorage(() => localStorage, {}),
     },
   ),
 );
