@@ -25,7 +25,7 @@ interface DisclaimerModalStore {
   closeDisclaimerModal: () => void;
 }
 
-const tokens = ['APOLLO', 'XOR', 'DAI', 'ETH', 'VAL', 'PSWAP'];
+const tokens = ['APOLLO', 'XOR', 'DAI', 'ETH', 'VAL', 'PSWAP', 'KSM', 'DOT'];
 
 export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
   prices: [],
