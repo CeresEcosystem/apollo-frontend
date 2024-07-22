@@ -12,7 +12,12 @@ const useMarkets = () => {
         throw new Error();
       }
 
-      return await response.json();
+      const marketsData = (await response.json()) as MarketsData;
+
+      return {
+        pools: marketsData.pools.filter(pool => !pool.isRemoved),
+        stats: marketsData.stats,
+      };
     },
   });
 

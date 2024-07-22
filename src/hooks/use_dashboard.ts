@@ -18,7 +18,15 @@ const useDashboard = () => {
         throw new Error();
       }
 
-      return await response.json();
+      const dashboardData = (await response.json()) as DashboardData;
+
+      return {
+        lendingInfo: dashboardData.lendingInfo.filter(info => !info.isRemoved),
+        borrowingInfo: dashboardData.borrowingInfo.filter(
+          info => !info.isRemoved,
+        ),
+        userData: dashboardData.userData,
+      };
     },
   });
 

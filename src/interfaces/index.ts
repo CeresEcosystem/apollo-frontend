@@ -143,6 +143,7 @@ export interface LendingInfo {
   apr: number;
   amount: string;
   rewards: string;
+  isRemoved: boolean;
 }
 
 export interface Collateral {
@@ -166,6 +167,7 @@ export interface BorrowingInfo {
   healthFactor: number;
   collaterals: Collateral[];
   totalCollateralsInUsd: string;
+  isRemoved: boolean;
 }
 
 export interface StatsData {
@@ -195,6 +197,7 @@ export interface MarketPool {
   borrowed: number;
   lendingAPR: number;
   borrowingAPR: number;
+  isRemoved: boolean;
 }
 
 export interface MarketsData {
