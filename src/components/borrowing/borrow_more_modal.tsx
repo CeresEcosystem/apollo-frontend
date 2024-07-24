@@ -6,10 +6,10 @@ import LoanToValue from '@components/table/loan_to_value';
 import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
 import { ICONS_URL } from '@constants/index';
+import { useTxFees } from '@context/tx_fees_context';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import usePrice from '@hooks/use_price';
 import { priceFormat } from '@utils/helpers';
-import { borrowFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
@@ -17,6 +17,7 @@ import {
   Collateral,
   BorrowMoreFormData,
   LendingInfo,
+  FEE_TYPES,
 } from 'src/interfaces';
 
 export default function BorrowMoreModal({
@@ -45,6 +46,8 @@ export default function BorrowMoreModal({
   const { loading, borrowAsset } = useBorrowAsset();
 
   const { getPriceForToken } = usePrice();
+
+  const { getFee } = useTxFees();
 
   const borrowingTokenPrice = useMemo(() => {
     return asset ? getPriceForToken(asset.poolAssetId) : 0;
@@ -207,7 +210,7 @@ export default function BorrowMoreModal({
           />
         </>
       )}
-      <TransactionFee fee={borrowFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Borrow)} />
       <ModalButton
         title="Borrow asset"
         onClick={() =>

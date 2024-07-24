@@ -4,15 +4,16 @@ import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
 import TransactionFee from '@components/transaction/transaction_fee';
 import { ICONS_URL } from '@constants/index';
+import { useTxFees } from '@context/tx_fees_context';
 import useAddCollateral from '@hooks/use_add_collateral';
 import usePrice from '@hooks/use_price';
-import { lendFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import {
   BorrowingInfo,
   Collateral,
   LendingInfo,
   AddCollateralFormData,
+  FEE_TYPES,
 } from 'src/interfaces';
 
 export default function AddCollateralModal({
@@ -38,6 +39,8 @@ export default function AddCollateralModal({
   const { loading, addCollateral } = useAddCollateral();
 
   const { getPriceForToken } = usePrice();
+
+  const { getFee } = useTxFees();
 
   const borrowingTokenPrice = useMemo(() => {
     return collateral ? getPriceForToken(collateral.collateralAssetId) : 0;
@@ -138,7 +141,7 @@ export default function AddCollateralModal({
           />
         </>
       )}
-      <TransactionFee fee={lendFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Lend)} />
       <ModalButton
         title="Add collateral"
         onClick={() =>

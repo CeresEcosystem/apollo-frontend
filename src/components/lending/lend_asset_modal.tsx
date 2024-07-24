@@ -1,6 +1,7 @@
 import Modal from '@components/modal';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import {
+  FEE_TYPES,
   LendingAssetFormData,
   LendingAssetSelectOption,
   LendingInfo,
@@ -16,7 +17,7 @@ import { useIntl } from 'react-intl';
 import useBalance from '@hooks/use_balance';
 import useLendAsset from '@hooks/use_lend_asset';
 import usePrice from '@hooks/use_price';
-import { lendFee } from '@utils/xor_fee';
+import { useTxFees } from '@context/tx_fees_context';
 
 export default function LendAssetModal({
   showModal,
@@ -43,6 +44,8 @@ export default function LendAssetModal({
     inputValue: '',
     price: 0,
   });
+
+  const { getFee } = useTxFees();
 
   const tokenPrice = useMemo(() => {
     return formData.asset ? getPriceForToken(formData.asset.value) : 0;
@@ -146,7 +149,7 @@ export default function LendAssetModal({
           />
         </>
       )}
-      <TransactionFee fee={lendFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Lend)} />
       <ModalButton
         title="Lend asset"
         onClick={() =>

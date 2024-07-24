@@ -4,6 +4,7 @@ import {
   BorrowingAssetFormData,
   BorrowingAssetSelectOption,
   BorrowingInfo,
+  FEE_TYPES,
   LendingInfo,
 } from 'src/interfaces';
 import AssetBalance from '@components/input/asset_balance';
@@ -17,7 +18,7 @@ import { useIntl } from 'react-intl';
 import useBorrowAsset from '@hooks/use_borrow_asset';
 import usePrice from '@hooks/use_price';
 import LoanToValue from '@components/table/loan_to_value';
-import { borrowFee } from '@utils/xor_fee';
+import { useTxFees } from '@context/tx_fees_context';
 
 export default function BorrowAssetModal({
   showModal,
@@ -45,6 +46,8 @@ export default function BorrowAssetModal({
   const { loading, borrowAsset } = useBorrowAsset();
 
   const { getPriceForToken } = usePrice();
+
+  const { getFee } = useTxFees();
 
   const borrowingTokenPrice = useMemo(() => {
     if (formData.asset) {
@@ -233,7 +236,7 @@ export default function BorrowAssetModal({
           />
         </>
       )}
-      <TransactionFee fee={borrowFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Borrow)} />
       <ModalButton
         title="Borrow asset"
         onClick={() =>

@@ -251,3 +251,16 @@ export interface HistoryFilterData {
   asset: SelectOption | '';
   action: SelectOption | '';
 }
+
+export enum FEE_TYPES {
+  Lend = 'Lend',
+  Borrow = 'Borrow',
+  Rewards = 'Rewards',
+  Withdraw = 'Withdraw',
+  Repay = 'Repay',
+}
+
+export interface FeeDto {
+  type: FEE_TYPES;
+  fee: number;
+}

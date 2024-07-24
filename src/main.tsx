@@ -15,6 +15,7 @@ import ReactGA from 'react-ga4';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import ErrorPage from '@pages/error/index.tsx';
+import TxFeesProvider from '@context/tx_fees_context.tsx';
 
 ReactGA.initialize('G-JYW28NEEEN');
 
@@ -63,7 +64,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <PolkadotWalletsContextProvider walletAggregator={walletAggregator}>
           <PolkadotProvider>
-            <RouterProvider router={router} />
+            <TxFeesProvider>
+              <RouterProvider router={router} />
+            </TxFeesProvider>
           </PolkadotProvider>
         </PolkadotWalletsContextProvider>
       </QueryClientProvider>

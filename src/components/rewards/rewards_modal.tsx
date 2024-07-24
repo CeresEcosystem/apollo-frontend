@@ -2,6 +2,7 @@ import Modal from '@components/modal';
 import { useEffect, useState } from 'react';
 import {
   BorrowingInfo,
+  FEE_TYPES,
   LendingInfo,
   LendingRewardsFormData,
   LendingRewardsSelectOption,
@@ -14,7 +15,7 @@ import { ICONS_URL, TOKEN_NAME } from '@constants/index';
 import { priceFormat } from '@utils/helpers';
 import { useIntl } from 'react-intl';
 import useRewards from '@hooks/use_rewards';
-import { rewardsFee } from '@utils/xor_fee';
+import { useTxFees } from '@context/tx_fees_context';
 
 export default function RewardsModal({
   showModal,
@@ -36,6 +37,8 @@ export default function RewardsModal({
   });
 
   const { loading, getRewards } = useRewards();
+
+  const { getFee } = useTxFees();
 
   const options: LendingRewardsSelectOption[] = assets.map(asset => {
     return {
@@ -82,7 +85,7 @@ export default function RewardsModal({
           ]}
         />
       )}
-      <TransactionFee fee={rewardsFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Rewards)} />
       <ModalButton
         title="Get rewards"
         onClick={() =>

@@ -5,8 +5,12 @@ import usePrice from '@hooks/use_price';
 import useWithdrawAsset from '@hooks/use_withdraw_asset';
 import TransactionFee from '@components/transaction/transaction_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { LendingInfo, LendingWithdrawFormData } from 'src/interfaces';
-import { withdrawFee } from '@utils/xor_fee';
+import {
+  FEE_TYPES,
+  LendingInfo,
+  LendingWithdrawFormData,
+} from 'src/interfaces';
+import { useTxFees } from '@context/tx_fees_context';
 
 export default function WithdrawModal({
   showModal,
@@ -27,6 +31,8 @@ export default function WithdrawModal({
   const { loading, withdrawAsset } = useWithdrawAsset();
 
   const { getPriceForToken } = usePrice();
+
+  const { getFee } = useTxFees();
 
   const tokenPrice = useMemo(() => {
     return asset ? getPriceForToken(asset.poolAssetId) : 0;
@@ -73,7 +79,7 @@ export default function WithdrawModal({
           price={formData.price}
         />
       )}
-      <TransactionFee fee={withdrawFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Withdraw)} />
       <ModalButton
         title="Withdraw"
         onClick={() =>

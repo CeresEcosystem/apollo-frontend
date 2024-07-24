@@ -3,16 +3,17 @@ import Modal from '@components/modal';
 import ModalButton from '@components/modal/modal_button';
 import TransactionFee from '@components/transaction/transaction_fee';
 import TransactionOverview from '@components/transaction/transaction_overview';
+import { useTxFees } from '@context/tx_fees_context';
 import useBalance from '@hooks/use_balance';
 import usePrice from '@hooks/use_price';
 import useRepayAsset from '@hooks/use_repay_asset';
 import { priceFormat } from '@utils/helpers';
-import { repayFee } from '@utils/xor_fee';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   BorrowingInfo,
   Collateral,
+  FEE_TYPES,
   RepayCollateralFormData,
 } from 'src/interfaces';
 
@@ -36,6 +37,8 @@ export default function RepayModal({
   const { loading, repayAsset } = useRepayAsset();
 
   const { getPriceForToken } = usePrice();
+
+  const { getFee } = useTxFees();
 
   const [formData, setFormData] = useState<RepayCollateralFormData>({
     balance: 0,
@@ -144,7 +147,7 @@ export default function RepayModal({
         </>
       )}
 
-      <TransactionFee fee={repayFee} />
+      <TransactionFee fee={getFee(FEE_TYPES.Repay)} />
       <ModalButton
         title="Repay"
         onClick={() =>
