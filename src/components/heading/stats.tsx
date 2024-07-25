@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import { FaLock, FaUsers, FaCoins } from 'react-icons/fa';
 import { useIntl } from 'react-intl';
 import { StatsData, UserData } from 'src/interfaces';
+import { useTokenPrice } from 'src/store';
 
 const containerStyle =
   'h-44 shadow-sm rounded-2xl bg-white p-4 flex xs:p-6 xs:h-56 lg:h-44 lg:p-4 xl:h-56 2xl:p-6';
@@ -127,6 +128,8 @@ function ActiveUsers({ totalUsers }: { totalUsers: number }) {
 function TotalRewards({ totalRewards }: { totalRewards: string }) {
   const intl = useIntl();
 
+  const apolloPrice = useTokenPrice(state => state.apolloPrice);
+
   return (
     <div
       className={classNames(
@@ -142,7 +145,12 @@ function TotalRewards({ totalRewards }: { totalRewards: string }) {
         <span className={valueStyle}>
           {`${priceFormat(intl, totalRewards, 3)}`}
         </span>
-        <span className={subtitleStyle}>{TOKEN_NAME.toUpperCase()}</span>
+        <span className={subtitleStyle}>
+          {TOKEN_NAME.toUpperCase()}
+          {Number(totalRewards) > 0 && (
+            <span className="text-base pl-2 font-semibold text-grey2">{`$${priceFormat(intl, apolloPrice * Number(totalRewards), 3)}`}</span>
+          )}
+        </span>
       </div>
       <FaCoins className="absolute right-4 top-2 h-32 w-auto xs:top-4 lg:top-2 xl:top-4 text-pinkIcon" />
     </div>

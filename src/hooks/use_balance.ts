@@ -1,4 +1,4 @@
-import { APOLLO_ADDRESS, TOAST_ID } from '@constants/index';
+import { APOLLO_ADDRESS, TOAST_ID, XOR_ADDRESS } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { parse } from '@utils/helpers';
 import { showErrorNotify } from '@utils/toast';
@@ -24,10 +24,19 @@ const useBalance = () => {
   const getBalanceForToken = useCallback(
     async (tokenAddress: string) => {
       if (selectedAccount) {
-        const balance = await api?.rpc.assets.freeBalance(
-          selectedAccount?.address,
-          tokenAddress,
-        );
+        let balance;
+
+        if (tokenAddress === XOR_ADDRESS) {
+          balance = await api?.rpc.assets.usableBalance(
+            selectedAccount?.address,
+            tokenAddress,
+          );
+        } else {
+          balance = await api?.rpc.assets.freeBalance(
+            selectedAccount?.address,
+            tokenAddress,
+          );
+        }
 
         // @ts-expect-error Property 'balance' does not exist on type 'string'.
         return parse(balance?.toHuman()?.balance);
