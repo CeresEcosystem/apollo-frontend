@@ -31,6 +31,7 @@ import { Tooltip } from 'react-tooltip';
 import usePrice from '@hooks/use_price';
 import TooltipLoanToValueQuestion from '@components/table/tooltip_loan_to_value';
 import AddCollateralModal from './add_collateral_modal';
+import TooltipHealthFactorQuestion from '@components/table/tooltip_health_factor';
 
 function TooltipHealthFactor({ healthFactor }: { healthFactor: number }) {
   const id = 'health-factor';
@@ -346,6 +347,7 @@ export default function Borrowing({
               {sortConfig.key === 'healthFactor' && (
                 <SortIcon direction={sortConfig.direction} />
               )}
+              <TooltipHealthFactorQuestion />
             </th>
             <th className={tableHeadStyle}>Collaterals</th>
           </tr>
