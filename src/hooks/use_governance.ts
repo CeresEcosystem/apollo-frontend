@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
 import { GovernancePoll, GovernancePolls } from 'src/interfaces';
@@ -28,9 +27,9 @@ const useGovernance = () => {
     queryKey: ['governanceData'],
     queryFn: async () => {
       const [activePolls, upcomingPolls, closedPolls] = await Promise.all([
-        getPolls(`${API_URL}/polls/active`),
-        getPolls(`${API_URL}/polls/upcoming`, 1),
-        getPolls(`${API_URL}/polls/closed`, 2),
+        getPolls(`${import.meta.env.VITE_BACKEND_URL}/polls/active`),
+        getPolls(`${import.meta.env.VITE_BACKEND_URL}/polls/upcoming`, 1),
+        getPolls(`${import.meta.env.VITE_BACKEND_URL}/polls/closed`, 2),
       ]);
 
       return {

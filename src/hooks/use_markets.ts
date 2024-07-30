@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { useQuery } from '@tanstack/react-query';
 import { MarketsData } from 'src/interfaces';
 
@@ -6,7 +5,9 @@ const useMarkets = () => {
   const { isLoading, error, data } = useQuery<MarketsData>({
     queryKey: ['marketsData'],
     queryFn: async () => {
-      const response = await fetch(`${API_URL}/protocol`);
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/protocol`,
+      );
 
       if (!response.ok) {
         throw new Error();

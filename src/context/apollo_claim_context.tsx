@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import {
   createContext,
   useCallback,
@@ -23,7 +22,9 @@ const ApolloClaimProvider = ({ children }: { children: React.ReactNode }) => {
   const [totalClaimed, setTotalClaimed] = useState<string | null>(null);
 
   const fetchTotalClaim = useCallback(async () => {
-    const response = await fetch(`${API_URL}/airdrop/total-claimed`);
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/airdrop/total-claimed`,
+    );
 
     if (response.ok) {
       const json = await response.json();

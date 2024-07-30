@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { useEffect, useState } from 'react';
 import { getEncodedAddress } from '@utils/helpers';
@@ -21,7 +20,7 @@ const useClaim = () => {
 
       try {
         const response = await fetch(
-          `${API_URL}/airdrop/claimable/${encodedAccount}`,
+          `${import.meta.env.VITE_BACKEND_URL}/airdrop/claimable/${encodedAccount}`,
         );
 
         if (response.ok) {

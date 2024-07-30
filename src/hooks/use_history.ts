@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { getEncodedAddress } from '@utils/helpers';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -50,7 +49,7 @@ const useHistory = (data: DashboardData) => {
         : '';
 
       const response = await fetch(
-        `${API_URL}/users/${getEncodedAddress(keyring, selectedAccount?.address)}/actions?size=5&page=${page}${historyOptions}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${getEncodedAddress(keyring, selectedAccount?.address)}/actions?size=5&page=${page}${historyOptions}`,
       );
 
       if (!response.ok) {

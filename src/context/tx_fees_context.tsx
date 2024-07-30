@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import {
   createContext,
   useCallback,
@@ -25,7 +24,7 @@ const TxFeesProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const fetchFees = useCallback(async () => {
-    const response = await fetch(`${API_URL}/fees`);
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/fees`);
 
     if (response.ok) {
       const json = (await response.json()) as FeeDto[];

@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { usePolkadot } from '@context/polkadot_context';
 import { useQuery } from '@tanstack/react-query';
 import { getEncodedAddress } from '@utils/helpers';
@@ -11,7 +10,7 @@ const useDashboard = () => {
     queryKey: ['dashboardData'],
     queryFn: async () => {
       const response = await fetch(
-        `${API_URL}/users/${getEncodedAddress(keyring, selectedAccount?.address)}`,
+        `${import.meta.env.VITE_BACKEND_URL}/users/${getEncodedAddress(keyring, selectedAccount?.address)}`,
       );
 
       if (!response.ok) {

@@ -1,4 +1,3 @@
-import { API_URL } from '@constants/index';
 import { useQuery } from '@tanstack/react-query';
 import { priceFormat } from '@utils/helpers';
 import { IntlShape, useIntl } from 'react-intl';
@@ -14,7 +13,9 @@ export function getPollAnswer(options: string[], answer: number) {
 }
 
 async function fetchPollDetails(intl: IntlShape, pollId: string | undefined) {
-  const response = await fetch(`${API_URL}/polls/${pollId}`);
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/polls/${pollId}`,
+  );
 
   const poll = (await response.json()) as GovernancePollDetails;
   const results: GovernacePollResults = {};
