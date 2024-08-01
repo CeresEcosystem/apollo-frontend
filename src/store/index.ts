@@ -1,4 +1,4 @@
-import { TOKEN_NAME, TOOLS_URL } from '@constants/index';
+import { TOKEN_NAME } from '@constants/index';
 import { TokenPrices } from 'src/interfaces';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
@@ -32,7 +32,9 @@ export const useTokenPrice = create<ApolloPriceStore>((set, get) => ({
   prices: [],
   apolloPrice: 0,
   fetchPrices: async () => {
-    const response = await fetch(`${TOOLS_URL}/prices`);
+    const response = await fetch(
+      `${import.meta.env.VITE_TOOLS_BACKEND_URL}/prices`,
+    );
 
     if (response.ok) {
       const pricesForAllTokens = (await response.json()) as TokenPrices[];

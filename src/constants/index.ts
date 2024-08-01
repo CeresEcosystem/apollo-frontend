@@ -2,7 +2,6 @@ export const APP_NAME = 'Apollo - Lending Borrowing';
 export const TOKEN_NAME = 'Apollo';
 
 export const SITE_URL = 'https://api.apolloprotocol.io';
-export const TOOLS_URL = 'https://data.cerestoken.io/api';
 export const ICONS_URL = 'https://data.cerestoken.io/storage/icons/';
 
 export const POLKADOT_ACCOUNT = 'POLKADOT_ACCOUNT';
